@@ -40,7 +40,7 @@ export default {
   },
   methods: {
     init: function() {
-      const wsurl = "ws://127.0.0.1:8888/ws";
+      const wsurl = process.env.WS_URL || "ws://127.0.0.1:8888/ws";
       this.$message.info(wsurl);
       this.websock = new WebSocket(wsurl);
       this.websock.onmessage = this.onmessage;
