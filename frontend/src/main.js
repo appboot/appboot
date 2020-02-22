@@ -3,6 +3,7 @@ import App from "./App.vue";
 import {
   Button,
   Input,
+  Form,
   Radio,
   InputNumber,
   message,
@@ -11,6 +12,7 @@ import {
 
 Vue.use(Button);
 Vue.use(Input);
+Vue.use(Form);
 Vue.use(Radio);
 Vue.use(InputNumber);
 Vue.use(Icon);

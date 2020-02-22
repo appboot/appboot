@@ -5,9 +5,35 @@
     </div>
     <div id="detial" v-if="!finish">
       <div class="title">Application Name</div>
-      <a-input class="input" placeholder="your application name" v-model="name" @change="onNameChange" />
+      <a-input
+        class="input"
+        placeholder="your application name"
+        v-model="name"
+        @change="onNameChange"
+      />
       <div class="title">Template</div>
-      <a-input class="input" placeholder="VUE" v-model="template" @change="onTemplateChange" />      
+      <a-input class="input" placeholder="VUE" v-model="template" @change="onTemplateChange" />
+
+      <div class="title">Params</div>
+      <a-form layout="inline" style="margin-bottom: 15px">
+        <div v-for="(param, index) in form.params" :key="index">
+          <a-form-item label="key">
+            <a-input v-model="param.key"></a-input>
+          </a-form-item>
+
+          <a-form-item label="value">
+            <a-input v-model="param.value"></a-input>
+          </a-form-item>
+
+          <a-form-item>
+            <a-button icon="delete" @click="deleteParam(param, index)"></a-button>
+          </a-form-item>
+        </div>
+      </a-form>
+      <a-button type="dashed" style="width: 100%" @click="addParam">
+        <a-icon type="plus" /> Add param
+      </a-button>
+
       <a-button
         class="createButton"
         type="primary"
@@ -36,6 +62,9 @@ export default {
       finish: false,
       name: "",
       template: "",
+      form: {
+        params: []
+      }
     };
   },
   methods: {
@@ -56,7 +85,9 @@ export default {
     },
     onCreate() {
       if (this.name.length < 3) {
-        this.$message.error("application name must be at least three characters.");
+        this.$message.error(
+          "application name must be at least three characters."
+        );
         return;
       }
       if (this.template.length < 1) {
@@ -70,9 +101,9 @@ export default {
       );
       this.init();
       var that = this;
-      setTimeout(function(){
+      setTimeout(function() {
         that.send(msg);
-      }, 1 * 1000 );
+      }, 1 * 1000);
     },
     send: function(data) {
       this.websock.send(data);
@@ -104,12 +135,23 @@ export default {
       this.$message.error("ws error");
       this.creating = false;
       var that = this;
-      setTimeout(function(){
+      setTimeout(function() {
         that.init();
-      }, 1 * 1000 );
+      }, 1 * 1000);
+    },
+    addParam() {
+      this.form.params.push({
+        key: "",
+        value: ""
+      });
+      // eslint-disable-next-line no-console
+      console.log(this.form.params)
+    },
+    deleteParam(param, index) {
+      this.form.params.splice(index, 1);
+      // eslint-disable-next-line no-console
+      console.log(this.form.params)
     }
-  },
-  mounted: function() {
   },
   components: {}
 };
@@ -155,6 +197,13 @@ export default {
 .createButton {
   width: 50%;
   height: 40px;
+  align-self: center;
+  font-size: medium;
+  margin-top: 30px;
+}
+.addButton {
+  width: 50px;
+  height: 30px;
   align-self: center;
   font-size: medium;
   margin-top: 15px;
