@@ -26,12 +26,16 @@
           </a-form-item>
 
           <a-form-item>
-            <a-button icon="delete" @click="deleteParam(param, index)"></a-button>
+            <a-icon
+              class="dynamic-delete-button"
+              type="minus-circle-o"
+              @click="deleteParam(param, index)"
+            />
           </a-form-item>
         </div>
       </a-form>
       <a-button type="dashed" style="width: 100%" @click="addParam">
-        <a-icon type="plus" /> Add param
+        <a-icon type="plus" />Add param
       </a-button>
 
       <a-button
@@ -94,10 +98,19 @@ export default {
         this.$message.error("template cannot be empty.");
         return;
       }
+
+      if (!this.checkParams()) {
+        this.$message.error("The key and value of all params cannot be empty.");
+        return;
+      }
+
+      const params = this.jsonParams();
+
       this.creating = true;
-      const msg = '{"name":"{0}", "template":"{1}"}'.format(
+      const msg = '{"name":"{0}", "template":"{1}"}, "params":"{2}"'.format(
         this.name,
-        this.template
+        this.template,
+        params
       );
       this.init();
       var that = this;
@@ -139,18 +152,33 @@ export default {
         that.init();
       }, 1 * 1000);
     },
+    checkParams() {
+      var result = true;
+      for (var j = 0, len = this.form.params.length; j < len; j++) {
+        const param = this.form.params[j];
+        if (param.key.length < 1 || param.value.length < 1) {
+          result = false;
+          break;
+        }
+      }
+      return result;
+    },
+    jsonParams() {
+      var obj = {};
+      for (var j = 0, len = this.form.params.length; j < len; j++) {
+        const param = this.form.params[j];
+        obj[param.key] = param.value;
+      }
+      return JSON.stringify(obj);
+    },
     addParam() {
       this.form.params.push({
         key: "",
         value: ""
       });
-      // eslint-disable-next-line no-console
-      console.log(this.form.params)
     },
     deleteParam(param, index) {
       this.form.params.splice(index, 1);
-      // eslint-disable-next-line no-console
-      console.log(this.form.params)
     }
   },
   components: {}
