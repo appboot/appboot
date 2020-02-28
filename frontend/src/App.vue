@@ -88,10 +88,8 @@ export default {
       this.template = this.template.trim();
     },
     onCreate() {
-      if (this.name.length < 3) {
-        this.$message.error(
-          "application name must be at least three characters."
-        );
+      if (this.name.length < 1) {
+        this.$message.error("application name cannot be empty.");
         return;
       }
       if (this.template.length < 1) {
@@ -125,7 +123,6 @@ export default {
       if (this.finish) {
         return;
       }
-      this.$message.error("ws closeed");
       this.creating = false;
     },
     onmessage: function(e) {
@@ -145,12 +142,14 @@ export default {
       if (this.finish) {
         return;
       }
-      this.$message.error("ws error");
+      this.$message.error(
+        "websocket connection error, please check backend service"
+      );
       this.creating = false;
       var that = this;
       setTimeout(function() {
         that.init();
-      }, 1 * 1000);
+      }, 5 * 1000);
     },
     checkParams() {
       var result = true;
