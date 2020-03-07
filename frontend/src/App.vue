@@ -105,7 +105,7 @@ export default {
       const params = this.jsonParams();
 
       this.creating = true;
-      const msg = '{"name":"{0}", "template":"{1}"}, "params":"{2}"'.format(
+      const msg = '{"name":"{0}", "template":"{1}", "params":"{2}"}'.format(
         this.name,
         this.template,
         params
