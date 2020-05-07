@@ -11,8 +11,14 @@
         v-model="name"
         @change="onNameChange"
       />
+      
       <div class="title">Template</div>
-      <a-input class="input" placeholder="VUE" v-model="template" @change="onTemplateChange" />
+      <div v-if="templates.length > 0">
+        <a-radio-group class="radio" v-model="template" buttonStyle="solid">
+          <a-radio-button v-for="(t, index) in templates" :key="index" :value=t>{{t}}</a-radio-button>
+        </a-radio-group>
+      </div>
+      <a-input class="input" placeholder="" v-model="template" @change="onTemplateChange" />
 
       <div class="title">Params</div>
       <a-form layout="inline" style="margin-bottom: 15px">
@@ -57,6 +63,7 @@
 
 <script>
 import {} from "./string";
+import { websocket, createSocket, sendGetTemplates, sendCreateApp, jsonParams} from "./websocket";
 
 export default {
   name: "app",
@@ -66,6 +73,7 @@ export default {
       finish: false,
       name: "",
       template: "",
+      templates: [],
       form: {
         params: []
       }
@@ -73,13 +81,11 @@ export default {
   },
   methods: {
     init: function() {
-      const wsurl = process.env.WS_URL || "ws://127.0.0.1:8888/ws";
-      this.$message.info(wsurl);
-      this.websock = new WebSocket(wsurl);
-      this.websock.onmessage = this.onmessage;
-      this.websock.onopen = this.onopen;
-      this.websock.onerror = this.onerror;
-      this.websock.onclose = this.onclose;
+      createSocket()
+      websocket.onmessage = this.onmessage;
+      websocket.onopen = this.onopen;
+      websocket.onerror = this.onerror;
+      websocket.onclose = this.onclose;
     },
     onNameChange() {
       this.name = this.name.trim();
@@ -102,22 +108,14 @@ export default {
         return;
       }
 
-      const params = this.jsonParams();
+      const params = jsonParams(this.form.params);
 
       this.creating = true;
-      const msg = '{"name":"{0}", "template":"{1}", "params":"{2}"}'.format(
-        this.name,
-        this.template,
-        params
-      );
       this.init();
       var that = this;
       setTimeout(function() {
-        that.send(msg);
+        sendCreateApp(that.name, that.template, params)
       }, 1 * 1000);
-    },
-    send: function(data) {
-      this.websock.send(data);
     },
     onclose: function() {
       if (this.finish) {
@@ -127,15 +125,19 @@ export default {
     },
     onmessage: function(e) {
       const json = JSON.parse(e.data);
-      if (json.Code < 500) {
-        if (json.Code == 0) {
-          this.creating = false;
-          this.finish = true;
+      if (json.method == "GetTemplates") {
+        this.templates = json.data
+      } else if (json.method == "CreateApp") {
+        if (json.code < 500) {
+          if (json.code == 0) {
+            this.creating = false;
+            this.finish = true;
+          } else {
+            this.$message.info(json.msg);
+          }
         } else {
-          this.$message.info(json.Msg);
-        }
-      } else {
-        this.$message.error(json.Msg);
+          this.$message.error(json.msg);
+        }       
       }
     },
     onerror: function() {
@@ -162,14 +164,6 @@ export default {
       }
       return result;
     },
-    jsonParams() {
-      var obj = {};
-      for (var j = 0, len = this.form.params.length; j < len; j++) {
-        const param = this.form.params[j];
-        obj[param.key] = param.value;
-      }
-      return JSON.stringify(obj);
-    },
     addParam() {
       this.form.params.push({
         key: "",
@@ -179,6 +173,12 @@ export default {
     deleteParam(param, index) {
       this.form.params.splice(index, 1);
     }
+  },
+  mounted: function() {
+    this.init();
+    setTimeout(function() {
+      sendGetTemplates()
+    }, 100);
   },
   components: {}
 };

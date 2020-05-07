@@ -1,9 +1,10 @@
-package handler
+package constant
 
 // ErrCode error code
 type ErrCode int32
 
 const (
+	OK ErrCode = 0
 	// ErrInternal code
 	ErrInternal ErrCode = 500
 	// ErrJSONHandler code
@@ -14,4 +15,6 @@ const (
 	ErrContainBlanks ErrCode = 503
 	// ErrCreate code
 	ErrCreate ErrCode = 504
+	// ErrUnknownMethod
+	ErrUnknownMethod ErrCode = 505
 )
