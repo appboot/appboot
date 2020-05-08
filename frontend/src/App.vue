@@ -27,8 +27,12 @@
             <a-input v-model="param.key"></a-input>
           </a-form-item>
 
-          <a-form-item label="value">
+          <a-form-item label="value" v-if="param.type == 'string'">
             <a-input v-model="param.value"></a-input>
+          </a-form-item>
+
+          <a-form-item label="value" v-if="param.type == 'int'">
+            <a-input-number :min="param.min" :max="param.max" :placeholder="param.value" v-model="param.value" />
           </a-form-item>
 
           <a-form-item>
