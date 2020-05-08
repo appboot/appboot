@@ -2,8 +2,11 @@ package service
 
 import (
 	"errors"
+	"os"
 	"path"
 	"strings"
+
+	"github.com/appboot/appboot/git"
 
 	"github.com/appboot/appboot/parameter"
 
@@ -46,6 +49,8 @@ func GetParams(template string) *parameter.Parameters {
 
 // CreateApp create app
 func CreateApp(app model.Application) (constant.ErrCode, error) {
+	application := app.Convert()
+
 	if len(app.Name) < 1 || len(app.Template) < 1 {
 		return constant.ErrEmpty, errors.New("application name and template can be empty")
 	}
@@ -54,9 +59,21 @@ func CreateApp(app model.Application) (constant.ErrCode, error) {
 		return constant.ErrContainBlanks, errors.New("application name can not contain blanks")
 	}
 
-	if err := creator.Create(app.Convert(), true, false); err != nil {
+	_ = os.RemoveAll(application.Path)
+
+	if err := creator.Create(application, true, false); err != nil {
 		return constant.ErrCreate, err
 	}
 
 	return constant.OK, nil
+}
+
+// PushCode push code
+func PushCode(app model.Application) error {
+	if len(app.Git) < 1 {
+		return nil
+	}
+
+	codeFolder := app.Convert().Path
+	return git.Push(app.Git, codeFolder)
 }

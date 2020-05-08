@@ -12,6 +12,9 @@
         @change="onNameChange"
       />
       
+      <div class="title">Git</div>
+      <a-input class="input" placeholder v-model="git" @change="onGitChange" />
+
       <div class="title">Template</div>
       <div v-if="templates.length > 0">
         <a-radio-group class="radio" v-model="template" buttonStyle="solid" @change="onTemplateChange">
@@ -79,6 +82,8 @@ import {
 import { method } from "./const";
 import { decodeParams } from "./utils";
 
+const defaultGit = "git@github.com:appboot/example.git";
+
 export default {
   name: "app",
   data() {
@@ -90,7 +95,8 @@ export default {
       templates: [],
       form: {
         params: []
-      }
+      },
+      git: defaultGit
     };
   },
   methods: {
@@ -107,6 +113,9 @@ export default {
     onTemplateChange() {
       this.template = this.template.trim();
       sendGetParams(this.template)
+    },
+    onGitChange() {
+      this.git = this.git.replace(/\s*/g, "");
     },
     onCreate() {
       if (this.name.length < 1) {
@@ -129,7 +138,7 @@ export default {
       this.init();
       var that = this;
       setTimeout(function() {
-        sendCreateApp(that.name, that.template, params)
+        sendCreateApp(that.name, that.template, params, that.git)
       }, 1 * 1000);
     },
     onclose: function() {

@@ -17,4 +17,6 @@ const (
 	ErrCreate ErrCode = 504
 	// ErrUnknownMethod
 	ErrUnknownMethod ErrCode = 505
+	// ErrPushCode
+	ErrPushCode ErrCode = 506
 )

@@ -17,6 +17,7 @@ type Application struct {
 	Name     string `json:"name"`
 	Template string `json:"template"`
 	Params   string `json:"params"`
+	Git      string `json:"git"`
 }
 
 // Convert to appboot Application

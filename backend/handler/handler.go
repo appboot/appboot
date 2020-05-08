@@ -29,6 +29,11 @@ func Handle(conn *websocket.Conn) {
 				break
 			}
 
+			if err := service.PushCode(app); err != nil {
+				_ = sendMessage(constant.ErrPushCode, "push code failed", constant.MethodCreateApp, jsonHandler, conn)
+				break
+			}
+
 			_ = sendMessage(constant.OK, "create success", constant.MethodCreateApp, jsonHandler, conn)
 			break
 
