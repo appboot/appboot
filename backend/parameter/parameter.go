@@ -8,22 +8,22 @@ import (
 
 // Parameters parameters
 type Parameters struct {
-	StringParameters []StringParameter `yaml:"string"`
-	IntParameters    []IntParameter    `yaml:"int"`
+	StringParameters []StringParameter `yaml:"string" json:"string"`
+	IntParameters    []IntParameter    `yaml:"int" json:"int"`
 }
 
 // StringParameter string parameter
 type StringParameter struct {
-	Key     string `yaml:"key"`
-	Default string `yaml:"default"`
+	Key     string `yaml:"key" json:"key"`
+	Default string `yaml:"default" json:"default"`
 }
 
 // IntParameter int parameter
 type IntParameter struct {
-	Key     string `yaml:"key"`
-	Default string `yaml:"default"`
-	Min     int    `yaml:"min"`
-	Max     int    `yaml:"max"`
+	Key     string `yaml:"key" json:"key"`
+	Default string `yaml:"default" json:"default"`
+	Min     int    `yaml:"min" json:"min"`
+	Max     int    `yaml:"max" json:"max"`
 }
 
 // GetParameters get parameters from yaml path

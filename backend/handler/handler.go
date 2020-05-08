@@ -1,13 +1,10 @@
 package handler
 
 import (
-	"errors"
 	"fmt"
-	"strings"
 
 	"github.com/appboot/appboot/service"
 
-	"github.com/appboot/appbctl/creator"
 	"github.com/appboot/appboot/constant"
 	"github.com/appboot/appboot/model"
 	"golang.org/x/net/websocket"
@@ -26,42 +23,29 @@ func Handle(conn *websocket.Conn) {
 
 		if params.Method == constant.MethodCreateApp {
 			app := params.Application
-			if err := createApp(app, jsonHandler, conn); err != nil {
+
+			if code, err := service.CreateApp(app); err != nil {
+				_ = sendMessage(code, err.Error(), constant.MethodCreateApp, jsonHandler, conn)
 				break
 			}
-			_ = sendData(constant.OK, "create success", constant.MethodCreateApp, "", jsonHandler, conn)
+
+			_ = sendMessage(constant.OK, "create success", constant.MethodCreateApp, jsonHandler, conn)
 			break
 
 		} else if params.Method == constant.MethodGetTemplates {
 			templates := service.GetTemplates()
 			_ = sendData(constant.OK, "get templates success", constant.MethodGetTemplates, templates, jsonHandler, conn)
 
+		} else if params.Method == constant.MethodGetParams {
+			app := params.Application
+			result := service.GetParams(app.Template)
+			_ = sendData(constant.OK, "get params success", constant.MethodGetParams, result, jsonHandler, conn)
+
 		} else {
 			_ = sendMessage(constant.ErrUnknownMethod, "unknown method", "", jsonHandler, conn)
 			break
 		}
 	}
-}
-
-func createApp(app model.Application, jsonHandler websocket.Codec, conn *websocket.Conn) error {
-	if len(app.Name) < 1 || len(app.Template) < 1 {
-		msg := "application name and template can be empty"
-		_ = sendMessage(constant.ErrEmpty, msg, constant.MethodCreateApp, jsonHandler, conn)
-		return errors.New(msg)
-	}
-
-	if strings.Contains(app.Name, " ") {
-		msg := "application name can not contain blanks"
-		_ = sendMessage(constant.ErrContainBlanks, msg, constant.MethodCreateApp, jsonHandler, conn)
-		return errors.New(msg)
-	}
-
-	if err := creator.Create(app.Convert(), true, false); err != nil {
-		_ = sendMessage(constant.ErrCreate, err.Error(), constant.MethodCreateApp, jsonHandler, conn)
-		return err
-	}
-
-	return nil
 }
 
 func sendMessage(code constant.ErrCode,

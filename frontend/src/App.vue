@@ -14,7 +14,7 @@
       
       <div class="title">Template</div>
       <div v-if="templates.length > 0">
-        <a-radio-group class="radio" v-model="template" buttonStyle="solid">
+        <a-radio-group class="radio" v-model="template" buttonStyle="solid" @change="onTemplateChange">
           <a-radio-button v-for="(t, index) in templates" :key="index" :value=t>{{t}}</a-radio-button>
         </a-radio-group>
       </div>
@@ -62,8 +62,18 @@
 </template>
 
 <script>
-import {} from "./string";
-import { websocket, createSocket, sendGetTemplates, sendCreateApp, jsonParams} from "./websocket";
+
+import { 
+  websocket,
+  createSocket,
+  sendGetTemplates,
+  sendCreateApp,
+  jsonParams,
+  sendGetParams
+} from "./websocket";
+
+import { method } from "./const";
+import { decodeParams } from "./utils";
 
 export default {
   name: "app",
@@ -92,6 +102,7 @@ export default {
     },
     onTemplateChange() {
       this.template = this.template.trim();
+      sendGetParams(this.template)
     },
     onCreate() {
       if (this.name.length < 1) {
@@ -125,9 +136,9 @@ export default {
     },
     onmessage: function(e) {
       const json = JSON.parse(e.data);
-      if (json.method == "GetTemplates") {
+      if (json.method == method.GetTemplates) {
         this.templates = json.data
-      } else if (json.method == "CreateApp") {
+      } else if (json.method == method.CreateApp) {
         if (json.code < 500) {
           if (json.code == 0) {
             this.creating = false;
@@ -137,7 +148,12 @@ export default {
           }
         } else {
           this.$message.error(json.msg);
-        }       
+        }
+      } else if (json.method == method.GetParams) {
+        window.console.log('params: '+json.data)
+        var result = decodeParams(json.data)
+        window.console.log('result: '+result)
+        this.form.params = result
       }
     },
     onerror: function() {

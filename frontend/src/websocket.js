@@ -1,24 +1,31 @@
+import { method } from "./const";
+
 const WSS_URL = process.env.WS_URL || "ws://127.0.0.1:8888/ws"
 
 export let websocket = ''
 
 export function createSocket() {
-    if (!websocket) {
-        window.console.log('creating websocket: '+WSS_URL)
-        websocket = new WebSocket(WSS_URL)
-    } else {
-        window.console.log('websocket was created')
-    }
+    window.console.log('creating websocket: '+WSS_URL)
+    websocket = new WebSocket(WSS_URL)
 }
 
 export function sendGetTemplates() {
-    const msg = JSON.stringify({method: 'GetTemplates'})
+    const msg = JSON.stringify({method: method.GetTemplates})
+    websocket.send(msg);
+}
+
+export function sendGetParams(template) {
+    const msg = JSON.stringify({
+        method: method.GetParams,
+        application: {
+            template: template,
+        }})
     websocket.send(msg);
 }
 
 export function sendCreateApp(name, template, params) {
     const msg = JSON.stringify({
-        method: 'CreateApp', 
+        method: method.CreateApp, 
         application: {
             name: name,
             template: template,
