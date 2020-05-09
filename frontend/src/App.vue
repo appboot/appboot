@@ -126,9 +126,12 @@ export default {
         this.$message.error("template cannot be empty.");
         return;
       }
-
+      if (this.git.length < 1) {
+        this.$message.error("git cannot be empty.");
+        return;
+      }
       if (!this.checkParams()) {
-        this.$message.error("The key and value of all params cannot be empty.");
+        this.$message.error("the key and value of all params cannot be empty.");
         return;
       }
 

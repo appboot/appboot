@@ -48,7 +48,7 @@ func GetParams(template string) *parameter.Parameters {
 }
 
 // CreateApp create app
-func CreateApp(app model.Application) (constant.ErrCode, error) {
+func CreateApp(app model.Application, callback *creator.CreateCallback) (constant.ErrCode, error) {
 	application := app.Convert()
 
 	if len(app.Name) < 1 || len(app.Template) < 1 {
@@ -61,7 +61,7 @@ func CreateApp(app model.Application) (constant.ErrCode, error) {
 
 	_ = os.RemoveAll(application.Path)
 
-	if err := creator.Create(application, true, false); err != nil {
+	if err := creator.CreateWithCallback(application, true, false, callback); err != nil {
 		return constant.ErrCreate, err
 	}
 
