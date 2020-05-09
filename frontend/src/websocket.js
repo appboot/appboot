@@ -1,6 +1,5 @@
 import { method } from "./const";
-
-const WSS_URL = process.env.WS_URL || "ws://127.0.0.1:8888/ws"
+import { WSS_URL } from "./config";
 
 export let websocket = ''
 

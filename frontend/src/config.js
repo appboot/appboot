@@ -1,0 +1,1 @@
+export const WSS_URL = "ws://ws.appboot.com:8888/ws"; //"ws://127.0.0.1:8888/ws"
