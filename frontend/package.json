@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "docker": "docker build . -t appboot"
+    "docker": "docker build . -t appboot/frontend"
   },
   "dependencies": {
     "ant-design-vue": "^1.4.1",
