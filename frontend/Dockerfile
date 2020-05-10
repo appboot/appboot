@@ -5,6 +5,7 @@ WORKDIR /app
 RUN npm install && npm run build
 
 FROM nginx:1.17.8-alpine
+
 RUN mkdir /app
 COPY --from=builder /app/dist /app
 COPY --from=builder /app/start.sh /app
