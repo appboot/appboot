@@ -12,7 +12,7 @@ import (
 func main() {
 	const port = ":8888"
 	const pattern = "/appboot"
-	url := fmt.Sprintf("ws://%v:%v/%v",utils.GetIP(),port,pattern)
+	url := fmt.Sprintf("ws://%v:%v%v",utils.GetIP(),port,pattern)
 	fmt.Printf("WS_URL: %v", url)
 
 	http.Handle(pattern, websocket.Handler(handler.Handle))
