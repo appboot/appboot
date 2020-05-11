@@ -22,6 +22,15 @@ export function sendGetParams(template) {
     websocket.send(msg);
 }
 
+export function sendGetGitPrefix(template) {
+    const msg = JSON.stringify({
+        method: method.GetGitPrefix,
+        application: {
+            template: template,
+        }})
+    websocket.send(msg);
+}
+
 export function sendCreateApp(name, template, params, git) {
     const msg = JSON.stringify({
         method: method.CreateApp, 

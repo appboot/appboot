@@ -17,6 +17,12 @@ import (
 	"github.com/appboot/appboot/utils"
 )
 
+const (
+	appboot        = "appboot"
+	parametersYaml = "parameters.yaml"
+	gitYaml        = "git.yaml"
+)
+
 // GetTemplates get templates
 func GetTemplates() []string {
 	var templates []string
@@ -38,9 +44,26 @@ func GetParams(template string) *parameter.Parameters {
 		return &params
 	}
 
-	yamlPath := path.Join(root, template, "appboot", "parameters.yaml")
+	yamlPath := path.Join(root, template, appboot, parametersYaml)
 
 	result, err := parameter.GetParameters(yamlPath)
+	if err != nil {
+		return &params
+	}
+	return result
+}
+
+// GetGitParameters get git parameters
+func GetGitParameters(template string) *git.Parameters {
+	var params git.Parameters
+	root, err := config.GetTemplateRoot()
+	if err != nil {
+		return &params
+	}
+
+	yamlPath := path.Join(root, template, appboot, gitYaml)
+
+	result, err := git.GetParameters(yamlPath)
 	if err != nil {
 		return &params
 	}

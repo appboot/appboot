@@ -48,6 +48,11 @@ func Handle(conn *websocket.Conn) {
 			templates := service.GetTemplates()
 			_ = sendData(constant.OK, "get templates success", constant.MethodGetTemplates, templates, jsonHandler, conn)
 
+		} else if params.Method == constant.MethodGetGitPrefix {
+			app := params.Application
+			parameters := service.GetGitParameters(app.Template)
+			_ = sendData(constant.OK, "get git prefix success", constant.MethodGetGitPrefix, parameters.Prefix, jsonHandler, conn)
+
 		} else if params.Method == constant.MethodGetParams {
 			app := params.Application
 			result := service.GetParams(app.Template)

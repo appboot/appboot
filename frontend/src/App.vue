@@ -76,7 +76,8 @@ import {
   sendGetTemplates,
   sendCreateApp,
   jsonParams,
-  sendGetParams
+  sendGetParams,
+  sendGetGitPrefix
 } from "./websocket";
 
 import { method } from "./const";
@@ -96,7 +97,8 @@ export default {
       form: {
         params: []
       },
-      git: defaultGit
+      gitPrefix: "git@github.com:appboot/",
+      git: gitPrefix,
     };
   },
   methods: {
@@ -109,10 +111,12 @@ export default {
     },
     onNameChange() {
       this.name = this.name.trim();
+      this.git = this.gitPrefix + this.name
     },
     onTemplateChange() {
       this.template = this.template.trim();
       sendGetParams(this.template)
+      sendGetGitPrefix(this.template)
     },
     onGitChange() {
       this.git = this.git.replace(/\s*/g, "");
@@ -168,8 +172,15 @@ export default {
       } else if (json.method == method.GetParams) {
         window.console.log('params: '+json.data)
         var result = decodeParams(json.data)
-        window.console.log('result: '+result)
         this.form.params = result
+      } else if (json.method == method.GetGitPrefix) {
+        window.console.log('git prefix: '+json.data)
+        var result = decodeParams(json.data)
+        if (result.length > 0) {
+          this.gitPrefix = result
+        } else {
+          this.gitPrefix = "git@github.com:appboot/"
+        }
       }
     },
     onerror: function() {
