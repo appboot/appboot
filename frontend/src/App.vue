@@ -80,10 +80,8 @@ import {
   sendGetGitPrefix
 } from "./websocket";
 
-import { method } from "./const";
+import { method, git } from "./const";
 import { decodeParams } from "./utils";
-
-const defaultGit = "git@github.com:appboot/example.git";
 
 export default {
   name: "app",
@@ -97,8 +95,8 @@ export default {
       form: {
         params: []
       },
-      gitPrefix: "git@github.com:appboot/",
-      git: gitPrefix,
+      gitPrefix: git.DefaultPrefix,
+      git: git.DefaultPrefix,
     };
   },
   methods: {
@@ -111,7 +109,7 @@ export default {
     },
     onNameChange() {
       this.name = this.name.trim();
-      this.git = this.gitPrefix + this.name
+      this.git = this.gitPrefix + this.name + git.Suffix
     },
     onTemplateChange() {
       this.template = this.template.trim();
@@ -175,11 +173,12 @@ export default {
         this.form.params = result
       } else if (json.method == method.GetGitPrefix) {
         window.console.log('git prefix: '+json.data)
-        var result = decodeParams(json.data)
-        if (result.length > 0) {
-          this.gitPrefix = result
+        var prefix = json.data
+        if (prefix.length > 0) {
+          this.gitPrefix = prefix
+          this.onNameChange()
         } else {
-          this.gitPrefix = "git@github.com:appboot/"
+          this.gitPrefix = git.DefaultPrefix
         }
       }
     },
