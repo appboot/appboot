@@ -1,8 +1,10 @@
 <template>
   <div id="app">
+
     <div id="logo">
       <img alt="logo" src="./assets/logo.png" />
     </div>
+
     <div id="detial" v-if="!finish">
       <div class="title">Application Name</div>
       <a-input
@@ -59,10 +61,17 @@
         @click="onCreate"
       >Create</a-button>
     </div>
+    
     <div id="finish" v-if="finish">
       <div class="finish-text">
         <a-icon class="icons-list" type="check-circle" theme="twoTone" twoToneColor="#52c41a" />
         Congratulations, the application {{name}} was created successfully!
+      </div>
+      <div class="finish-text">You can execute the following command to pull the created application code.</div>
+      <div v-highlight>
+        <pre>
+          <code class="shell">git clone {{git}}</code>
+        </pre>
       </div>
     </div>
   </div>
