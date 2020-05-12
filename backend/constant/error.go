@@ -4,6 +4,7 @@ package constant
 type ErrCode int32
 
 const (
+	// OK code
 	OK ErrCode = 0
 	// ErrInternal code
 	ErrInternal ErrCode = 500
@@ -15,8 +16,8 @@ const (
 	ErrContainBlanks ErrCode = 503
 	// ErrCreate code
 	ErrCreate ErrCode = 504
-	// ErrUnknownMethod
+	// ErrUnknownMethod code
 	ErrUnknownMethod ErrCode = 505
-	// ErrPushCode
+	// ErrPushCode code
 	ErrPushCode ErrCode = 506
 )

@@ -229,7 +229,7 @@ export default {
     this.init();
     setTimeout(function() {
       sendGetTemplates()
-    }, 100);
+    }, 1000);
   },
   components: {}
 };
