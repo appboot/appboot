@@ -1,6 +1,5 @@
 export const method = {
-    GetParams: "GetParams",
-    GetGitPrefix: "GetGitPrefix",
+    GetConfig: "GetConfig",
     GetTemplates: "GetTemplates",
     CreateApp: "CreateApp",
 }

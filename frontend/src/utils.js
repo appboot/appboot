@@ -4,6 +4,7 @@ export function decodeParams(params) {
 
     var stringParams = params.string
     var intParams = params.int
+    var floatParams = params.float
 
     if (stringParams != null) {
         for (let i = 0; i < stringParams.length; i++) {
@@ -25,6 +26,19 @@ export function decodeParams(params) {
                 value: intParam.default,
                 min: intParam.min,
                 max: intParam.max
+            });
+        }
+    }
+
+    if (floatParams != null) {
+        for (let i = 0; i < floatParams.length; i++) {
+            var floatParam = floatParams[i]
+            result.push({
+                type: "float",
+                key: floatParam.key,
+                value: floatParam.default,
+                min: floatParam.min,
+                max: floatParam.max
             });
         }
     }

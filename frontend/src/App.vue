@@ -40,6 +40,10 @@
             <a-input-number :min="param.min" :max="param.max" :placeholder="param.value" v-model="param.value" />
           </a-form-item>
 
+          <a-form-item label="value" v-if="param.type == 'float'">
+            <a-input-number :min="param.min" :max="param.max" :placeholder="param.value" v-model="param.value" />
+          </a-form-item>
+
           <a-form-item>
             <a-icon
               class="dynamic-delete-button"
@@ -85,8 +89,7 @@ import {
   sendGetTemplates,
   sendCreateApp,
   jsonParams,
-  sendGetParams,
-  sendGetGitPrefix
+  sendGetConfig
 } from "./websocket";
 
 import { method, git } from "./const";
@@ -122,8 +125,7 @@ export default {
     },
     onTemplateChange() {
       this.template = this.template.trim();
-      sendGetParams(this.template)
-      sendGetGitPrefix(this.template)
+      sendGetConfig(this.template)
     },
     onGitChange() {
       this.git = this.git.replace(/\s*/g, "");
@@ -176,13 +178,12 @@ export default {
         } else {
           this.$message.error(json.msg);
         }
-      } else if (json.method == method.GetParams) {
+      } else if (json.method == method.GetConfig) {
         window.console.log('params: '+json.data)
-        var result = decodeParams(json.data)
-        this.form.params = result
-      } else if (json.method == method.GetGitPrefix) {
-        window.console.log('git prefix: '+json.data)
-        var prefix = json.data
+        var result = json.data
+        this.form.params = decodeParams(result.parameters)
+        
+        var prefix = result.git.prefix
         if (prefix.length > 0) {
           this.gitPrefix = prefix
           this.onNameChange()
@@ -218,6 +219,7 @@ export default {
     addParam() {
       this.form.params.push({
         key: "",
+        type: "string",
         value: ""
       });
     },

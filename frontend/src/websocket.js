@@ -13,18 +13,9 @@ export function sendGetTemplates() {
     websocket.send(msg);
 }
 
-export function sendGetParams(template) {
+export function sendGetConfig(template) {
     const msg = JSON.stringify({
-        method: method.GetParams,
-        application: {
-            template: template,
-        }})
-    websocket.send(msg);
-}
-
-export function sendGetGitPrefix(template) {
-    const msg = JSON.stringify({
-        method: method.GetGitPrefix,
+        method: method.GetConfig,
         application: {
             template: template,
         }})

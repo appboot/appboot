@@ -8,7 +8,7 @@ import (
 
 	"github.com/appboot/appboot/git"
 
-	"github.com/appboot/appboot/parameter"
+	cnf "github.com/appboot/appboot/config"
 
 	"github.com/appboot/appbctl/config"
 	"github.com/appboot/appbctl/creator"
@@ -18,9 +18,8 @@ import (
 )
 
 const (
-	appboot        = "appboot"
-	parametersYaml = "parameters.yaml"
-	gitYaml        = "git.yaml"
+	appboot    = "appboot"
+	configYaml = "appboot.yaml"
 )
 
 // GetTemplates get templates
@@ -36,37 +35,17 @@ func GetTemplates() []string {
 	return templates
 }
 
-// GetParams get params
-func GetParams(template string) *parameter.Parameters {
-	var params parameter.Parameters
+// GetConfig get config
+func GetConfig(template string) *cnf.Config {
+	var result *cnf.Config
 	root, err := config.GetTemplateRoot()
 	if err != nil {
-		return &params
+		return result
 	}
 
-	yamlPath := path.Join(root, template, appboot, parametersYaml)
+	yamlPath := path.Join(root, template, appboot, configYaml)
 
-	result, err := parameter.GetParameters(yamlPath)
-	if err != nil {
-		return &params
-	}
-	return result
-}
-
-// GetGitParameters get git parameters
-func GetGitParameters(template string) *git.Parameters {
-	var params git.Parameters
-	root, err := config.GetTemplateRoot()
-	if err != nil {
-		return &params
-	}
-
-	yamlPath := path.Join(root, template, appboot, gitYaml)
-
-	result, err := git.GetParameters(yamlPath)
-	if err != nil {
-		return &params
-	}
+	result, _ = cnf.GetConfig(yamlPath)
 	return result
 }
 
