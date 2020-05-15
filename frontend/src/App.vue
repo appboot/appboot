@@ -87,6 +87,7 @@ import {
   websocket,
   createSocket,
   sendGetTemplates,
+  sendUpdateAllTemplates,
   sendCreateApp,
   jsonParams,
   sendGetConfig
@@ -165,7 +166,10 @@ export default {
     },
     onmessage: function(e) {
       const json = JSON.parse(e.data);
-      if (json.method == method.GetTemplates) {
+      if (json.method == method.GetTemplates || json.method == method.UpdateAllTemplates) {
+        if (json.data == null) {
+            json.data = []
+        }
         this.templates = json.data
       } else if (json.method == method.CreateApp) {
         if (json.code < 500) {
@@ -231,6 +235,7 @@ export default {
     this.init();
     setTimeout(function() {
       sendGetTemplates()
+      sendUpdateAllTemplates()
     }, 1000);
   },
   components: {}

@@ -48,6 +48,10 @@ func Handle(conn *websocket.Conn) {
 			templates := service.GetTemplates()
 			_ = sendData(constant.OK, "get templates success", constant.MethodGetTemplates, templates, jsonHandler, conn)
 
+		} else if params.Method == constant.MethodUpdateAllTemplates {
+			templates := service.UpdateAllTemplates()
+			_ = sendData(constant.OK, "update all templates success", constant.MethodUpdateAllTemplates, templates, jsonHandler, conn)
+
 		} else if params.Method == constant.MethodGetConfig {
 			app := params.Application
 			config := service.GetConfig(app.Template)

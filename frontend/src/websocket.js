@@ -13,6 +13,11 @@ export function sendGetTemplates() {
     websocket.send(msg);
 }
 
+export function sendUpdateAllTemplates() {
+    const msg = JSON.stringify({method: method.UpdateAllTemplates})
+    websocket.send(msg);
+}
+
 export function sendGetConfig(template) {
     const msg = JSON.stringify({
         method: method.GetConfig,

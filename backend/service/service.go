@@ -12,6 +12,8 @@ import (
 
 	"github.com/appboot/appbctl/config"
 	"github.com/appboot/appbctl/creator"
+	"github.com/appboot/appbctl/downloader"
+	"github.com/appboot/appbctl/template"
 	"github.com/appboot/appboot/constant"
 	"github.com/appboot/appboot/model"
 	"github.com/appboot/appboot/utils"
@@ -33,6 +35,12 @@ func GetTemplates() []string {
 
 	templates, _ = utils.GetDirList(root)
 	return templates
+}
+
+// UpdateAllTemplates update all templates
+func UpdateAllTemplates() []string {
+	_ = template.UpdateAllTemplates(&downloader.GitDownloader{})
+	return GetTemplates()
 }
 
 // GetConfig get config

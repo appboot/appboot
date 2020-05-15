@@ -21,7 +21,7 @@ push-docker:
 	docker push ${IMAGE_NAME}
 push-docker-latest:
 	docker tag ${IMAGE_NAME} ${IMAGE_LATEST}
-#	docker push ${IMAGE_LATEST}
+	docker push ${IMAGE_LATEST}
 help:
 	@echo "fmt - format the source code"
 	@echo "mod - mod tidy"

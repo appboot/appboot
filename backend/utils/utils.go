@@ -12,8 +12,13 @@ import (
 	"github.com/mitchellh/go-homedir"
 )
 
-// GetIP get intranet IP
+// GetIP get IP
 func GetIP() string {
+	envIP := os.Getenv("HOST_IP")
+	if len(envIP) > 0 {
+		return envIP
+	}
+
 	addrs, err := net.InterfaceAddrs()
 	if err != nil {
 		fmt.Println(err)
