@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"log"
 	"os"
 	"path"
 	"strings"
@@ -39,7 +40,9 @@ func GetTemplates() []string {
 
 // UpdateAllTemplates update all templates
 func UpdateAllTemplates() []string {
-	_ = template.UpdateAllTemplates(&downloader.GitDownloader{})
+	if err := template.UpdateAllTemplates(&downloader.GitDownloader{}); err != nil {
+		log.Printf("update all templates: %v", err)
+	}
 	return GetTemplates()
 }
 
@@ -71,7 +74,7 @@ func CreateApp(app model.Application, callback *creator.CreateCallback) (constan
 
 	_ = os.RemoveAll(application.Path)
 
-	if err := creator.CreateWithCallback(application, true, false, callback); err != nil {
+	if err := creator.CreateWithCallback(application, true, true, callback); err != nil {
 		return constant.ErrCreate, err
 	}
 

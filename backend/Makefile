@@ -17,10 +17,10 @@ build: mod
 	go build -o main ./main.go
 build-docker:
 	docker build -t ${IMAGE_NAME} -f Dockerfile .
+	docker tag ${IMAGE_NAME} ${IMAGE_LATEST}
 push-docker:
 	docker push ${IMAGE_NAME}
 push-docker-latest:
-	docker tag ${IMAGE_NAME} ${IMAGE_LATEST}
 	docker push ${IMAGE_LATEST}
 help:
 	@echo "fmt - format the source code"

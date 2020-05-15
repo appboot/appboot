@@ -8,6 +8,12 @@ WORKDIR /build
 RUN go build -o main main.go
 
 FROM alpine:3.7
+
+# https://pkgs.alpinelinux.org/packages
+RUN apk add  --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.7/main/ git=2.15.4-r0
+RUN apk add  --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.7/main/ bash=4.4.19-r1
+RUN apk add  --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.7/main/ openssh=7.5_p1-r10
+
 RUN mkdir /app
 COPY --from=builder /build/main /app
 WORKDIR /app
