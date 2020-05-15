@@ -6,7 +6,7 @@
 
 ### Docker
 
-1. Get the `WS_URL` from the command line output of backend.
+1. Get the `WS_URL` from the command line output of [backend](../backend).
 
    ```shell
    WS_URL: ws://xxx.xxx.xxx.xxx:8888/appboot
