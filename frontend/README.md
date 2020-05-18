@@ -15,7 +15,10 @@
 2. Run appboot docker with `WS_URL`
 
    ```shell
-   docker run -d --name appboot -p 8080:80 -e WS_URL="ws://xxx.xxx.xxx.xxx:8888/appboot" appboot/frontend
+   docker run -d --name appboot \
+    -p 8080:80 \
+    -e WS_URL="ws://xxx.xxx.xxx.xxx:8888/appboot" \
+    appboot/frontend
    ```
 
 3. Visit <http://localhost:8080/>

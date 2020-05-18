@@ -9,8 +9,26 @@
 #### Run
 
 ```shell
-// replace 192.168.0.1 with your host IP
-docker run -d --name backend -e HOST_IP=192.168.0.1 -v $HOME/.ssh:/root/.ssh -v $HOME/.gitconfig:/root/.gitconfig -p 8888:8888 appboot/backend
+// replace 192.168.0.1 with your host IP or domain
+docker run -d --name backend \
+ -e HOST_IP=192.168.0.1 \
+ -v $HOME/.ssh:/root/.ssh \
+ -v $HOME/.gitconfig:/root/.gitconfig \
+ -p 8888:8888 \
+ appboot/backend
+```
+
+with [jenkinsapi](https://github.com/CatchZeng/jenkinsapi)
+
+```shell
+// replace 192.168.0.1 with your host IP or domain
+docker run -d --name backend \
+ -e HOST_IP=192.168.0.1 \
+ -v $HOME/.ssh:/root/.ssh \
+ -v $HOME/.gitconfig:/root/.gitconfig \
+ -v $HOME/.jenkinsapi:/root/.jenkinsapi \
+ -p 8888:8888 \
+ appboot/backend:jenkinsapi
 ```
 
 #### Get WS_URL
