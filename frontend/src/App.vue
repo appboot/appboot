@@ -149,7 +149,7 @@ export default {
         return;
       }
     
-      var tmpParams = this.form.params
+      var tmpParams = this.form.params.slice()
       tmpParams.push({
         key: "Git",
         type: "string",
