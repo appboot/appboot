@@ -148,8 +148,14 @@ export default {
         this.$message.error("the key and value of all params cannot be empty.");
         return;
       }
-
-      const params = jsonParams(this.form.params);
+    
+      var tmpParams = this.form.params
+      tmpParams.push({
+        key: "Git",
+        type: "string",
+        value: this.git
+      })
+      const params = jsonParams(tmpParams);
 
       this.creating = true;
       this.init();
