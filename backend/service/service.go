@@ -25,6 +25,11 @@ const (
 	configYaml = "appboot.yaml"
 )
 
+// InitAppbctlConfig init appbctl config
+func InitAppbctlConfig() {
+	config.InitConfig()
+}
+
 // GetTemplates get templates
 func GetTemplates() []string {
 	var templates []string

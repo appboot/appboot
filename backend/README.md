@@ -14,6 +14,7 @@ docker run -d --name backend \
  -e HOST_IP=192.168.0.1 \
  -v $HOME/.ssh:/root/.ssh \
  -v $HOME/.gitconfig:/root/.gitconfig \
+ -v $HOME/.appboot:/root/.appboot \
  -p 8888:8888 \
  appboot/backend
 ```
@@ -26,6 +27,7 @@ docker run -d --name backend \
  -e HOST_IP=192.168.0.1 \
  -v $HOME/.ssh:/root/.ssh \
  -v $HOME/.gitconfig:/root/.gitconfig \
+ -v $HOME/.appboot:/root/.appboot \
  -v $HOME/.jenkinsapi:/root/.jenkinsapi \
  -p 8888:8888 \
  appboot/backend:jenkinsapi
