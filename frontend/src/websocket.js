@@ -42,8 +42,12 @@ export function sendCreateApp(name, template, params, git) {
 export function jsonParams(params) {
     var obj = {};
     for (var j = 0, len = params.length; j < len; j++) {
-      const param = params[j];
-      obj[param.key] = param.value;
+        const param = params[j];
+        var value = param.value
+        if (param.type != "string") {
+            value = value.toString()
+        }
+        obj[param.key] = value;
     }
     return JSON.stringify(obj);
 }
