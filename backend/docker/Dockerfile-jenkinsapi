@@ -6,7 +6,7 @@ RUN mkdir /build
 ADD . /build/
 WORKDIR /build
 RUN go build -o main main.go
-RUN go get github.com/CatchZeng/jenkinsapi
+RUN go get -u github.com/CatchZeng/jenkinsapi
 
 FROM alpine:3.7
 

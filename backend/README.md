@@ -30,7 +30,7 @@ docker run -d --name backend \
  -v $HOME/.appboot:/root/.appboot \
  -v $HOME/.jenkinsapi:/root/.jenkinsapi \
  -p 8888:8888 \
- appboot/backend:jenkinsapi
+ appboot/backend:jenkinsapi-latest
 ```
 
 #### Get WS_URL
