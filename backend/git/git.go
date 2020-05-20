@@ -19,7 +19,7 @@ func Push(gitURL string, codeFolder string) error {
 	}
 
 	cmd := "cd " + codeFolder + " && " + "git init" + " && " + "git remote add origin " + gitURL + " && " +
-		"git add ." + " && " + "git commit -m \"Initial commit\"" + " && " + "git push -u origin master"
+		"git add ." + " && " + "git reset appboot" + " && " + "git commit -m \"Initial commit\"" + " && " + "git push -u origin master"
 	log.Printf("%s", cmd)
 	return runBashCommand(cmd)
 }
