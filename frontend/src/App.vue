@@ -6,7 +6,14 @@
     </div>
 
     <div id="detial" v-if="!finish">
-      <div class="title">Application Name</div>
+      <div class="title">Template</div>
+      <div v-if="templates.length > 0">
+        <a-radio-group class="radio" v-model="template" buttonStyle="solid" @change="onTemplateChange">
+          <a-radio-button v-for="(t, index) in templates" :key="index" :value=t>{{t}}</a-radio-button>
+        </a-radio-group>
+      </div>
+
+      <div class="title">Name</div>
       <a-input
         class="input"
         placeholder="your application name"
@@ -15,15 +22,7 @@
       />
       
       <div class="title">Git</div>
-      <a-input class="input" placeholder v-model="git" @change="onGitChange" />
-
-      <div class="title">Template</div>
-      <div v-if="templates.length > 0">
-        <a-radio-group class="radio" v-model="template" buttonStyle="solid" @change="onTemplateChange">
-          <a-radio-button v-for="(t, index) in templates" :key="index" :value=t>{{t}}</a-radio-button>
-        </a-radio-group>
-      </div>
-      <a-input class="input" placeholder="" v-model="template" @change="onTemplateChange" />
+      <a-input class="input" placeholder v-model="git" @change="onGitChange" />      
 
       <div class="title">Params</div>
       <a-form layout="inline" style="margin-bottom: 15px">
