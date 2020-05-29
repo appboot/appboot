@@ -3,8 +3,8 @@ module github.com/appboot/appboot
 go 1.13
 
 require (
-	github.com/CatchZeng/gutils v0.0.3
-	github.com/appboot/appbctl v0.1.5
+	github.com/CatchZeng/gutils v0.1.1
+	github.com/appboot/appbctl v0.2.0
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/mapstructure v1.3.0 // indirect

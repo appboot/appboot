@@ -25,7 +25,7 @@ func (app *Application) Convert() application.Application {
 	result := application.Application{}
 	result.Name = app.Name
 	result.Template = app.Template
-	result.Values = app.Params
+	result.Parameters = app.Params
 	result.Path = utils.GetSavePath(app.Name)
 	return result
 }

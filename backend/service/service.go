@@ -4,25 +4,14 @@ import (
 	"errors"
 	"log"
 	"os"
-	"path"
 	"strings"
-
-	"github.com/appboot/appboot/git"
-
-	cnf "github.com/appboot/appboot/config"
 
 	"github.com/appboot/appbctl/config"
 	"github.com/appboot/appbctl/creator"
-	"github.com/appboot/appbctl/downloader"
 	"github.com/appboot/appbctl/template"
 	"github.com/appboot/appboot/constant"
+	"github.com/appboot/appboot/git"
 	"github.com/appboot/appboot/model"
-	"github.com/appboot/appboot/utils"
-)
-
-const (
-	appboot    = "appboot"
-	configYaml = "appboot.yaml"
 )
 
 // InitAppbctlConfig init appbctl config
@@ -32,37 +21,20 @@ func InitAppbctlConfig() {
 
 // GetTemplates get templates
 func GetTemplates() []string {
-	var templates []string
-
-	root, err := config.GetTemplateRoot()
-	if err != nil {
-		return templates
-	}
-
-	templates, _ = utils.GetDirList(root)
-	return templates
+	return template.GetTemplates()
 }
 
 // UpdateAllTemplates update all templates
 func UpdateAllTemplates() []string {
-	if err := template.UpdateAllTemplates(&downloader.GitDownloader{}); err != nil {
+	if err := template.UpdateAllTemplatesWithGit(); err != nil {
 		log.Printf("update all templates: %v", err)
 	}
 	return GetTemplates()
 }
 
 // GetConfig get config
-func GetConfig(template string) *cnf.Config {
-	var result *cnf.Config
-	root, err := config.GetTemplateRoot()
-	if err != nil {
-		return result
-	}
-
-	yamlPath := path.Join(root, template, appboot, configYaml)
-
-	result, _ = cnf.GetConfig(yamlPath)
-	return result
+func GetConfig(t string) *template.Config {
+	return template.GetTemplateConfig(t)
 }
 
 // CreateApp create app
@@ -79,7 +51,7 @@ func CreateApp(app model.Application, callback *creator.CreateCallback) (constan
 
 	_ = os.RemoveAll(application.Path)
 
-	if err := creator.CreateWithCallback(application, true, true, callback); err != nil {
+	if err := creator.CreateWithCallback(application, true, callback); err != nil {
 		return constant.ErrCreate, err
 	}
 

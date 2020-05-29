@@ -2,12 +2,9 @@ package utils
 
 import (
 	"fmt"
-	"log"
 	"net"
 	"os"
 	"path"
-	"path/filepath"
-	"strings"
 
 	"github.com/mitchellh/go-homedir"
 )
@@ -44,29 +41,4 @@ func GetSavePath(appName string) string {
 
 	savePath := path.Join(home, ".appboot", ".workspace", appName)
 	return savePath
-}
-
-// GetDirList get directory list
-func GetDirList(path string) ([]string, error) {
-	var dirList []string
-
-	paths, err := filepath.Glob(filepath.Join(path, "*"))
-
-	log.Printf("paths: %v", paths)
-
-	for _, value := range paths {
-		f, err := os.Stat(value)
-		if err != nil {
-			return dirList, err
-		}
-		if f.IsDir() {
-			dir := strings.Replace(value, path, "", 1)
-			if strings.HasPrefix(dir, "/") {
-				dir = strings.Replace(dir, "/", "", 1)
-			}
-			dirList = append(dirList, dir)
-		}
-	}
-
-	return dirList, err
 }
