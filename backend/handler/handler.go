@@ -3,10 +3,6 @@ package handler
 import (
 	"fmt"
 
-	"github.com/appboot/appbctl/application"
-
-	"github.com/appboot/appbctl/creator"
-
 	"github.com/appboot/appboot/service"
 
 	"github.com/appboot/appboot/constant"
@@ -28,13 +24,7 @@ func Handle(conn *websocket.Conn) {
 		if params.Method == constant.MethodCreateApp {
 			modelApp := params.Application
 
-			code, err := service.CreateApp(
-				modelApp,
-				&creator.CreateCallback{
-					DidCreated: func(app application.Application) error {
-						return service.PushCode(modelApp)
-					},
-				})
+			code, err := service.CreateApp(modelApp, nil)
 
 			if err != nil {
 				_ = sendMessage(code, err.Error(), constant.MethodCreateApp, jsonHandler, conn)

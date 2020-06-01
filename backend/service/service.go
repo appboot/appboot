@@ -10,7 +10,6 @@ import (
 	"github.com/appboot/appbctl/creator"
 	"github.com/appboot/appbctl/template"
 	"github.com/appboot/appboot/constant"
-	"github.com/appboot/appboot/git"
 	"github.com/appboot/appboot/model"
 )
 
@@ -56,14 +55,4 @@ func CreateApp(app model.Application, callback *creator.CreateCallback) (constan
 	}
 
 	return constant.OK, nil
-}
-
-// PushCode push code
-func PushCode(app model.Application) error {
-	if len(app.Git) < 1 {
-		return nil
-	}
-
-	codeFolder := app.Convert().Path
-	return git.Push(app.Git, codeFolder)
 }

@@ -19,10 +19,7 @@
         placeholder="your application name"
         v-model="name"
         @change="onNameChange"
-      />
-      
-      <div class="title">Git</div>
-      <a-input class="input" placeholder v-model="git" @change="onGitChange" />      
+      />    
 
       <div class="title">Params</div>
       <a-form layout="inline" style="margin-bottom: 15px">
@@ -70,12 +67,6 @@
         <a-icon class="icons-list" type="check-circle" theme="twoTone" twoToneColor="#52c41a" />
         Congratulations, the application {{name}} was created successfully!
       </div>
-      <div class="finish-text">You can execute the following command to pull the created application code.</div>
-      <div v-highlight>
-        <pre>
-          <code class="shell">git clone {{git}}</code>
-        </pre>
-      </div>
     </div>
   </div>
 </template>
@@ -92,7 +83,7 @@ import {
   sendGetConfig
 } from "./websocket";
 
-import { method, git } from "./const";
+import { method } from "./const";
 import { decodeParams } from "./utils";
 
 export default {
@@ -107,8 +98,6 @@ export default {
       form: {
         params: []
       },
-      gitPrefix: git.DefaultPrefix,
-      git: git.DefaultPrefix,
     };
   },
   methods: {
@@ -121,14 +110,10 @@ export default {
     },
     onNameChange() {
       this.name = this.name.trim();
-      this.git = this.gitPrefix + this.name + git.Suffix
     },
     onTemplateChange() {
       this.template = this.template.trim();
       sendGetConfig(this.template)
-    },
-    onGitChange() {
-      this.git = this.git.replace(/\s*/g, "");
     },
     onCreate() {
       if (this.name.length < 1) {
@@ -139,28 +124,18 @@ export default {
         this.$message.error("template cannot be empty.");
         return;
       }
-      if (this.git.length < 1) {
-        this.$message.error("git cannot be empty.");
-        return;
-      }
       if (!this.checkParams()) {
         this.$message.error("the key and value of all params cannot be empty.");
         return;
       }
-    
-      var tmpParams = this.form.params.slice()
-      tmpParams.push({
-        key: "Git",
-        type: "string",
-        value: this.git
-      })
-      const params = jsonParams(tmpParams);
+
+      const params = jsonParams(this.form.params);
 
       this.creating = true;
       this.init();
       var that = this;
       setTimeout(function() {
-        sendCreateApp(that.name, that.template, params, that.git)
+        sendCreateApp(that.name, that.template, params)
       }, 1 * 1000);
     },
     onclose: function() {
@@ -191,14 +166,6 @@ export default {
         window.console.log('params: '+json.data)
         var result = json.data
         this.form.params = decodeParams(result.parameters)
-        
-        var prefix = result.git.prefix
-        if (prefix.length > 0) {
-          this.gitPrefix = prefix
-          this.onNameChange()
-        } else {
-          this.gitPrefix = git.DefaultPrefix
-        }
       }
     },
     onerror: function() {

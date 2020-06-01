@@ -27,14 +27,13 @@ export function sendGetConfig(template) {
     websocket.send(msg);
 }
 
-export function sendCreateApp(name, template, params, git) {
+export function sendCreateApp(name, template, params) {
     const msg = JSON.stringify({
         method: method.CreateApp, 
         application: {
             name: name,
             template: template,
-            params: params,
-            git: git
+            params: params
         }})
     websocket.send(msg);
 }
