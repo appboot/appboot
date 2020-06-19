@@ -16,7 +16,7 @@ mod:
 utest: mod
 	go test -coverpkg=./... -coverprofile=coverage.data ./...
 build: mod
-	go build -o main ./main.go
+	go build -o main ./main.go	
 build-docker:
 	docker build -t ${IMAGE_NAME} -f docker/Dockerfile .
 	docker tag ${IMAGE_NAME} ${IMAGE_LATEST}
@@ -31,6 +31,8 @@ push-docker-latest:
 	docker push ${IMAGE_LATEST}
 push-docker-jenkinsapi-latest:
 	docker push ${IMAGE_JENKINSAPI_LATEST}
+docker-all:	build-docker build-docker-jenkinsapi push-docker push-docker-jenkinsapi push-docker-latest push-docker-jenkinsapi-latest
+	@echo "docker all in one"
 help:
 	@echo "fmt - format the source code"
 	@echo "mod - mod tidy"
