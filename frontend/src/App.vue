@@ -12,17 +12,19 @@
           <a-radio-button v-for="(t, index) in templates" :key="index" :value=t>{{t}}</a-radio-button>
         </a-radio-group>
       </div>
-
-      <div class="title">Name</div>
-      <a-input
-        class="input"
-        placeholder="your application name"
-        v-model="name"
-        @change="onNameChange"
-      />    
-
+      
       <div class="title">Params</div>
       <a-form layout="inline" style="margin-bottom: 15px">
+        <!-- Name -->
+        <a-form-item label="key">
+          <a-input default-value="Name" disabled="true"></a-input>
+        </a-form-item>
+
+        <a-form-item label="value">
+          <a-input v-model="name" @change="onNameChange"></a-input>
+        </a-form-item>
+
+        <!-- Other Params -->
         <div v-for="(param, index) in form.params" :key="index">
           <a-form-item label="key">
             <a-input v-model="param.key"></a-input>
@@ -40,7 +42,7 @@
             <a-input-number :min="param.min" :max="param.max" :placeholder="param.value" v-model="param.value" />
           </a-form-item>
 
-          <a-form-item>
+          <a-form-item v-if="index >= paramsLength">
             <a-icon
               class="dynamic-delete-button"
               type="minus-circle-o"
@@ -98,6 +100,7 @@ export default {
       form: {
         params: []
       },
+      paramsLength: 0,
     };
   },
   methods: {
@@ -117,7 +120,7 @@ export default {
     },
     onCreate() {
       if (this.name.length < 1) {
-        this.$message.error("application name cannot be empty.");
+        this.$message.error("name cannot be empty.");
         return;
       }
       if (this.template.length < 1) {
@@ -164,8 +167,9 @@ export default {
         }
       } else if (json.method == method.GetConfig) {
         window.console.log('params: '+json.data)
-        var result = json.data
+        var result = json.data        
         this.form.params = decodeParams(result.parameters)
+        this.paramsLength = this.form.params.length
       }
     },
     onerror: function() {
