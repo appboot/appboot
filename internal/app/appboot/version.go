@@ -10,7 +10,7 @@ var (
 	// Version for appboot
 	Version = "1.0.0"
 	// BuildTime for appboot
-	BuildTime = "2020/07/31"
+	BuildTime = "2020/08/04"
 )
 
 // Options for appboot

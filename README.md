@@ -16,3 +16,11 @@ Appboot creates applications based on [templates](https://github.com/appboot/tem
 In the template, you can include code, lint configuration, CI&CD, custom scripts, etc.
 
 ---
+
+## Install
+
+```shell
+go get -u github.com/appboot/appboot
+```
+
+## Quick Start
