@@ -41,7 +41,7 @@ appbctl 配置文件 `config.yaml` 位于 `$HOME/.appboot/` 目录下。如果�
 
 **templateRoot** 指定了模板的存储和获取路径，默认值是 `$HOME/.appboot/templates/`。比如设置 `templateRoot: /Users/catchzeng/Desktop/templates` 表示指定模板的路径为我的桌面。
 
-**templateSource** 指定获取模板的代码仓库，默认值是 <https://github.com/appboot/templates.git>. 如果默认的仓局没有你想要的模板，你可以指定为自己的代码仓库。比如设置 `templateSource: https://github.com/CatchZeng/templates.git`。
+**templateSource** 指定获取模板的代码仓库，默认值是 <https://github.com/appboot/templates.git>. 如果默认的仓库没有你想要的模板，你可以指定为自己的代码仓库。比如设置 `templateSource: https://github.com/CatchZeng/templates.git`。
 
 ```shell
 ❯ cd $HOME/.appboot

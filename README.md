@@ -43,7 +43,7 @@ Currently in `config.yaml` you can configure **templateRoot** and **templateSour
 
 **templateRoot** specifies the storage and retrieval path of the template. The default is `$HOME/.appboot/templates/`. For example, `templateRoot: /Users/catchzeng/Desktop/templates` means set the template path to my desktop templates directory.
 
-**templateSource** indicates the source repository for obtaining templates. The default is <https://github.com/appboot/templates.git>. If the default repository cannot meet the requirements, you can specify your own repository. For example, `templateSource : https://github.com/CatchZeng/templates.git`.
+**templateSource** indicates the source repository for obtaining templates. The default is <https://github.com/appboot/templates.git>. If the default repository cannot meet the requirements, you can specify your own repository. For example, `templateSource: https://github.com/CatchZeng/templates.git`.
 
 ```shell
 ❯ cd $HOME/.appboot
