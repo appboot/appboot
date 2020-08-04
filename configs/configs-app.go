@@ -41,6 +41,9 @@ func GetTemplateRoot() (string, error) {
 // GetTemplateSource get template source
 func GetTemplateSource() string {
 	if source, err := GetConfig("templateSource"); err == nil {
+		if len(source) < 1 {
+			return TemplatesSource
+		}
 		return source
 	}
 	return TemplatesSource
