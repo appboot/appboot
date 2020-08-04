@@ -24,3 +24,11 @@ go get -u github.com/appboot/appboot
 ```
 
 ## Quick Start
+
+### Command Line Tool
+
+```shell
+appboot create
+```
+
+![](https://github.com/appboot/resources/blob/master/appboot.gif?raw=true)

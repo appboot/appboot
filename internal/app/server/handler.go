@@ -52,10 +52,10 @@ func createApp(c *gin.Context) {
 	}
 
 	app := appboot.Application{
-		Name: name,
-		Template: template,
+		Name:       name,
+		Template:   template,
 		Parameters: params,
-		Path: getSavePath(name),
+		Path:       getSavePath(name),
 	}
 
 	_ = os.RemoveAll(app.Path)

@@ -6,12 +6,10 @@ export GOPROXY=https://goproxy.cn,direct
 export GOSUMDB=off
 
 APP_NAME=appboot
-APP_VERSION=1.0.0
+APP_VERSION=0.1.0
 IMAGE_PREFIX=appboot/${APP_NAME}
 IMAGE_NAME=${IMAGE_PREFIX}:v${APP_VERSION}
-IMAGE_JENKINSAPI=${IMAGE_PREFIX}:jenkinsapi-v${APP_VERSION}
 IMAGE_LATEST=${IMAGE_PREFIX}:latest
-IMAGE_JENKINSAPI_LATEST=${IMAGE_PREFIX}:jenkinsapi-latest
 
 fmt:
 	gofmt -w .
@@ -25,6 +23,10 @@ build:
 	go build -o server cmd/server/main.go
 build-docker:
 	sh build/package/build.sh ${IMAGE_NAME}
+push-docker:
+	docker tag ${IMAGE_NAME} ${IMAGE_LATEST}
+	docker push ${IMAGE_NAME}
+	docker push ${IMAGE_LATEST}
 .PHONY: test
 test:
 	go test -gcflags=-l -coverpkg=./... -coverprofile=coverage.data ./...
