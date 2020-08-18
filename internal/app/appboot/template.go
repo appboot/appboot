@@ -3,17 +3,19 @@ package appboot
 import (
 	"container/list"
 	"fmt"
-	"github.com/CatchZeng/gutils/file"
-	gos "github.com/CatchZeng/gutils/os"
-	"github.com/appboot/appboot/configs"
-	"github.com/appboot/appboot/internal/pkg/logger"
 	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
 	"strings"
+
+	"github.com/CatchZeng/gutils/file"
+	gos "github.com/CatchZeng/gutils/os"
+	"github.com/appboot/appboot/configs"
+	"github.com/appboot/appboot/internal/pkg/logger"
 )
 
+// File template file
 type File struct {
 	Path    string
 	Content string

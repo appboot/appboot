@@ -3,6 +3,9 @@ package cmd
 import (
 	"errors"
 	"fmt"
+	"log"
+	"strconv"
+
 	"github.com/CatchZeng/gutils/convert"
 	"github.com/CatchZeng/gutils/file"
 	"github.com/appboot/appboot/internal/app/appboot"
@@ -10,8 +13,6 @@ import (
 	"github.com/appboot/appboot/internal/pkg/path"
 	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
-	"log"
-	"strconv"
 )
 
 var create = &cobra.Command{

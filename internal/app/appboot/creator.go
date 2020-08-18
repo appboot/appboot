@@ -3,12 +3,13 @@ package appboot
 import (
 	"errors"
 	"fmt"
-	"github.com/CatchZeng/gutils/file"
-	gos "github.com/CatchZeng/gutils/os"
-	"github.com/appboot/appboot/internal/pkg/logger"
 	"os"
 	"path"
 	"strings"
+
+	"github.com/CatchZeng/gutils/file"
+	gos "github.com/CatchZeng/gutils/os"
+	"github.com/appboot/appboot/internal/pkg/logger"
 )
 
 // Callback app callback
