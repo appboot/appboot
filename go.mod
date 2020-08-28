@@ -3,7 +3,7 @@ module github.com/appboot/appboot
 go 1.13
 
 require (
-	github.com/CatchZeng/gutils v0.1.2
+	github.com/CatchZeng/gutils v0.1.4
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.6.3
 	github.com/manifoldco/promptui v0.7.0

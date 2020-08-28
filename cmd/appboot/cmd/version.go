@@ -1,9 +1,14 @@
 package cmd
 
 import (
-	"github.com/appboot/appboot/internal/app/appboot"
+	v "github.com/CatchZeng/gutils/version"
 	"github.com/spf13/cobra"
 	"log"
+)
+
+const (
+	version   = "0.1.0"
+	buildTime = "2020/08/04"
 )
 
 // versionCmd represents the version command
@@ -15,8 +20,8 @@ var versionCmd = &cobra.Command{
 }
 
 func runVersionCmd(_ *cobra.Command, _ []string) {
-	versionString := appboot.GetVersion()
-	log.Println(versionString)
+	vs := v.Stringify(version, buildTime)
+	log.Println(vs)
 }
 
 func init() {

@@ -3,6 +3,7 @@ package appboot
 import (
 	"container/list"
 	"fmt"
+	"github.com/CatchZeng/gutils/array"
 	"io/ioutil"
 	"os"
 	"path"
@@ -68,14 +69,15 @@ func UpdateTemplate(name string) error {
 
 // UpdateTemplateWithDownloader update template
 func UpdateTemplateWithDownloader(name string, downloader Downloader) error {
+	// get template path
 	root, err := configs.GetTemplateRoot()
 	if err != nil {
 		return err
 	}
-
 	templatePath := path.Join(root, name)
-	templateSource := configs.GetTemplateSource()
-	tempDir, err := downloadTemplates(templateSource, downloader)
+
+	// download templates
+	tempDir, err := downloadTemplates(downloader)
 	defer os.RemoveAll(tempDir)
 	if err != nil {
 		if file.Exists(templatePath) {
@@ -85,20 +87,41 @@ func UpdateTemplateWithDownloader(name string, downloader Downloader) error {
 		return err
 	}
 
+	// check template
 	src := path.Join(tempDir, name)
+	if !file.Exists(src) {
+		logger.LogW(fmt.Sprintf("can not get template %v from %v", name, configs.GetTemplateSource()))
+		return nil
+	}
 
-	_ = os.RemoveAll(templatePath)
-	if err = os.MkdirAll(templatePath, 0755); err != nil {
+	// update template
+	if err := updateTemplate(name, root, src); err != nil {
 		return err
 	}
 
+	if !file.Exists(templatePath) {
+		return fmt.Errorf("can not find template from appboot templates, you can add your custom template to %s", root)
+	}
+
+	return nil
+}
+
+func updateTemplate(name, root, src string) error {
+	templatePath := path.Join(root, name)
+
+	// recreate template directory
+	mode := file.Mode(templatePath)
+	_ = os.RemoveAll(templatePath)
+	if err := os.MkdirAll(templatePath, mode); err != nil {
+		return err
+	}
+
+	// copy template to root from src
 	cp := "cp -rf " + src + " " + root
 	if err := gos.RunBashCommand(cp); err != nil {
 		return err
 	}
-	if !file.Exists(templatePath) {
-		return fmt.Errorf("can not find template from appboot templates, you can add your custom template to %s", root)
-	}
+
 	return nil
 }
 
@@ -109,18 +132,32 @@ func UpdateAllTemplates() error {
 
 // UpdateAllTemplatesWithDownloader update all templates
 func UpdateAllTemplatesWithDownloader(downloader Downloader) error {
-	root, err := configs.GetTemplateRoot()
-	if err != nil {
-		return err
-	}
-
-	templateSource := configs.GetTemplateSource()
-	tempDir, err := downloadTemplates(templateSource, downloader)
+	// download templates
+	tempDir, err := downloadTemplates(downloader)
 	defer os.RemoveAll(tempDir)
 	if err != nil {
 		return err
 	}
 
+	// get template root
+	root, err := configs.GetTemplateRoot()
+	if err != nil {
+		return err
+	}
+
+	// remove existed templates
+	templates := GetTemplates()
+	for _, name := range templates {
+		list, _ := file.GetDirListWithFilter(tempDir, func(info os.FileInfo) bool {
+			return !strings.HasPrefix(info.Name(), ".")
+		})
+		if array.ContainString(list, name) {
+			existed := path.Join(root, name)
+			os.RemoveAll(existed)
+		}
+	}
+
+	// update templates
 	cp := "cp -rf " + tempDir + "/*" + " " + root
 	if err := gos.RunBashCommand(cp); err != nil {
 		return err
@@ -131,7 +168,8 @@ func UpdateAllTemplatesWithDownloader(downloader Downloader) error {
 
 // Warning: caller should clean tempDir after used
 // defer os.RemoveAll(tempDir)
-func downloadTemplates(source string, downloader Downloader) (string, error) {
+func downloadTemplates(downloader Downloader) (string, error) {
+	source := configs.GetTemplateSource()
 	tempDir, err := ioutil.TempDir(os.TempDir(), "template")
 	if err != nil {
 		return tempDir, err
