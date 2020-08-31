@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/CatchZeng/gutils/net"
 	"github.com/appboot/appboot/configs"
 	"github.com/appboot/appboot/internal/app/server"
-	"github.com/appboot/appboot/pkg/net"
 	"log"
 	"os"
 	"os/signal"
