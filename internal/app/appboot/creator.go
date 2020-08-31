@@ -85,7 +85,7 @@ func CreateWithCallback(app Application, force bool, skipPreSH bool, skipPostSH 
 func createAllFiles(app Application) error {
 	templatePath := app.TemplatePath()
 
-	files, err := GetFiles(templatePath)
+	files, err := file.GetFiles(templatePath)
 	if err != nil {
 		return err
 	}
@@ -97,12 +97,11 @@ func createAllFiles(app Application) error {
 
 	logger.LogI(fmt.Sprintf("Parameters:%v", params))
 
-	for i := files.Front(); i != nil; i = i.Next() {
-		templateFile := i.Value.(File)
-		savePath := strings.Replace(templateFile.Path, templatePath, app.Path, -1)
+	for _, f := range files {
+		savePath := strings.Replace(f.Path, templatePath, app.Path, -1)
 		savePath = replaceWithParams(savePath, params)
 
-		content := replaceWithParams(templateFile.Content, params)
+		content := replaceWithParams(f.Content, params)
 
 		index := strings.LastIndex(savePath, "/")
 		if index > 0 {
@@ -111,7 +110,7 @@ func createAllFiles(app Application) error {
 				return err
 			}
 		}
-		mode := file.Mode(templateFile.Path)
+		mode := file.Mode(f.Path)
 		if err := file.WriteStringToFile(content, savePath, mode); err != nil {
 			return err
 		}
