@@ -1,5 +1,11 @@
 # appboot
 
+![Go](https://github.com/appboot/appboot/workflows/Go/badge.svg)
+[![codecov](https://codecov.io/gh/appboot/appboot/branch/master/graph/badge.svg)](https://codecov.io/gh/appboot/appboot)
+[![Go Report Card](https://goreportcard.com/badge/github.com/appboot/appboot)](https://goreportcard.com/report/github.com/appboot/appboot)
+[![Release](https://img.shields.io/github/release/appboot/appboot.svg)](https://github.com/appboot/appboot/releases)
+[![GoDoc](https://godoc.org/github.com/appboot/appboot?status.svg)](https://pkg.go.dev/github.com/appboot/appboot?tab=doc)
+
 <p align="center">
   <br>
   <img width="20%" src="./assets/logo.svg" alt="logo">

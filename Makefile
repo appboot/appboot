@@ -17,6 +17,9 @@ mod:
 	go mod tidy
 lint:
 	golangci-lint run
+.PHONY: test
+test:
+	sh scripts/test.sh	
 .PHONY: build
 build:
 	go build -o appboot cmd/appboot/main.go
@@ -27,9 +30,6 @@ push-docker:
 	docker tag ${IMAGE_NAME} ${IMAGE_LATEST}
 	docker push ${IMAGE_NAME}
 	docker push ${IMAGE_LATEST}
-.PHONY: test
-test:
-	go test -gcflags=-l -coverpkg=./... -coverprofile=coverage.data ./...
 .PHONY: web
 web:
 	cd web/appboot; \
@@ -38,4 +38,4 @@ help:
 	@echo "fmt - gofmt"
 	@echo "mod - go mod tidy"
 	@echo "lint - run golangci-lint"
-	@echo "utest - unit test"
+	@echo "test - unit test"

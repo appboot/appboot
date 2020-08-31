@@ -2,7 +2,7 @@ package appboot
 
 import (
 	"errors"
-	gos "github.com/CatchZeng/gutils/os"
+	"github.com/CatchZeng/gutils/os"
 )
 
 // Downloader downloader interface
@@ -18,13 +18,11 @@ func NewDownloader() Downloader {
 	return &gitDownloader{}
 }
 
-var runBashCommand = gos.RunBashCommand
-
 // Run run git download
 func (g *gitDownloader) Run(source string, destination string) error {
 	if len(source) < 1 {
 		return errors.New("source is empty")
 	}
 	cmd := "git clone " + source + " " + destination
-	return runBashCommand(cmd)
+	return os.RunBashCommand(cmd)
 }

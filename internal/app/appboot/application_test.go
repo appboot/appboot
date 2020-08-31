@@ -1,9 +1,17 @@
 package appboot
 
 import (
+	"errors"
 	"fmt"
+	"github.com/CatchZeng/gutils/file"
+	"io/ioutil"
+	"os"
+	"path"
 	"reflect"
 	"testing"
+
+	"bou.ke/monkey"
+	"github.com/appboot/appboot/configs"
 )
 
 func TestApplication_Description(t *testing.T) {
@@ -44,7 +52,40 @@ func TestApplication_Description(t *testing.T) {
 	}
 }
 
-func TestApplication_GetValues(t *testing.T) {
+func TestApplication_GetTemplatePath(t *testing.T) {
+	sut := &Application{
+		Name:       "test",
+		Path:       "test",
+		Template:   "test",
+		Parameters: "test",
+	}
+
+	t.Run("will return error", func(t *testing.T) {
+		monkey.Patch(configs.GetTemplateRoot, func() (string, error) {
+			return "", errors.New("error")
+		})
+		defer monkey.Unpatch(configs.GetTemplateRoot)
+
+		p := sut.GetTemplatePath()
+		if p != "" {
+			t.Error("GetTemplatePath error")
+		}
+	})
+
+	t.Run("will return path", func(t *testing.T) {
+		monkey.Patch(configs.GetTemplateRoot, func() (string, error) {
+			return "/root", nil
+		})
+		defer monkey.Unpatch(configs.GetTemplateRoot)
+
+		p := sut.GetTemplatePath()
+		if p != "/root/test" {
+			t.Error("GetTemplatePath error")
+		}
+	})
+}
+
+func TestApplication_GetParameters(t *testing.T) {
 	type fields struct {
 		Name     string
 		Path     string
@@ -104,6 +145,53 @@ func TestApplication_GetValues(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestApplication_GetPreScript(t *testing.T) {
+	sut := &Application{
+		Name:       "test",
+		Path:       "test",
+		Template:   "test",
+		Parameters: "test",
+	}
+
+	t.Run("will return script", func(t *testing.T) {
+		monkey.Patch(configs.GetTemplateRoot, func() (string, error) {
+			return "/root", nil
+		})
+		defer monkey.Unpatch(configs.GetTemplateRoot)
+
+		monkey.Patch(file.Exists, func(path string) bool {
+			return true
+		})
+		defer monkey.Unpatch(file.Exists)
+
+		p := sut.GetPreScript()
+		if p != "sh "+path.Join("/root/test", ConfigFolder, PreSH) {
+			t.Error("GetPreScript error")
+		}
+	})
+}
+
+func TestApplication_GetPostScript(t *testing.T) {
+	sut := &Application{
+		Name:       "test",
+		Path:       "test",
+		Template:   "test",
+		Parameters: "test",
+	}
+
+	t.Run("will return script", func(t *testing.T) {
+		monkey.Patch(file.Exists, func(path string) bool {
+			return true
+		})
+		defer monkey.Unpatch(file.Exists)
+
+		p := sut.GetPostScript()
+		if p != "sh "+path.Join("test", ConfigFolder, PostSH) {
+			t.Error("GetPostScript error")
+		}
+	})
 }
 
 func TestApplication_IsValid(t *testing.T) {
@@ -176,5 +264,31 @@ func TestApplication_IsValid(t *testing.T) {
 				t.Errorf("Application.IsValid() = %v, want %v", got, tt.want)
 			}
 		})
+	}
+}
+
+func TestApplication_Clean(t *testing.T) {
+	tempDir, err := ioutil.TempDir(os.TempDir(), "Clean")
+	if err != nil {
+		t.Errorf(err.Error())
+	}
+	defer os.RemoveAll(tempDir)
+
+	sut := &Application{
+		Name:       "test",
+		Path:       tempDir,
+		Template:   "test",
+		Parameters: "test",
+	}
+
+	configFolder := path.Join(tempDir, ConfigFolder)
+	if err = os.MkdirAll(configFolder, 0755); err != nil {
+		t.Errorf(err.Error())
+	}
+
+	sut.Clean()
+
+	if file.Exists(configFolder) {
+		t.Error("Clean() error")
 	}
 }

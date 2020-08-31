@@ -3,6 +3,7 @@ module github.com/appboot/appboot
 go 1.13
 
 require (
+	bou.ke/monkey v1.0.2
 	github.com/CatchZeng/gutils v0.1.5
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.6.3

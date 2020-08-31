@@ -3,13 +3,10 @@ package appboot
 import (
 	"errors"
 	"fmt"
-	"os"
-	"path"
-	"strings"
-
 	"github.com/CatchZeng/gutils/file"
 	gos "github.com/CatchZeng/gutils/os"
 	"github.com/appboot/appboot/internal/pkg/logger"
+	"os"
 )
 
 // Callback app callback
@@ -36,6 +33,9 @@ func CreateWithCallback(app Application, force bool, skipPreSH bool, skipPostSH 
 		return errors.New("the application is invalid")
 	}
 
+	params, _:= app.GetParameters()
+	logger.LogI(fmt.Sprintf("Parameters:%v", params))
+
 	preScript := app.GetPreScript()
 	if !skipPreSH && len(preScript) > 0 {
 		logger.LogI("running script before the app is created")
@@ -51,13 +51,13 @@ func CreateWithCallback(app Application, force bool, skipPreSH bool, skipPostSH 
 		}
 	}
 
-	logger.LogI("creating all folders")
+	logger.LogI("creating folders")
 	if err := os.MkdirAll(app.Path, 0755); err != nil {
 		return err
 	}
 
-	logger.LogI("creating all files")
-	if err := createAllFiles(app); err != nil {
+	logger.LogI("creating files")
+	if err := app.CreateFiles(); err != nil {
 		return err
 	}
 
@@ -76,60 +76,8 @@ func CreateWithCallback(app Application, force bool, skipPreSH bool, skipPostSH 
 		}
 	}
 
-	clean(app)
+	app.Clean()
 
 	logger.LogI("finish")
 	return nil
-}
-
-func createAllFiles(app Application) error {
-	templatePath := app.TemplatePath()
-
-	files, err := file.GetFiles(templatePath)
-	if err != nil {
-		return err
-	}
-
-	params, err := app.GetParameters()
-	if err != nil {
-		return err
-	}
-
-	logger.LogI(fmt.Sprintf("Parameters:%v", params))
-
-	for _, f := range files {
-		savePath := strings.Replace(f.Path, templatePath, app.Path, -1)
-		savePath = replaceWithParams(savePath, params)
-
-		content := replaceWithParams(f.Content, params)
-
-		index := strings.LastIndex(savePath, "/")
-		if index > 0 {
-			dir := savePath[:index]
-			if err := os.MkdirAll(dir, 0755); err != nil {
-				return err
-			}
-		}
-		mode := file.Mode(f.Path)
-		if err := file.WriteStringToFile(content, savePath, mode); err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func replaceWithParams(source string, params map[string]string) string {
-	var result = source
-	for key, value := range params {
-		result = strings.ReplaceAll(result, "{{."+key+"}}", value)
-	}
-	return result
-}
-
-func clean(app Application) {
-	configPath := path.Join(app.Path, ConfigFolder)
-	if file.Exists(configPath) {
-		_ = os.RemoveAll(configPath)
-	}
 }
