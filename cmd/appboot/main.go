@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/appboot/appboot/cmd/appboot/cmd"
 	"log"
+
+	"github.com/appboot/appboot/cmd/appboot/cmd"
 )
 
 func main() {

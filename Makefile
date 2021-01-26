@@ -11,6 +11,7 @@ IMAGE_PREFIX=appboot/${APP_NAME}
 IMAGE_NAME=${IMAGE_PREFIX}:v${APP_VERSION}
 IMAGE_LATEST=${IMAGE_PREFIX}:latest
 
+all: fmt mod lint test
 fmt:
 	gofmt -w .
 mod:

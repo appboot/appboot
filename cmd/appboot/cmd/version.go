@@ -1,9 +1,10 @@
 package cmd
 
 import (
+	"log"
+
 	v "github.com/CatchZeng/gutils/version"
 	"github.com/spf13/cobra"
-	"log"
 )
 
 const (

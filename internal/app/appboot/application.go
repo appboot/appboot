@@ -91,7 +91,7 @@ func (app *Application) IsValid() bool {
 }
 
 // Clean clean config folder
-func (app *Application)Clean() {
+func (app *Application) Clean() {
 	configPath := path.Join(app.Path, ConfigFolder)
 	if file.Exists(configPath) {
 		_ = os.RemoveAll(configPath)

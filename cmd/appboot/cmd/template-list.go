@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+
 	"github.com/appboot/appboot/internal/app/appboot"
 	"github.com/appboot/appboot/internal/pkg/logger"
 	"github.com/spf13/cobra"

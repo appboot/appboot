@@ -3,10 +3,11 @@ package appboot
 import (
 	"errors"
 	"fmt"
+	"os"
+
 	"github.com/CatchZeng/gutils/file"
 	gos "github.com/CatchZeng/gutils/os"
 	"github.com/appboot/appboot/internal/pkg/logger"
-	"os"
 )
 
 // Callback app callback
@@ -33,7 +34,7 @@ func CreateWithCallback(app Application, force bool, skipPreSH bool, skipPostSH 
 		return errors.New("the application is invalid")
 	}
 
-	params, _:= app.GetParameters()
+	params, _ := app.GetParameters()
 	logger.LogI(fmt.Sprintf("Parameters:%v", params))
 
 	preScript := app.GetPreScript()
