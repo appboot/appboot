@@ -13,34 +13,34 @@ import (
 
 var createTemplateCmd = &cobra.Command{
 	Use:   "create",
-	Short: "create template",
-	Long:  `create template from existed project`,
+	Short: "Create a template",
+	Long:  `Create a template from an existing project`,
 	Args:  cobra.MinimumNArgs(0),
 	Run:   createTemplate,
 }
 
 func createTemplate(_ *cobra.Command, _ []string) {
 	// project path
-	projectPath, err := prompt("project path", "existed project path cannot be empty")
+	projectPath, err := prompt("existing project path", "existing project path cannot be empty")
 	if err != nil {
 		logger.LogE(err)
 		return
 	}
 	if !file.Exists(projectPath) {
-		logger.LogE("project path is not existed")
+		logger.LogE("project path does not exist")
 		return
 	}
 	logger.LogI(projectPath)
 
 	// Path
-	savePath, err := prompt("save path", "save path cannot be empty")
+	destinationPath, err := prompt("destination path", "destination path cannot be empty")
 	if err != nil {
 		logger.LogE(err)
 		return
 	}
-	savePath = path.HandleHomedir(savePath)
-	if file.Exists(savePath) {
-		result, err := promptSelect(fmt.Sprintf("%s already exists, whether to overwrite?", savePath))
+	destinationPath = path.HandleHomedir(destinationPath)
+	if file.Exists(destinationPath) {
+		result, err := promptSelect(fmt.Sprintf("%s already exists, whether to overwrite?", destinationPath))
 		if err != nil {
 			logger.LogE(err)
 			return
@@ -58,14 +58,14 @@ func createTemplate(_ *cobra.Command, _ []string) {
 	for {
 		var pk, pv string
 		var err error
-		pk, err = prompt("name", "the name will be extracted")
+		pk, err = prompt("the name will be extracted", "the name cannot be empty")
 		if err != nil {
 			logger.LogE(err)
 		}
 		if pk == "wq!" {
 			break
 		}
-		pv, err = prompt("parameter name", "the parameter name")
+		pv, err = prompt("parameter name", "the parameter name cannot be empty")
 		if err != nil {
 			logger.LogE(err)
 		}
@@ -75,7 +75,10 @@ func createTemplate(_ *cobra.Command, _ []string) {
 
 	logger.LogI(parameters)
 
-	createTemplateFiles(projectPath, savePath, parameters)
+	err = createTemplateFiles(projectPath, destinationPath, parameters)
+	if err != nil {
+		logger.LogE(err)
+	}
 }
 
 func init() {
