@@ -27,7 +27,7 @@ func GetTemplateConfig(template string) (*TemplateConfig, error) {
 	return GetTemplateConfigFromYaml(yamlPath)
 }
 
-// GetConfig get config from yaml path
+// GetTemplateConfigFromYaml get config from yaml path
 func GetTemplateConfigFromYaml(yamlPath string) (config *TemplateConfig, err error) {
 	config = new(TemplateConfig)
 	var yamlFile []byte
@@ -81,12 +81,13 @@ type FloatParameter struct {
 	Max     float64 `yaml:"max" json:"max"`
 }
 
-// Select select parameter
+// SelectParameter select parameter
 type SelectParameter struct {
 	Key     string   `yaml:"key" json:"key"`
 	Options []string `yaml:"options" json:"options"`
 }
 
+// UnmarshalYAML unmarshalYAML
 func (p *IntParameter) UnmarshalYAML(unmarshal func(interface{}) error) error {
 	type param IntParameter
 	raw := param{
@@ -101,6 +102,7 @@ func (p *IntParameter) UnmarshalYAML(unmarshal func(interface{}) error) error {
 	return nil
 }
 
+// UnmarshalYAML unmarshalYAML
 func (p *FloatParameter) UnmarshalYAML(unmarshal func(interface{}) error) error {
 	type param FloatParameter
 	raw := param{
