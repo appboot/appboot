@@ -1,12 +1,13 @@
 package server
 
 import (
-	"github.com/appboot/appboot/configs"
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/appboot/appboot/configs"
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
 )
 
 const (

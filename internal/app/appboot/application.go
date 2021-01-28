@@ -2,12 +2,13 @@ package appboot
 
 import (
 	"fmt"
-	"github.com/CatchZeng/gutils/convert"
-	"github.com/CatchZeng/gutils/file"
-	"github.com/appboot/appboot/configs"
 	"os"
 	"path"
 	"strings"
+
+	"github.com/CatchZeng/gutils/convert"
+	"github.com/CatchZeng/gutils/file"
+	"github.com/appboot/appboot/configs"
 )
 
 const (

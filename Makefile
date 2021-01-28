@@ -11,16 +11,18 @@ IMAGE_PREFIX=appboot/${APP_NAME}
 IMAGE_NAME=${IMAGE_PREFIX}:v${APP_VERSION}
 IMAGE_LATEST=${IMAGE_PREFIX}:latest
 
-all: fmt mod lint test
+all: fmt imports mod lint test
 fmt:
 	gofmt -w .
+imports:
+	goimports -w .
 mod:
 	go mod tidy
 lint:
 	golangci-lint run
 .PHONY: test
 test:
-	sh scripts/test.sh	
+	sh scripts/test.sh
 .PHONY: build
 build:
 	go build -o appboot cmd/appboot/main.go
@@ -37,6 +39,7 @@ web:
 	npm run serve
 help:
 	@echo "fmt - gofmt"
+	@echo "imports - goimports"
 	@echo "mod - go mod tidy"
 	@echo "lint - run golangci-lint"
 	@echo "test - unit test"

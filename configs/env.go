@@ -1,8 +1,9 @@
 package configs
 
 import (
-	"github.com/timest/env"
 	"log"
+
+	"github.com/timest/env"
 )
 
 //EnvConfig EnvConfig

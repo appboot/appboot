@@ -1,11 +1,12 @@
 package appboot
 
 import (
-	"github.com/appboot/appboot/configs"
-	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"math"
 	"path"
+
+	"github.com/appboot/appboot/configs"
+	"gopkg.in/yaml.v2"
 )
 
 const (

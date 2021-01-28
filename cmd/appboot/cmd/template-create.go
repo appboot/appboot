@@ -3,9 +3,11 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/CatchZeng/gutils/file"
+	"github.com/appboot/appboot/internal/app/appboot"
 	"github.com/appboot/appboot/internal/pkg/logger"
 	"github.com/appboot/appboot/internal/pkg/path"
 	"github.com/spf13/cobra"
@@ -91,11 +93,16 @@ func createTemplateFiles(projectPath, savePath string, params map[string]string)
 		return err
 	}
 
+	appbootPath := filepath.Join(projectPath, appboot.ConfigFolder)
+
 	for _, f := range files {
 		savePath := strings.Replace(f.Path, projectPath, savePath, -1)
-		savePath = replaceWithParams(savePath, params)
+		var content = f.Content
 
-		content := replaceWithParams(f.Content, params)
+		if !strings.HasPrefix(f.Path, appbootPath) { // escape appboot folder
+			savePath = replaceWithParams(savePath, params)
+			content = replaceWithParams(f.Content, params)
+		}
 
 		index := strings.LastIndex(savePath, "/")
 		if index > 0 {

@@ -2,11 +2,12 @@ package appboot
 
 import (
 	"fmt"
-	"github.com/CatchZeng/gutils/array"
 	"io/ioutil"
 	"os"
 	"path"
 	"strings"
+
+	"github.com/CatchZeng/gutils/array"
 
 	"github.com/CatchZeng/gutils/file"
 	gos "github.com/CatchZeng/gutils/os"

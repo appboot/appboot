@@ -3,12 +3,13 @@ package appboot
 import (
 	"errors"
 	"fmt"
-	"github.com/CatchZeng/gutils/file"
 	"io/ioutil"
 	"os"
 	"path"
 	"reflect"
 	"testing"
+
+	"github.com/CatchZeng/gutils/file"
 
 	"bou.ke/monkey"
 	"github.com/appboot/appboot/configs"

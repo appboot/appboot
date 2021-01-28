@@ -1,9 +1,10 @@
 package configs
 
 import (
-	"github.com/CatchZeng/gutils/file"
 	"os"
 	"path"
+
+	"github.com/CatchZeng/gutils/file"
 
 	"github.com/mitchellh/go-homedir"
 )

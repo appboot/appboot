@@ -2,6 +2,7 @@ package appboot
 
 import (
 	"errors"
+
 	"github.com/CatchZeng/gutils/os"
 )
 

@@ -2,9 +2,10 @@ package server
 
 import (
 	"fmt"
-	"github.com/mitchellh/go-homedir"
 	"os"
 	"path"
+
+	"github.com/mitchellh/go-homedir"
 )
 
 func getSavePath(appName string) string {

@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
-	"github.com/CatchZeng/gutils/net"
-	"github.com/appboot/appboot/configs"
-	"github.com/appboot/appboot/internal/app/server"
 	"log"
 	"os"
 	"os/signal"
+
+	"github.com/CatchZeng/gutils/net"
+	"github.com/appboot/appboot/configs"
+	"github.com/appboot/appboot/internal/app/server"
 )
 
 func main() {

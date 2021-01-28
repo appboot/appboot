@@ -1,10 +1,11 @@
 package appboot
 
 import (
-	"bou.ke/monkey"
 	"errors"
-	"github.com/CatchZeng/gutils/os"
 	"testing"
+
+	"bou.ke/monkey"
+	"github.com/CatchZeng/gutils/os"
 )
 
 func TestGitDownloader_Run(t *testing.T) {

@@ -1,9 +1,10 @@
 package path
 
 import (
-	"github.com/mitchellh/go-homedir"
 	"path"
 	"testing"
+
+	"github.com/mitchellh/go-homedir"
 )
 
 func TestHandleHomedir(t *testing.T) {
