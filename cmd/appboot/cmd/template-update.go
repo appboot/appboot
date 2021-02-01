@@ -27,7 +27,7 @@ func runUpdateTemplate(_ *cobra.Command, _ []string) {
 
 	const All = "All"
 	templates = append(templates, All)
-	selectedTemplate, err := promptTemplates(templates)
+	selectedTemplate, err := promptSelectWithItems("select template", templates)
 	if err != nil {
 		logger.LogE(err)
 		return

@@ -53,7 +53,7 @@ func createTemplate(_ *cobra.Command, _ []string) {
 	}
 
 	// Parameters
-	logger.LogI("extract the parameters. Input wq! to end")
+	logger.LogI("extract the parameters.")
 
 	parameters := make(map[string]string)
 
@@ -64,15 +64,22 @@ func createTemplate(_ *cobra.Command, _ []string) {
 		if err != nil {
 			logger.LogE(err)
 		}
-		if pk == "wq!" {
-			break
-		}
+
 		pv, err = prompt("parameter name", "the parameter name cannot be empty")
 		if err != nil {
 			logger.LogE(err)
 		}
 
 		parameters[pk] = pv
+
+		r, err := promptSelect("finish extracting parameters?")
+		if err != nil {
+			logger.LogE(err)
+			return
+		}
+		if r == selectYes {
+			break
+		}
 	}
 
 	logger.LogI(parameters)
