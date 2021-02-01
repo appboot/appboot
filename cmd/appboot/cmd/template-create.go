@@ -23,28 +23,28 @@ var createTemplateCmd = &cobra.Command{
 
 func createTemplate(_ *cobra.Command, _ []string) {
 	// project path
-	projectPath, err := prompt("existing project path", "existing project path cannot be empty")
+	projectPath, err := prompt("Existing project path", "Existing project path cannot be empty.")
 	if err != nil {
-		logger.LogE(err)
+		logger.LogE(err.Error())
 		return
 	}
 	if !file.Exists(projectPath) {
-		logger.LogE("project path does not exist")
+		logger.LogE("Project path does not exist.")
 		return
 	}
 	logger.LogI(projectPath)
 
 	// Path
-	destinationPath, err := prompt("destination path", "destination path cannot be empty")
+	destinationPath, err := prompt("Destination path", "Destination path cannot be empty.")
 	if err != nil {
-		logger.LogE(err)
+		logger.LogE(err.Error())
 		return
 	}
 	destinationPath = path.HandleHomedir(destinationPath)
 	if file.Exists(destinationPath) {
 		result, err := promptSelect(fmt.Sprintf("%s already exists, whether to overwrite?", destinationPath))
 		if err != nil {
-			logger.LogE(err)
+			logger.LogE(err.Error())
 			return
 		}
 		if result == selectNo {
@@ -53,28 +53,28 @@ func createTemplate(_ *cobra.Command, _ []string) {
 	}
 
 	// Parameters
-	logger.LogI("extract the parameters.")
+	logger.LogI("Extract the parameters.")
 
 	parameters := make(map[string]string)
 
 	for {
 		var pk, pv string
 		var err error
-		pk, err = prompt("the name will be extracted", "the name cannot be empty")
+		pk, err = prompt("The value will be extracted", "The value cannot be empty.")
 		if err != nil {
-			logger.LogE(err)
+			logger.LogE(err.Error())
 		}
 
-		pv, err = prompt("parameter name", "the parameter name cannot be empty")
+		pv, err = prompt("Parameter name", "Parameter name cannot be empty.")
 		if err != nil {
-			logger.LogE(err)
+			logger.LogE(err.Error())
 		}
 
 		parameters[pk] = pv
 
-		r, err := promptSelect("finish extracting parameters?")
+		r, err := promptSelectWithItems("Finish", []string{selectNo, selectYes})
 		if err != nil {
-			logger.LogE(err)
+			logger.LogE(err.Error())
 			return
 		}
 		if r == selectYes {
@@ -82,11 +82,11 @@ func createTemplate(_ *cobra.Command, _ []string) {
 		}
 	}
 
-	logger.LogI(parameters)
+	logger.LogI("Parameters: %v", parameters)
 
 	err = createTemplateFiles(projectPath, destinationPath, parameters)
 	if err != nil {
-		logger.LogE(err)
+		logger.LogE(err.Error())
 	}
 }
 

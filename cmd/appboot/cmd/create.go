@@ -25,7 +25,7 @@ var create = &cobra.Command{
 		if len(templates) < 1 {
 			logger.LogI("updating templates...")
 			if err := appboot.UpdateAllTemplates(); err != nil {
-				logger.LogE(fmt.Sprintf("update templates error: %v", err))
+				logger.LogE("update templates error: %v", err)
 				return
 			}
 			templates = appboot.GetTemplates()
@@ -37,7 +37,7 @@ var create = &cobra.Command{
 
 		selectedTemplate, err := promptSelectWithItems("select template", templates)
 		if err != nil {
-			logger.LogE(err)
+			logger.LogE(err.Error())
 			return
 		}
 		app.Template = selectedTemplate
@@ -45,7 +45,7 @@ var create = &cobra.Command{
 		// Name
 		name, err := prompt("name", "application name cannot be empty")
 		if err != nil {
-			logger.LogE(err)
+			logger.LogE(err.Error())
 			return
 		}
 		app.Name = name
@@ -53,7 +53,7 @@ var create = &cobra.Command{
 		// Path
 		savePath, err := prompt("path", "application path cannot be empty")
 		if err != nil {
-			logger.LogE(err)
+			logger.LogE(err.Error())
 			return
 		}
 		app.Path = path.HandleHomedir(savePath)
@@ -61,7 +61,7 @@ var create = &cobra.Command{
 		if file.Exists(app.Path) {
 			result, err := promptSelect(fmt.Sprintf("%s already exists, whether to overwrite?", app.Path))
 			if err != nil {
-				logger.LogE(err)
+				logger.LogE(err.Error())
 				return
 			}
 			if result == selectNo {
@@ -72,7 +72,7 @@ var create = &cobra.Command{
 		// Params
 		cnf, err := appboot.GetTemplateConfig(selectedTemplate)
 		if err != nil {
-			logger.LogE(err)
+			logger.LogE(err.Error())
 			return
 		}
 		params := handleParams(cnf.Parameters)
@@ -80,25 +80,25 @@ var create = &cobra.Command{
 
 		valueString, err := convert.MapToJSON(params)
 		if err != nil {
-			logger.LogE(err)
+			logger.LogE(err.Error())
 			return
 		}
 		app.Parameters = valueString
 
 		skipPreSH, err := promptSelect("skip pre script?")
 		if err != nil {
-			logger.LogE(err)
+			logger.LogE(err.Error())
 			return
 		}
 		skipPostSH, err := promptSelect("skip post script?")
 		if err != nil {
-			logger.LogE(err)
+			logger.LogE(err.Error())
 			return
 		}
 
 		// Create
 		if err := appboot.Create(app, true, skipPreSH == selectYes, skipPostSH == selectYes); err != nil {
-			logger.LogE(err)
+			logger.LogE(err.Error())
 			return
 		}
 	},

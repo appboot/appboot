@@ -5,6 +5,7 @@ go 1.13
 require (
 	bou.ke/monkey v1.0.2
 	github.com/CatchZeng/gutils v0.1.5
+	github.com/fatih/color v1.7.0
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.6.3
 	github.com/manifoldco/promptui v0.7.0

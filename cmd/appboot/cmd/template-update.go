@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/appboot/appboot/internal/app/appboot"
 	"github.com/appboot/appboot/internal/pkg/logger"
 	"github.com/spf13/cobra"
@@ -20,7 +18,7 @@ func runUpdateTemplate(_ *cobra.Command, _ []string) {
 	if len(templates) < 1 {
 		logger.LogI("updating templates...")
 		if err := appboot.UpdateAllTemplates(); err != nil {
-			logger.LogE(fmt.Sprintf("update templates error: %v", err))
+			logger.LogE("update templates error: %v", err)
 		}
 		return
 	}
@@ -29,7 +27,7 @@ func runUpdateTemplate(_ *cobra.Command, _ []string) {
 	templates = append(templates, All)
 	selectedTemplate, err := promptSelectWithItems("select template", templates)
 	if err != nil {
-		logger.LogE(err)
+		logger.LogE(err.Error())
 		return
 	}
 

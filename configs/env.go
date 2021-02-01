@@ -1,8 +1,6 @@
 package configs
 
 import (
-	"log"
-
 	"github.com/timest/env"
 )
 
@@ -18,7 +16,6 @@ func init() {
 	EnvConfig = new(config)
 	env.IgnorePrefix()
 	err := env.Fill(EnvConfig)
-	log.Println(EnvConfig)
 	if err != nil {
 		panic(err)
 	}

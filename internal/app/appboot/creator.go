@@ -2,7 +2,6 @@ package appboot
 
 import (
 	"errors"
-	"fmt"
 	"os"
 
 	"github.com/CatchZeng/gutils/file"
@@ -35,7 +34,7 @@ func CreateWithCallback(app Application, force bool, skipPreSH bool, skipPostSH 
 	}
 
 	params, _ := app.GetParameters()
-	logger.LogI(fmt.Sprintf("Parameters:%v", params))
+	logger.LogI("Parameters:%v", params)
 
 	preScript := app.GetPreScript()
 	if !skipPreSH && len(preScript) > 0 {

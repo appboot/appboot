@@ -5,6 +5,7 @@ import (
 	"os"
 	"path"
 
+	"github.com/appboot/appboot/internal/pkg/logger"
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
 )
@@ -23,15 +24,13 @@ func InitConfig() {
 	viper.AddConfigPath(configPath)
 	viper.SetConfigName("config")
 
-	log.Printf("configPath: %v", configPath)
-
 	viper.AutomaticEnv() // read in environment variables that match
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err != nil {
-		log.Printf("ReadInConfig error: %v", err)
+		logger.LogE("ReadInConfig error: %v", err)
 	}
-	log.Println("Using config file:", viper.ConfigFileUsed())
+	logger.LogH("Using config file: %v", viper.ConfigFileUsed())
 }
 
 // GetConfig get config with key

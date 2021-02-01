@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/appboot/appboot/internal/app/appboot"
 	"github.com/appboot/appboot/internal/pkg/logger"
 	"github.com/spf13/cobra"
@@ -18,7 +16,7 @@ var listTemplateCmd = &cobra.Command{
 func runListTemplate(_ *cobra.Command, _ []string) {
 	templates := appboot.GetTemplates()
 	for i, t := range templates {
-		logger.Log(logger.Blue, fmt.Sprintf("%d. %v", i+1, t))
+		logger.LogI("%d. %v", i+1, t)
 	}
 }
 

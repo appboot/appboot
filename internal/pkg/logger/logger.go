@@ -1,50 +1,30 @@
 package logger
 
 import (
-	"fmt"
-	"log"
-)
-
-// Color list
-const (
-	Red = uint8(iota + 31)
-	Green
-	Yellow
-	Blue
-	Magenta
-	Cyan
-	White
+	"github.com/fatih/color"
 )
 
 // LogE log error
-func LogE(v ...interface{}) {
-	LogWrap(Red, v...)
+func LogE(format string, a ...interface{}) {
+	color.Red(format, a...)
 }
 
 // LogW log warning
-func LogW(v ...interface{}) {
-	LogWrap(Yellow, v...)
+func LogW(format string, a ...interface{}) {
+	color.Yellow(format, a...)
+}
+
+// LogH log hint
+func LogH(format string, a ...interface{}) {
+	color.Green(format, a...)
 }
 
 // LogI log info
-func LogI(v ...interface{}) {
-	LogWrap(Blue, v...)
+func LogI(format string, a ...interface{}) {
+	color.Blue(format, a...)
 }
 
 // LogV log verbose
-func LogV(v ...interface{}) {
-	LogWrap(White, v...)
-}
-
-// LogWrap log with color and wrap
-func LogWrap(color uint8, v ...interface{}) {
-	Log(color, v, "\n")
-}
-
-// Log log with color
-func Log(color uint8, v ...interface{}) {
-	tmp := fmt.Sprintf("\x1b[%dm%s\x1b[0m", color, v)
-	if len(tmp) > 0 {
-		log.Print(tmp)
-	}
+func LogV(format string, a ...interface{}) {
+	color.White(format, a...)
 }
