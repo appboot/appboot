@@ -15,14 +15,14 @@ const (
 // versionCmd represents the version command
 var versionCmd = &cobra.Command{
 	Use:   "version",
-	Short: "appboot version",
-	Long:  `appboot version`,
+	Short: "Appboot version",
+	Long:  `Appboot version`,
 	Run:   runVersionCmd,
 }
 
 func runVersionCmd(_ *cobra.Command, _ []string) {
 	vs := v.Stringify(version, buildTime)
-	log.H(vs)
+	log.I(vs)
 }
 
 func init() {

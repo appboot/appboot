@@ -49,7 +49,7 @@ func UpdateTemplateWithDownloader(name string, downloader Downloader) error {
 	defer os.RemoveAll(tempDir)
 	if err != nil {
 		if file.Exists(templatePath) {
-			log.W("update template error: %v \nuse old template.", err)
+			log.W("Update template error: %v \nuse old template.", err)
 			return nil
 		}
 		return err
@@ -58,7 +58,7 @@ func UpdateTemplateWithDownloader(name string, downloader Downloader) error {
 	// check template
 	src := path.Join(tempDir, name)
 	if !file.Exists(src) {
-		log.W("can not get template %v from %v", name, configs.GetTemplateSource())
+		log.W("Can not get template %v from %v", name, configs.GetTemplateSource())
 		return nil
 	}
 

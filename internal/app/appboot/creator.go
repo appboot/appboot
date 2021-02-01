@@ -33,12 +33,9 @@ func CreateWithCallback(app Application, force bool, skipPreSH bool, skipPostSH 
 		return errors.New("the application is invalid")
 	}
 
-	params, _ := app.GetParameters()
-	log.I("Parameters:%v", params)
-
 	preScript := app.GetPreScript()
 	if !skipPreSH && len(preScript) > 0 {
-		log.I("running script before the app is created")
+		log.H("Running script before the app is created")
 		log.W(preScript)
 		if err := gos.RunBashCommand(preScript); err != nil {
 			return err
@@ -51,12 +48,12 @@ func CreateWithCallback(app Application, force bool, skipPreSH bool, skipPostSH 
 		}
 	}
 
-	log.I("creating folders")
+	log.H("Creating folders")
 	if err := os.MkdirAll(app.Path, 0755); err != nil {
 		return err
 	}
 
-	log.I("creating files")
+	log.H("Creating files")
 	if err := app.CreateFiles(); err != nil {
 		return err
 	}
@@ -69,7 +66,7 @@ func CreateWithCallback(app Application, force bool, skipPreSH bool, skipPostSH 
 
 	postScript := app.GetPostScript()
 	if !skipPostSH && len(postScript) > 0 {
-		log.I("running script after the app is created")
+		log.H("Running script after the app is created")
 		log.W(postScript)
 		if err := gos.RunBashCommand(postScript); err != nil {
 			return err
@@ -78,6 +75,6 @@ func CreateWithCallback(app Application, force bool, skipPreSH bool, skipPostSH 
 
 	app.Clean()
 
-	log.I("finish")
+	log.H("Finish")
 	return nil
 }

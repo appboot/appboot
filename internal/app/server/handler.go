@@ -23,7 +23,7 @@ func getTemplates(c *gin.Context) {
 func updateTemplates(c *gin.Context) {
 	templates := appboot.GetTemplates()
 	if err := appboot.UpdateAllTemplates(); err != nil {
-		log.Printf("failed to update all templates: %v", err)
+		log.Printf("Failed to update all templates: %v", err)
 		c.JSON(http.StatusOK, NewResponse(RC_UPDATE_TEMPLATES_ERROR, "", templates))
 		return
 	}
@@ -36,7 +36,7 @@ func getTemplateConfig(c *gin.Context) {
 	template := c.Param("template")
 	config, err := appboot.GetTemplateConfig(template)
 	if err != nil {
-		log.Printf("failed to get template config: %v", err)
+		log.Printf("Failed to get template config: %v", err)
 		c.JSON(http.StatusOK, NewResponse(RC_GET_TEMPLATE_CONFIG_ERROR, "", nil))
 		return
 	}
@@ -63,7 +63,7 @@ func createApp(c *gin.Context) {
 	_ = os.RemoveAll(app.Path)
 
 	if err := appboot.Create(app, true, false, false); err != nil {
-		log.Printf("failed to create application: %v", err)
+		log.Printf("Failed to create application: %v", err)
 		c.JSON(http.StatusOK, NewResponse(RC_CREATE_APP_ERROR, "", nil))
 		return
 	}

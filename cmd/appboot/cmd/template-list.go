@@ -8,8 +8,8 @@ import (
 
 var listTemplateCmd = &cobra.Command{
 	Use:   "list",
-	Short: "list templates",
-	Long:  `list templates`,
+	Short: "List templates",
+	Long:  `List templates`,
 	Run:   runListTemplate,
 }
 

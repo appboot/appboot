@@ -4,8 +4,8 @@ import "github.com/spf13/cobra"
 
 var templateCmd = &cobra.Command{
 	Use:   "template",
-	Short: "template manager",
-	Long:  `template manager`,
+	Short: "Template manager",
+	Long:  `Template manager`,
 }
 
 func init() {

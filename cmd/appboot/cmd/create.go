@@ -22,9 +22,9 @@ var create = &cobra.Command{
 		// Template
 		templates := appboot.GetTemplates()
 		if len(templates) < 1 {
-			log.I("updating templates...")
+			log.I("Updating templates...")
 			if err := appboot.UpdateAllTemplates(); err != nil {
-				log.E("update templates error: %v", err)
+				log.E("Update templates error: %v", err)
 				return
 			}
 			templates = appboot.GetTemplates()
@@ -34,7 +34,7 @@ var create = &cobra.Command{
 			}
 		}
 
-		selectedTemplate, err := promptSelectWithItems("select template", templates)
+		selectedTemplate, err := promptSelectWithItems("Select template", templates)
 		if err != nil {
 			log.E(err.Error())
 			return
@@ -42,7 +42,7 @@ var create = &cobra.Command{
 		app.Template = selectedTemplate
 
 		// Name
-		name, err := prompt("name", "application name cannot be empty")
+		name, err := prompt("Name", "Application name cannot be empty.")
 		if err != nil {
 			log.E(err.Error())
 			return
@@ -50,7 +50,7 @@ var create = &cobra.Command{
 		app.Name = name
 
 		// Path
-		savePath, err := prompt("path", "application path cannot be empty")
+		savePath, err := prompt("Path", "Application path cannot be empty.")
 		if err != nil {
 			log.E(err.Error())
 			return
@@ -84,12 +84,12 @@ var create = &cobra.Command{
 		}
 		app.Parameters = valueString
 
-		skipPreSH, err := promptSelect("skip pre script?")
+		skipPreSH, err := promptSelect("Skip pre script")
 		if err != nil {
 			log.E(err.Error())
 			return
 		}
-		skipPostSH, err := promptSelect("skip post script?")
+		skipPostSH, err := promptSelect("Skip post script")
 		if err != nil {
 			log.E(err.Error())
 			return
@@ -105,7 +105,7 @@ var create = &cobra.Command{
 
 func handleParams(params appboot.Parameters) map[string]string {
 	result := make(map[string]string)
-	log.I("enter the parameters, if you need to use the default value, just press Enter.")
+	log.H("Enter the parameters, if you need to use the default value, just press Enter.")
 
 	stringParams := params.StringParameters
 	if len(stringParams) > 0 {

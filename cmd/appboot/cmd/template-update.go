@@ -8,24 +8,24 @@ import (
 
 var updateTemplateCmd = &cobra.Command{
 	Use:   "update",
-	Short: "update template",
-	Long:  `update template`,
+	Short: "Update template",
+	Long:  `Update template`,
 	Run:   runUpdateTemplate,
 }
 
 func runUpdateTemplate(_ *cobra.Command, _ []string) {
 	templates := appboot.GetTemplates()
 	if len(templates) < 1 {
-		log.I("updating templates...")
+		log.I("Updating templates...")
 		if err := appboot.UpdateAllTemplates(); err != nil {
-			log.E("update templates error: %v", err)
+			log.E("Update templates error: %v", err)
 		}
 		return
 	}
 
 	const All = "All"
 	templates = append(templates, All)
-	selectedTemplate, err := promptSelectWithItems("select template", templates)
+	selectedTemplate, err := promptSelectWithItems("Select template", templates)
 	if err != nil {
 		log.E(err.Error())
 		return
