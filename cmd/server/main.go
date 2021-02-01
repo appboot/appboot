@@ -6,9 +6,9 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/CatchZeng/gutils/net"
 	"github.com/appboot/appboot/configs"
 	"github.com/appboot/appboot/internal/app/server"
+	"github.com/go-ecosystem/utils/net"
 )
 
 func main() {

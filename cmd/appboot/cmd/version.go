@@ -1,9 +1,9 @@
 package cmd
 
 import (
-	"log"
+	"github.com/go-ecosystem/utils/log"
 
-	v "github.com/CatchZeng/gutils/version"
+	v "github.com/go-ecosystem/utils/version"
 	"github.com/spf13/cobra"
 )
 
@@ -22,7 +22,7 @@ var versionCmd = &cobra.Command{
 
 func runVersionCmd(_ *cobra.Command, _ []string) {
 	vs := v.Stringify(version, buildTime)
-	log.Println(vs)
+	log.H(vs)
 }
 
 func init() {

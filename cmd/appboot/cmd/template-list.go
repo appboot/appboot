@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"github.com/appboot/appboot/internal/app/appboot"
-	"github.com/appboot/appboot/internal/pkg/logger"
+	"github.com/go-ecosystem/utils/log"
 	"github.com/spf13/cobra"
 )
 
@@ -16,7 +16,7 @@ var listTemplateCmd = &cobra.Command{
 func runListTemplate(_ *cobra.Command, _ []string) {
 	templates := appboot.GetTemplates()
 	for i, t := range templates {
-		logger.LogI("%d. %v", i+1, t)
+		log.I("%d. %v", i+1, t)
 	}
 }
 

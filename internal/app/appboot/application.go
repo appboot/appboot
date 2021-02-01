@@ -6,9 +6,9 @@ import (
 	"path"
 	"strings"
 
-	"github.com/CatchZeng/gutils/convert"
-	"github.com/CatchZeng/gutils/file"
 	"github.com/appboot/appboot/configs"
+	"github.com/go-ecosystem/utils/convert"
+	"github.com/go-ecosystem/utils/file"
 )
 
 const (

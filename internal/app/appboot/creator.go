@@ -4,9 +4,9 @@ import (
 	"errors"
 	"os"
 
-	"github.com/CatchZeng/gutils/file"
-	gos "github.com/CatchZeng/gutils/os"
-	"github.com/appboot/appboot/internal/pkg/logger"
+	"github.com/go-ecosystem/utils/file"
+	"github.com/go-ecosystem/utils/log"
+	gos "github.com/go-ecosystem/utils/os"
 )
 
 // Callback app callback
@@ -34,12 +34,12 @@ func CreateWithCallback(app Application, force bool, skipPreSH bool, skipPostSH 
 	}
 
 	params, _ := app.GetParameters()
-	logger.LogI("Parameters:%v", params)
+	log.I("Parameters:%v", params)
 
 	preScript := app.GetPreScript()
 	if !skipPreSH && len(preScript) > 0 {
-		logger.LogI("running script before the app is created")
-		logger.LogW(preScript)
+		log.I("running script before the app is created")
+		log.W(preScript)
 		if err := gos.RunBashCommand(preScript); err != nil {
 			return err
 		}
@@ -51,12 +51,12 @@ func CreateWithCallback(app Application, force bool, skipPreSH bool, skipPostSH 
 		}
 	}
 
-	logger.LogI("creating folders")
+	log.I("creating folders")
 	if err := os.MkdirAll(app.Path, 0755); err != nil {
 		return err
 	}
 
-	logger.LogI("creating files")
+	log.I("creating files")
 	if err := app.CreateFiles(); err != nil {
 		return err
 	}
@@ -69,8 +69,8 @@ func CreateWithCallback(app Application, force bool, skipPreSH bool, skipPostSH 
 
 	postScript := app.GetPostScript()
 	if !skipPostSH && len(postScript) > 0 {
-		logger.LogI("running script after the app is created")
-		logger.LogW(postScript)
+		log.I("running script after the app is created")
+		log.W(postScript)
 		if err := gos.RunBashCommand(postScript); err != nil {
 			return err
 		}
@@ -78,6 +78,6 @@ func CreateWithCallback(app Application, force bool, skipPreSH bool, skipPostSH 
 
 	app.Clean()
 
-	logger.LogI("finish")
+	log.I("finish")
 	return nil
 }

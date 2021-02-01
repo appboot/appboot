@@ -7,12 +7,12 @@ import (
 	"path"
 	"strings"
 
-	"github.com/CatchZeng/gutils/array"
+	"github.com/go-ecosystem/utils/array"
+	"github.com/go-ecosystem/utils/log"
 
-	"github.com/CatchZeng/gutils/file"
-	gos "github.com/CatchZeng/gutils/os"
 	"github.com/appboot/appboot/configs"
-	"github.com/appboot/appboot/internal/pkg/logger"
+	"github.com/go-ecosystem/utils/file"
+	gos "github.com/go-ecosystem/utils/os"
 )
 
 // GetTemplates get templates
@@ -49,7 +49,7 @@ func UpdateTemplateWithDownloader(name string, downloader Downloader) error {
 	defer os.RemoveAll(tempDir)
 	if err != nil {
 		if file.Exists(templatePath) {
-			logger.LogW("update template error: %v \nuse old template.", err)
+			log.W("update template error: %v \nuse old template.", err)
 			return nil
 		}
 		return err
@@ -58,7 +58,7 @@ func UpdateTemplateWithDownloader(name string, downloader Downloader) error {
 	// check template
 	src := path.Join(tempDir, name)
 	if !file.Exists(src) {
-		logger.LogW("can not get template %v from %v", name, configs.GetTemplateSource())
+		log.W("can not get template %v from %v", name, configs.GetTemplateSource())
 		return nil
 	}
 

@@ -3,7 +3,7 @@ package appboot
 import (
 	"errors"
 
-	"github.com/CatchZeng/gutils/os"
+	"github.com/go-ecosystem/utils/os"
 )
 
 // Downloader downloader interface

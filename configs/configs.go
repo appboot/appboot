@@ -1,11 +1,11 @@
 package configs
 
 import (
-	"log"
 	"os"
 	"path"
 
-	"github.com/appboot/appboot/internal/pkg/logger"
+	"github.com/go-ecosystem/utils/log"
+
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
 )
@@ -15,7 +15,7 @@ func InitConfig() {
 	// Find home directory.
 	home, err := homedir.Dir()
 	if err != nil {
-		log.Println(err)
+		log.E(err.Error())
 		os.Exit(1)
 	}
 
@@ -28,9 +28,9 @@ func InitConfig() {
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err != nil {
-		logger.LogE("ReadInConfig error: %v", err)
+		log.E("ReadInConfig error: %v", err)
 	}
-	logger.LogH("Using config file: %v", viper.ConfigFileUsed())
+	log.H("Using config file: %v", viper.ConfigFileUsed())
 }
 
 // GetConfig get config with key

@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"github.com/appboot/appboot/internal/app/appboot"
-	"github.com/appboot/appboot/internal/pkg/logger"
+	"github.com/go-ecosystem/utils/log"
 	"github.com/spf13/cobra"
 )
 
@@ -16,9 +16,9 @@ var updateTemplateCmd = &cobra.Command{
 func runUpdateTemplate(_ *cobra.Command, _ []string) {
 	templates := appboot.GetTemplates()
 	if len(templates) < 1 {
-		logger.LogI("updating templates...")
+		log.I("updating templates...")
 		if err := appboot.UpdateAllTemplates(); err != nil {
-			logger.LogE("update templates error: %v", err)
+			log.E("update templates error: %v", err)
 		}
 		return
 	}
@@ -27,18 +27,18 @@ func runUpdateTemplate(_ *cobra.Command, _ []string) {
 	templates = append(templates, All)
 	selectedTemplate, err := promptSelectWithItems("select template", templates)
 	if err != nil {
-		logger.LogE(err.Error())
+		log.E(err.Error())
 		return
 	}
 
 	if selectedTemplate == All {
 		if err := appboot.UpdateAllTemplates(); err != nil {
-			logger.LogE(err.Error())
+			log.E(err.Error())
 			return
 		}
 	} else {
 		if err := appboot.UpdateTemplate(selectedTemplate); err != nil {
-			logger.LogE(err.Error())
+			log.E(err.Error())
 			return
 		}
 	}

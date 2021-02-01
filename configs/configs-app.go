@@ -4,7 +4,7 @@ import (
 	"os"
 	"path"
 
-	"github.com/CatchZeng/gutils/file"
+	"github.com/go-ecosystem/utils/file"
 
 	"github.com/mitchellh/go-homedir"
 )
