@@ -12,7 +12,7 @@
       </a-form-item>
 
       <a-form-item label="value">
-        <a-input @change="OnNameChange"></a-input>
+        <a-input class='input-string' @change="OnNameChange"></a-input>
       </a-form-item>
 
       <!-- Other Params -->
@@ -22,7 +22,7 @@
         </a-form-item>
 
         <a-form-item label="value" v-if="param.type == 'string'">
-          <a-input v-model="param.value"></a-input>
+          <a-input class='input-string' v-model="param.value"></a-input>
         </a-form-item>
 
         <a-form-item label="value" v-if="param.type == 'int'">
@@ -44,7 +44,7 @@
         </a-form-item>
 
         <a-form-item label="value" v-if="param.type == 'select'">
-          <a-select v-model="param.value" @change="handleChange" style="width: 150px">
+          <a-select v-model="param.value" @change="handleChange" style="width: 240px">
             <a-select-option v-for="option in param.options" :key="option">
               {{ option }}
             </a-select-option>
@@ -98,4 +98,9 @@ export default {
   display: flex;
   flex-direction: row;
 }
+
+.input-string {
+  width: 400px
+}
+
 </style>

@@ -1,13 +1,10 @@
 # server
-FROM golang:1.13.1-alpine as builder
+FROM golang:1.16.4-alpine as builder
 
-ENV GO111MODULE=on
-#ENV GOPROXY=https://goproxy.cn,direct
-ENV GOSUMDB=off
 RUN mkdir /build
 ADD . /build/
 WORKDIR /build
-RUN go build -o server cmd/server/main.go
+RUN go mod tidy && go build -o server cmd/server/main.go
 RUN go get -u github.com/CatchZeng/jenkinsapi
 
 # web
