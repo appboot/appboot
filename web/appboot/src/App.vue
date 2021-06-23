@@ -3,14 +3,21 @@
     <Logo />
     <div id="creator" v-if="!finish">
       <Template @change="onTemplateChange" @changeParams="onParamsChange" />
-      <Params @change="onNameChange" :params="params" :paramsLength="paramsLength" />
+      <Params
+        v-if="selectedTemplate"
+        @change="onNameChange"
+        :params="params"
+        :paramsLength="paramsLength"
+      />
       <a-button
+        v-if="selectedTemplate"
         class="create-button"
         type="primary"
         icon="plus"
         :loading="creating"
         @click="onCreate"
-      >Create</a-button>
+        >Create</a-button
+      >
     </div>
     <Success v-if="finish" :name="name" />
   </div>
@@ -30,7 +37,7 @@ export default {
     return {
       name: "",
       selectedTemplate: "",
-      paramsLength: 1,
+      paramsLength: 0,
       params: [],
       creating: false,
       finish: false,
@@ -39,16 +46,18 @@ export default {
   methods: {
     onTemplateChange(template) {
       this.selectedTemplate = template;
-      console.log(`template ${this.selectedTemplate}`);
     },
     onParamsChange(params) {
-      console.log(params);
-      this.params = decodeParams(params);
-      this.paramsLength = this.params.length;
+      if (params) {
+        this.params = decodeParams(params);
+        this.paramsLength = this.params.length;
+      } else {
+        this.params = [];
+        this.paramsLength = 0;
+      }
     },
     onNameChange(value) {
       this.name = value;
-      console.log(`name ${this.name}`);
     },
     onCreate() {
       if (this.name.length < 1) {
@@ -67,8 +76,7 @@ export default {
       var that = this;
       this.creating = true;
       createApp(this.name, this.selectedTemplate, encodeParams(this.params))
-        .then(function (message) {
-          console.log(message);
+        .then(function () {
           that.creating = false;
           that.finish = true;
         })
