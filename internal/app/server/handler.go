@@ -8,7 +8,9 @@ import (
 
 	"github.com/appboot/appboot/configs"
 	"github.com/appboot/appboot/internal/app/appboot"
+	"github.com/appboot/appboot/internal/pkg/common"
 	"github.com/gin-gonic/gin"
+	"github.com/go-ecosystem/utils/response"
 )
 
 func healthz(c *gin.Context) {
@@ -17,19 +19,18 @@ func healthz(c *gin.Context) {
 
 func getTemplates(c *gin.Context) {
 	templates := appboot.GetTemplates()
-	c.JSON(http.StatusOK, NewResponse(RC_OK, "get templates success", templates))
+	response.OK(c, "get templates success", templates)
 }
 
 func updateTemplates(c *gin.Context) {
-	templates := appboot.GetTemplates()
 	if err := appboot.UpdateAllTemplates(); err != nil {
 		log.Printf("Failed to update all templates: %v", err)
-		c.JSON(http.StatusOK, NewResponse(RC_UPDATE_TEMPLATES_ERROR, "", templates))
+		response.Err(c, common.UpdateTemplatesError())
 		return
 	}
 
-	templates = appboot.GetTemplates()
-	c.JSON(http.StatusOK, NewResponse(RC_OK, "update templates success", templates))
+	templates := appboot.GetTemplates()
+	response.OK(c, "update templates success", templates)
 }
 
 func getTemplateConfig(c *gin.Context) {
@@ -37,10 +38,10 @@ func getTemplateConfig(c *gin.Context) {
 	config, err := appboot.GetTemplateConfig(template)
 	if err != nil {
 		log.Printf("Failed to get template config: %v", err)
-		c.JSON(http.StatusOK, NewResponse(RC_GET_TEMPLATE_CONFIG_ERROR, "", nil))
+		response.Err(c, common.GetTemplateConfigError())
 		return
 	}
-	c.JSON(http.StatusOK, NewResponse(RC_OK, "get template config success", config))
+	response.OK(c, "get template config success", config)
 }
 
 func createApp(c *gin.Context) {
@@ -49,7 +50,7 @@ func createApp(c *gin.Context) {
 	params := c.PostForm("params")
 
 	if len(name) < 1 || len(template) < 1 || strings.Contains(name, " ") {
-		c.JSON(http.StatusOK, NewResponse(RC_APP_PARAMS_ERROR, "", nil))
+		response.Err(c, common.AppParamsError())
 		return
 	}
 
@@ -64,9 +65,9 @@ func createApp(c *gin.Context) {
 
 	if err := appboot.Create(app, true, false, false); err != nil {
 		log.Printf("Failed to create application: %v", err)
-		c.JSON(http.StatusOK, NewResponse(RC_CREATE_APP_ERROR, "", nil))
+		response.Err(c, common.CreateAppError())
 		return
 	}
 
-	c.JSON(http.StatusOK, NewResponse(RC_OK, "create application success", app))
+	response.OK(c, "create application success", app)
 }
