@@ -8,11 +8,11 @@
     <a-form layout="inline" style="margin-bottom: 15px">
       <!-- Name -->
       <a-form-item label="key">
-        <a-input default-value="Name" disabled="true"></a-input>
+        <a-input default-value="Name" :disabled="true"></a-input>
       </a-form-item>
 
       <a-form-item label="value">
-        <a-input class='input-string' @change="OnNameChange"></a-input>
+        <a-input class="input-string" @change="OnNameChange"></a-input>
       </a-form-item>
 
       <!-- Other Params -->
@@ -22,25 +22,15 @@
         </a-form-item>
 
         <a-form-item label="value" v-if="param.type == 'string'">
-          <a-input class='input-string' v-model="param.value"></a-input>
+          <a-input class="input-string" v-model="param.value"></a-input>
         </a-form-item>
 
         <a-form-item label="value" v-if="param.type == 'int'">
-          <a-input-number
-            :min="param.min"
-            :max="param.max"
-            :placeholder="param.value"
-            v-model="param.value"
-          />
+          <a-input-number :min="param.min" :max="param.max" :placeholder="param.value" v-model="param.value" />
         </a-form-item>
 
         <a-form-item label="value" v-if="param.type == 'float'">
-          <a-input-number
-            :min="param.min"
-            :max="param.max"
-            :placeholder="param.value"
-            v-model="param.value"
-          />
+          <a-input-number :min="param.min" :max="param.max" :placeholder="param.value" v-model="param.value" />
         </a-form-item>
 
         <a-form-item label="value" v-if="param.type == 'select'">
@@ -52,11 +42,7 @@
         </a-form-item>
 
         <a-form-item v-if="index >= paramsLength">
-          <a-icon
-            class="dynamic-delete-button"
-            type="minus-circle-o"
-            @click="deleteParam(param, index)"
-          />
+          <a-icon class="dynamic-delete-button" type="minus-circle-o" @click="deleteParam(param, index)" />
         </a-form-item>
       </div>
     </a-form>
@@ -100,7 +86,6 @@ export default {
 }
 
 .input-string {
-  width: 400px
+  width: 400px;
 }
-
 </style>

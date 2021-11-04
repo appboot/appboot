@@ -1,19 +1,19 @@
 <template>
-    <div id="finish">
-        <div class="finish-text">
-            <a-icon class="icons-list" type="check-circle" theme="twoTone" twoToneColor="#52c41a" />
-            Congratulations, the application {{name}} was created successfully!
-        </div>
+  <div id="finish">
+    <div class="finish-text">
+      <a-icon class="icons-list" type="check-circle" theme="twoTone" twoToneColor="#52c41a" />
+      Congratulations, the application {{ name }} was created successfully!
     </div>
+  </div>
 </template>
 
 <script>
 export default {
-    name: "Success",
-    props: {
-        name: String,
-    },
-}
+  name: "Success",
+  props: {
+    name: String,
+  },
+};
 </script>
 
 <style>

@@ -43,6 +43,7 @@ func GetTemplateConfigFromYaml(yamlPath string) (config *TemplateConfig, err err
 // TemplateConfig appboot config from appboot.yaml
 type TemplateConfig struct {
 	Parameters Parameters `yaml:"parameters" json:"parameters"`
+	Desc       string     `yaml:"desc" json:"desc"`
 	Git        Git        `yaml:"git" json:"git"`
 }
 

@@ -2,22 +2,10 @@
   <div id="app">
     <Logo />
     <div id="creator" v-if="!finish">
-      <Template @change="onTemplateChange" @changeParams="onParamsChange" />
-      <Params
-        v-if="selectedTemplate"
-        @change="onNameChange"
-        :params="params"
-        :paramsLength="paramsLength"
-      />
-      <a-button
-        v-if="selectedTemplate"
-        class="create-button"
-        type="primary"
-        icon="plus"
-        :loading="creating"
-        @click="onCreate"
-        >Create</a-button
-      >
+      <Template @change="onTemplateChange" @onConfigChange="onConfigChange" />
+      <TemplateDesc v-if="desc" :desc="desc" />
+      <Params v-if="selectedTemplate" @change="onNameChange" :params="params" :paramsLength="paramsLength" />
+      <a-button v-if="selectedTemplate" class="create-button" type="primary" icon="plus" :loading="creating" @click="onCreate">Create</a-button>
     </div>
     <Success v-if="finish" :name="name" />
   </div>
@@ -26,6 +14,7 @@
 <script>
 import Logo from "./components/Logo.vue";
 import Template from "./components/Template.vue";
+import TemplateDesc from "./components/TemplateDesc.vue";
 import Params from "./components/Params.vue";
 import Success from "./components/Success.vue";
 import { decodeParams, encodeParams } from "./params";
@@ -36,6 +25,7 @@ export default {
   data() {
     return {
       name: "",
+      desc: "",
       selectedTemplate: "",
       paramsLength: 0,
       params: [],
@@ -47,7 +37,9 @@ export default {
     onTemplateChange(template) {
       this.selectedTemplate = template;
     },
-    onParamsChange(params) {
+    onConfigChange(configs) {
+      const params = configs.parameters;
+      this.desc = configs.desc;
       if (params) {
         this.params = decodeParams(params);
         this.paramsLength = this.params.length;
@@ -102,6 +94,7 @@ export default {
     Template,
     Params,
     Success,
+    TemplateDesc,
   },
 };
 </script>
