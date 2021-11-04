@@ -108,8 +108,8 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: left;
-  margin-left: 30%;
-  margin-right: 30%;
+  margin-left: 20%;
+  margin-right: 20%;
 }
 .title {
   margin-bottom: 10px;

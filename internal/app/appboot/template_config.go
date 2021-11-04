@@ -63,12 +63,14 @@ type Git struct {
 // StringParameter string parameter
 type StringParameter struct {
 	Key     string `yaml:"key" json:"key"`
+	Tip     string `yaml:"tip" json:"tip"`
 	Default string `yaml:"default" json:"default"`
 }
 
 // IntParameter int parameter
 type IntParameter struct {
 	Key     string `yaml:"key" json:"key"`
+	Tip     string `yaml:"tip" json:"tip"`
 	Default int64  `yaml:"default" json:"default"`
 	Min     int64  `yaml:"min" json:"min"`
 	Max     int64  `yaml:"max" json:"max"`
@@ -77,6 +79,7 @@ type IntParameter struct {
 // FloatParameter float parameter
 type FloatParameter struct {
 	Key     string  `yaml:"key" json:"key"`
+	Tip     string  `yaml:"tip" json:"tip"`
 	Default float64 `yaml:"default" json:"default"`
 	Min     float64 `yaml:"min" json:"min"`
 	Max     float64 `yaml:"max" json:"max"`
@@ -85,6 +88,7 @@ type FloatParameter struct {
 // SelectParameter select parameter
 type SelectParameter struct {
 	Key     string   `yaml:"key" json:"key"`
+	Tip     string   `yaml:"tip" json:"tip"`
 	Options []string `yaml:"options" json:"options"`
 }
 

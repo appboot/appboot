@@ -1,16 +1,7 @@
-import Vue from 'vue'
-import App from './App.vue'
+import Vue from "vue";
+import App from "./App.vue";
 
-import {
-  Button,
-  Input,
-  Form,
-  Radio,
-  InputNumber,
-  message,
-  Select,
-  Icon
-} from "ant-design-vue";
+import { Button, Input, Form, Radio, InputNumber, message, Select, Icon, Tooltip } from "ant-design-vue";
 
 Vue.use(Button);
 Vue.use(Input);
@@ -19,10 +10,11 @@ Vue.use(Radio);
 Vue.use(InputNumber);
 Vue.use(Icon);
 Vue.use(Select);
+Vue.use(Tooltip);
 Vue.prototype.$message = message;
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 new Vue({
-  render: h => h(App),
-}).$mount('#app')
+  render: h => h(App)
+}).$mount("#app");

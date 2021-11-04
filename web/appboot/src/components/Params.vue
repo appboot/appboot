@@ -7,34 +7,49 @@
 
     <a-form layout="inline" style="margin-bottom: 15px">
       <!-- Name -->
-      <a-form-item label="key">
-        <a-input default-value="Name" :disabled="true"></a-input>
+      <a-form-item class="param-key">
+        <a-tooltip placement="top">
+          <template #title>
+            <span>项目名称</span>
+          </template>
+          <label>Name</label>
+        </a-tooltip>
       </a-form-item>
 
-      <a-form-item label="value">
+      <a-form-item>
         <a-input class="input-string" @change="OnNameChange"></a-input>
       </a-form-item>
 
       <!-- Other Params -->
       <div v-for="(param, index) in params" :key="index">
-        <a-form-item label="key">
-          <a-input v-model="param.key"></a-input>
+        <a-form-item label="" class="param-key">
+          <a-tooltip placement="top" v-if="param.tip">
+            <template #title>
+              <span>{{ param.tip }}</span>
+            </template>
+            <a-input v-model="param.key" v-if="param.extra"></a-input>
+            <label class="input-string" v-if="!param.extra">{{ param.key }}</label>
+          </a-tooltip>
+          <div v-if="!param.tip">
+            <a-input v-model="param.key" v-if="param.extra"></a-input>
+            <label class="input-string" v-if="!param.extra">{{ param.key }}</label>
+          </div>
         </a-form-item>
 
-        <a-form-item label="value" v-if="param.type == 'string'">
+        <a-form-item label="" v-if="param.type == 'string'">
           <a-input class="input-string" v-model="param.value"></a-input>
         </a-form-item>
 
-        <a-form-item label="value" v-if="param.type == 'int'">
-          <a-input-number :min="param.min" :max="param.max" :placeholder="param.value" v-model="param.value" />
+        <a-form-item v-if="param.type == 'int'">
+          <a-input-number :min="param.min" :max="param.max" v-model="param.value" />
         </a-form-item>
 
-        <a-form-item label="value" v-if="param.type == 'float'">
-          <a-input-number :min="param.min" :max="param.max" :placeholder="param.value" v-model="param.value" />
+        <a-form-item v-if="param.type == 'float'">
+          <a-input-number :min="param.min" :max="param.max" v-model="param.value" />
         </a-form-item>
 
-        <a-form-item label="value" v-if="param.type == 'select'">
-          <a-select v-model="param.value" @change="handleChange" style="width: 240px">
+        <a-form-item v-if="param.type == 'select'">
+          <a-select v-model="param.value" style="width: 240px">
             <a-select-option v-for="option in param.options" :key="option">
               {{ option }}
             </a-select-option>
@@ -73,6 +88,7 @@ export default {
         key: "",
         type: "string",
         value: "",
+        extra: true,
       });
     },
   },
@@ -87,5 +103,9 @@ export default {
 
 .input-string {
   width: 400px;
+}
+
+.param-key {
+  width: 100px;
 }
 </style>
