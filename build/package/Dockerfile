@@ -14,13 +14,10 @@ ADD ./web/appboot /app
 WORKDIR /app
 RUN npm install && npm run build
 
-FROM alpine:3.7
+FROM alpine:3.15
 
 # https://pkgs.alpinelinux.org/packages
-RUN apk add  --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.7/main/ git=2.15.4-r0
-RUN apk add  --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.7/main/ bash=4.4.19-r1
-RUN apk add  --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.7/main/ openssh=7.5_p1-r10
-RUN apk add  --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.7/main/ nginx=1.12.2-r4
+RUN apk add  --no-cache git bash openssh nginx
 
 RUN mkdir /server
 RUN mkdir /app
