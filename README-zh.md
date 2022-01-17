@@ -23,8 +23,12 @@ Appboot 基于[模板](https://github.com/appboot/templates)创建应用。你�
 
 ## 安装
 
-```shell
-go get -u github.com/appboot/appboot
+```sh
+# Go 1.16+
+go install github.com/appboot/appboot@v0.3.1
+
+# Go version < 1.16
+go get -u github.com/appboot/appboot@v0.3.1
 ```
 
 ## 快速开始
@@ -39,7 +43,7 @@ appboot create
 
 ## 配置项
 
-appbctl 配置文件 `config.yaml` 位于 `$HOME/.appboot/` 目录下。如果没有该文件，你可以自行创建它。
+appboot 配置文件 `config.yaml` 位于 `$HOME/.appboot/` 目录下。如果没有该文件，你可以自行创建它。
 
 当前，在配置文件中支持 **templateRoot** 和 **templateSource** 的配置。
 

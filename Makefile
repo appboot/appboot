@@ -2,15 +2,15 @@ SHELL := /bin/bash
 BASEDIR = $(shell pwd)
 
 APP_NAME=appboot
-APP_VERSION=0.3.0
+APP_VERSION=0.3.1
 IMAGE_PREFIX=appboot/${APP_NAME}
 IMAGE_NAME=${IMAGE_PREFIX}:v${APP_VERSION}
 IMAGE_LATEST=${IMAGE_PREFIX}:latest
 
-all: first fmt imports mod lint test
+all: fmt imports mod lint test
 first:
-	go get golang.org/x/tools/cmd/goimports
-	go get github.com/golangci/golangci-lint/cmd/golangci-lint
+	go install golang.org/x/tools/cmd/goimports@latest
+	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 fmt:
 	gofmt -w .
 imports:

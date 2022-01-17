@@ -1,5 +1,5 @@
 # server
-FROM golang:1.16.4-alpine as builder
+FROM golang:1.17.6-alpine as builder
 
 RUN mkdir /build
 ADD . /build/

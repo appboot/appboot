@@ -15,9 +15,9 @@
 
 [中文请戳](./README-zh.md)
 
-Appboot, which means application BootLoader, is a general application creation platform. 
+Appboot, which means application BootLoader, is a general application creation platform.
 
-Appboot creates applications based on [templates](https://github.com/appboot/templates). You can create custom templates to meet different requirements. 
+Appboot creates applications based on [templates](https://github.com/appboot/templates). You can create custom templates to meet different requirements.
 
 In the template, you can include code, lint configuration, CI&CD, custom scripts, etc.
 
@@ -25,8 +25,12 @@ In the template, you can include code, lint configuration, CI&CD, custom scripts
 
 ## Install
 
-```shell
-go get -u github.com/appboot/appboot
+```sh
+# Go 1.16+
+go install github.com/appboot/appboot@v0.3.1
+
+# Go version < 1.16
+go get -u github.com/appboot/appboot@v0.3.1
 ```
 
 ## Quick Start
@@ -50,7 +54,7 @@ Currently in `config.yaml` you can configure **templateRoot** and **templateSour
 - templateSource: indicates the source repository for obtaining templates. The default is <https://github.com/appboot/templates.git>. If the default repository cannot meet the requirements, you can specify your own repository. For example, `templateSource: https://github.com/CatchZeng/templates.git`.
 
 ```shell
-$ cat $HOME/.appboot/config.yaml 
+$ cat $HOME/.appboot/config.yaml
 templateSource: https://github.com/CatchZeng/templates.git
 templateRoot: /Users/catchzeng/Desktop/templates
 ```
