@@ -1,0 +1,28 @@
+desc: "test template"
+parameters:
+  - key: s1
+    type: string
+    default: s1
+    tip: s1 tip
+  - key: s2
+    type: string
+    default: s2
+    tip: s2 tip
+  - key: i1
+    type: int
+    tip: i1 tip
+    default: 1
+    min: 0
+    max: 65535
+  - key: f1
+    type: float
+    tip: f1 tip
+    default: 1.0
+    min: 0
+    max: sssss
+  - key: se1
+    type: select
+    tip: se1 tip
+    options:
+      - o1
+      - o2

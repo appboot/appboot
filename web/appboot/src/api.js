@@ -1,7 +1,7 @@
 const axios = require("axios").default;
-import { API_HOST } from "./config";
+import { API_URL } from "./config";
 
-axios.defaults.baseURL = API_HOST;
+axios.defaults.baseURL = API_URL;
 
 export function getTemplates() {
   return new Promise((resolve, reject) => {

@@ -19,12 +19,23 @@ type CreateCallback struct {
 }
 
 // Create an application
-func Create(app Application, force bool, skipPreSH bool, skipPostSH bool) error {
-	return CreateWithCallback(app, force, skipPreSH, skipPostSH, nil)
+func Create(app Application,
+	force bool,
+	beforeScripts []string,
+	afterScripts []string,
+	skipBeforeScripts bool,
+	skipAfterScripts bool) error {
+	return CreateWithCallback(app, force, beforeScripts, afterScripts, skipBeforeScripts, skipAfterScripts, nil)
 }
 
 // CreateWithCallback create an application with callback
-func CreateWithCallback(app Application, force bool, skipPreSH bool, skipPostSH bool, callback *CreateCallback) error {
+func CreateWithCallback(app Application,
+	force bool,
+	beforeScripts []string,
+	afterScripts []string,
+	skipBeforeScripts bool,
+	skipAfterScripts bool,
+	callback *CreateCallback) error {
 	if !force && file.Exists(app.Path) {
 		return errors.New("the application already exists, you can force it to be created with the -f flag")
 	}
@@ -33,12 +44,13 @@ func CreateWithCallback(app Application, force bool, skipPreSH bool, skipPostSH 
 		return errors.New("the application is invalid")
 	}
 
-	preScript := app.GetPreScript()
-	if !skipPreSH && len(preScript) > 0 {
+	if !skipBeforeScripts && len(beforeScripts) > 0 {
 		log.H("Running script before the app is created")
-		log.W(preScript)
-		if err := gos.RunBashCommand(preScript); err != nil {
-			return err
+		for _, script := range beforeScripts {
+			log.W(script)
+			if err := gos.RunBashCommand(script); err != nil {
+				return err
+			}
 		}
 	}
 
@@ -64,12 +76,19 @@ func CreateWithCallback(app Application, force bool, skipPreSH bool, skipPostSH 
 		}
 	}
 
-	postScript := app.GetPostScript()
-	if !skipPostSH && len(postScript) > 0 {
+	if !skipAfterScripts && len(afterScripts) > 0 {
 		log.H("Running script after the app is created")
-		log.W(postScript)
-		if err := gos.RunBashCommand(postScript); err != nil {
-			return err
+
+		// changes the current working directory to the app's directory
+		if file.Exists(app.Path) {
+			os.Chdir(app.Path)
+		}
+
+		for _, script := range afterScripts {
+			log.W(script)
+			if err := gos.RunBashCommand(script); err != nil {
+				return err
+			}
 		}
 	}
 

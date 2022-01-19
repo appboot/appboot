@@ -147,54 +147,6 @@ func TestApplication_GetParameters(t *testing.T) {
 		})
 	}
 }
-
-func TestApplication_GetPreScript(t *testing.T) {
-	sut := &Application{
-		Name:       "test",
-		Path:       "test",
-		Template:   "test",
-		Parameters: "test",
-	}
-
-	t.Run("will return script", func(t *testing.T) {
-		monkey.Patch(configs.GetTemplateRoot, func() (string, error) {
-			return "/root", nil
-		})
-		defer monkey.Unpatch(configs.GetTemplateRoot)
-
-		monkey.Patch(file.Exists, func(path string) bool {
-			return true
-		})
-		defer monkey.Unpatch(file.Exists)
-
-		p := sut.GetPreScript()
-		if p != "sh "+path.Join("/root/test", ConfigFolder, PreSH) {
-			t.Error("GetPreScript error")
-		}
-	})
-}
-
-func TestApplication_GetPostScript(t *testing.T) {
-	sut := &Application{
-		Name:       "test",
-		Path:       "test",
-		Template:   "test",
-		Parameters: "test",
-	}
-
-	t.Run("will return script", func(t *testing.T) {
-		monkey.Patch(file.Exists, func(path string) bool {
-			return true
-		})
-		defer monkey.Unpatch(file.Exists)
-
-		p := sut.GetPostScript()
-		if p != "sh "+path.Join("test", ConfigFolder, PostSH) {
-			t.Error("GetPostScript error")
-		}
-	})
-}
-
 func TestApplication_IsValid(t *testing.T) {
 	type fields struct {
 		Name     string

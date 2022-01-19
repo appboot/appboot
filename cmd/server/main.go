@@ -15,7 +15,7 @@ func main() {
 	const port = ":8000"
 
 	url := fmt.Sprintf("http://%v%v", net.GetIP(), port)
-	log.Printf("API_HOST: %v\n", url)
+	log.Printf("API_URL: %v\n", url)
 
 	configs.InitConfig()
 

@@ -20,17 +20,17 @@ export default {
   data() {
     return {
       loading: false,
-      templates: [],
+      templates: []
     };
   },
   props: {},
   mounted() {
     var that = this;
     getTemplates()
-      .then(function (templates) {
+      .then(function(templates) {
         that.templates = templates;
       })
-      .catch(function (error) {
+      .catch(function(error) {
         that.$message.error(error);
       });
   },
@@ -41,10 +41,10 @@ export default {
 
       var that = this;
       getConfigs(value)
-        .then(function (configs) {
+        .then(function(configs) {
           that.$emit("onConfigChange", configs);
         })
-        .catch(function (error) {
+        .catch(function(error) {
           that.$message.error(error);
           that.$emit("onConfigChange", []);
         });
@@ -55,16 +55,16 @@ export default {
 
       var that = this;
       updateTemplates()
-        .then(function (templates) {
+        .then(function(templates) {
           that.loading = false;
           that.templates = templates;
         })
-        .catch(function (error) {
+        .catch(function(error) {
           that.loading = false;
           that.$message.error(error);
         });
-    },
-  },
+    }
+  }
 };
 </script>
 

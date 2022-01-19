@@ -19,10 +19,6 @@ const (
 
 	// ConfigFolder appboot configuration items
 	ConfigFolder = "appboot"
-	// PreSH appboot pre script
-	PreSH = "pre.sh"
-	// PostSH appboot post script
-	PostSH = "post.sh"
 )
 
 // Application data struct
@@ -62,26 +58,6 @@ func (app *Application) GetParameters() (map[string]string, error) {
 		parameters[Path] = app.Path
 	}
 	return parameters, nil
-}
-
-// GetPreScript  pre script
-func (app *Application) GetPreScript() string {
-	p := path.Join(app.GetTemplatePath(), ConfigFolder, PreSH)
-	return joinScript(p)
-}
-
-// GetPostScript post script
-func (app *Application) GetPostScript() string {
-	p := path.Join(app.Path, ConfigFolder, PostSH)
-	return joinScript(p)
-}
-
-func joinScript(path string) string {
-	if file.Exists(path) {
-		cmd := "sh " + path
-		return cmd
-	}
-	return ""
 }
 
 // IsValid is it valid

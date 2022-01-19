@@ -52,7 +52,7 @@ func promptIntParam(param appboot.IntParameter) (string, error) {
 	prompt := promptui.Prompt{
 		Label:    param.Key,
 		Validate: intParamValidate(param, param.Key+" can not be empty"),
-		Default:  strconv.FormatInt(param.Default, 10),
+		Default:  strconv.Itoa(param.Default),
 	}
 	return prompt.Run()
 }
@@ -81,7 +81,7 @@ func intParamValidate(param appboot.IntParameter, alert string) promptui.Validat
 			return errors.New(alert)
 		}
 
-		intValue, err := strconv.ParseInt(input, 10, 64)
+		intValue, err := strconv.Atoi(input)
 		if err != nil {
 			return err
 		}

@@ -63,7 +63,19 @@ func createApp(c *gin.Context) {
 
 	_ = os.RemoveAll(app.Path)
 
-	if err := appboot.Create(app, true, false, false); err != nil {
+	config, err := appboot.GetTemplateConfig(template)
+	if err != nil {
+		log.Printf("Failed to get template config: %v", err)
+		response.Err(c, common.GetTemplateConfigError())
+		return
+	}
+
+	if err := appboot.Create(app,
+		true,
+		config.Scripts.Before,
+		config.Scripts.After,
+		false,
+		false); err != nil {
 		log.Printf("Failed to create application: %v", err)
 		response.Err(c, common.CreateAppError())
 		return

@@ -84,68 +84,61 @@ var create = &cobra.Command{
 		}
 		app.Parameters = valueString
 
-		skipPreSH, err := promptSelect("Skip pre script")
+		skipBeforeScripts, err := promptSelect("Skip executing before scripts")
 		if err != nil {
 			log.E(err.Error())
 			return
 		}
-		skipPostSH, err := promptSelect("Skip post script")
+		skipAfterScripts, err := promptSelect("Skip executing after scripts")
 		if err != nil {
 			log.E(err.Error())
 			return
 		}
 
 		// Create
-		if err := appboot.Create(app, true, skipPreSH == selectYes, skipPostSH == selectYes); err != nil {
+		if err := appboot.Create(app,
+			true,
+			cnf.Scripts.Before,
+			cnf.Scripts.After,
+			skipBeforeScripts == selectYes,
+			skipAfterScripts == selectYes); err != nil {
 			log.E(err.Error())
 			return
 		}
 	},
 }
 
-func handleParams(params appboot.Parameters) map[string]string {
+func handleParams(params []interface{}) map[string]string {
 	result := make(map[string]string)
 	log.H("Enter the parameters, if you need to use the default value, just press Enter.")
 
-	stringParams := params.StringParameters
-	if len(stringParams) > 0 {
-		for _, param := range stringParams {
+	for _, v := range params {
+		switch param := v.(type) {
+		case appboot.StringParameter:
 			value, err := promptStringParam(param)
 			if err != nil {
 				result = make(map[string]string)
 				return result
 			}
 			result[param.Key] = value
-		}
-	}
 
-	intParams := params.IntParameters
-	if len(intParams) > 0 {
-		for _, param := range intParams {
+		case appboot.IntParameter:
 			value, err := promptIntParam(param)
 			if err != nil {
 				result = make(map[string]string)
 				return result
 			}
 			result[param.Key] = value
-		}
-	}
 
-	floatParams := params.FloatParameters
-	if len(floatParams) > 0 {
-		for _, param := range floatParams {
+		case appboot.FloatParameter:
 			value, err := promptFloatParam(param)
 			if err != nil {
 				result = make(map[string]string)
 				return result
 			}
 			result[param.Key] = value
-		}
-	}
 
-	selectParams := params.SelectParameters
-	if len(selectParams) > 0 {
-		for _, param := range selectParams {
+		case appboot.SelectParameter:
 			value, err := promptSelectWithItems(param.Key, param.Options)
 			if err != nil {
 				result = make(map[string]string)
@@ -154,7 +147,6 @@ func handleParams(params appboot.Parameters) map[string]string {
 			result[param.Key] = value
 		}
 	}
-
 	return result
 }
 

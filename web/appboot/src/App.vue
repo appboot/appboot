@@ -30,7 +30,7 @@ export default {
       paramsLength: 0,
       params: [],
       creating: false,
-      finish: false,
+      finish: false
     };
   },
   methods: {
@@ -68,11 +68,11 @@ export default {
       var that = this;
       this.creating = true;
       createApp(this.name, this.selectedTemplate, encodeParams(this.params))
-        .then(function () {
+        .then(function() {
           that.creating = false;
           that.finish = true;
         })
-        .catch(function (error) {
+        .catch(function(error) {
           that.creating = false;
           that.$message.error(error);
         });
@@ -87,15 +87,15 @@ export default {
         }
       }
       return result;
-    },
+    }
   },
   components: {
     Logo,
     Template,
     Params,
     Success,
-    TemplateDesc,
-  },
+    TemplateDesc
+  }
 };
 </script>
 
