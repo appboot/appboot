@@ -33,6 +33,11 @@ func updateTemplates(c *gin.Context) {
 	response.OK(c, "update templates success", templates)
 }
 
+func getTemplatesGitHash(c *gin.Context) {
+	hash := appboot.GetTemplatesGitHash()
+	response.OK(c, "get templates git hash", hash)
+}
+
 func getTemplateConfig(c *gin.Context) {
 	template := c.Param("template")
 	config, err := appboot.GetTemplateConfig(template)

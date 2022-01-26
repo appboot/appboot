@@ -42,6 +42,19 @@ export function updateTemplates() {
   });
 }
 
+export function getTemplatesGitHash() {
+  return new Promise((resolve, reject) => {
+    axios
+      .get("/templates/git_hash")
+      .then(function(response) {
+        resolve(response.data.data);
+      })
+      .catch(function(error) {
+        reject(error.toString());
+      });
+  });
+}
+
 export function createApp(name, template, params) {
   return new Promise((resolve, reject) => {
     const form = new FormData();

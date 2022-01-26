@@ -4,6 +4,9 @@
       <div class="title">Template</div>
       <a-button class="action-button" icon="reload" type="link" @click="onUpdate" :loading="loading"></a-button>
     </div>
+    <div v-if="gitHash.length > 0">
+      <div class="gitHash">git hash: {{ gitHash }}</div>
+    </div>
     <div v-if="templates.length > 0">
       <a-radio-group class="radio" buttonStyle="solid" @change="onChange">
         <a-radio-button v-for="(t, index) in templates" :key="index" :value="t">{{ t }}</a-radio-button>
@@ -13,14 +16,15 @@
 </template>
 
 <script>
-import { getTemplates, getConfigs, updateTemplates } from "../api";
+import { getTemplates, getConfigs, updateTemplates, getTemplatesGitHash } from "../api";
 
 export default {
   name: "Template",
   data() {
     return {
       loading: false,
-      templates: []
+      templates: [],
+      gitHash: ""
     };
   },
   props: {},
@@ -29,6 +33,14 @@ export default {
     getTemplates()
       .then(function(templates) {
         that.templates = templates;
+      })
+      .catch(function(error) {
+        that.$message.error(error);
+      });
+
+    getTemplatesGitHash()
+      .then(function(hash) {
+        that.gitHash = hash;
       })
       .catch(function(error) {
         that.$message.error(error);
@@ -58,6 +70,14 @@ export default {
         .then(function(templates) {
           that.loading = false;
           that.templates = templates;
+
+          getTemplatesGitHash()
+            .then(function(hash) {
+              that.gitHash = hash;
+            })
+            .catch(function(error) {
+              that.$message.error(error);
+            });
         })
         .catch(function(error) {
           that.loading = false;
@@ -72,5 +92,9 @@ export default {
 #template {
   display: flex;
   flex-direction: row;
+}
+.gitHash {
+  margin-bottom: 10px;
+  font-size: medium;
 }
 </style>

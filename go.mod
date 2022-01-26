@@ -6,7 +6,7 @@ require (
 	bou.ke/monkey v1.0.2
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.7.2
-	github.com/go-ecosystem/utils v1.3.2
+	github.com/go-ecosystem/utils v1.4.0
 	github.com/manifoldco/promptui v0.8.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/spf13/cobra v1.2.1

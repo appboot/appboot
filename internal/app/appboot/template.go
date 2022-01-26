@@ -1,6 +1,7 @@
 package appboot
 
 import (
+	"context"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -28,6 +29,20 @@ func GetTemplates() []string {
 		return !strings.HasPrefix(info.Name(), ".")
 	})
 	return templates
+}
+
+func GetTemplatesGitHash() string {
+	root, err := configs.GetTemplateRoot()
+	if err != nil {
+		return ""
+	}
+
+	res, err := gos.RunCommand(context.Background(), root, "git", "rev-parse", "--short", "HEAD")
+	if err != nil {
+		return ""
+	}
+	res = strings.Replace(res, "\n", "", -1)
+	return res
 }
 
 // UpdateTemplate update template with Git
@@ -126,7 +141,7 @@ func UpdateAllTemplatesWithDownloader(downloader Downloader) error {
 	}
 
 	// update templates
-	cp := "cp -rf " + tempDir + "/*" + " " + root
+	cp := "cp -rf " + tempDir + "/" + " " + root
 	if err := gos.RunBashCommand(cp); err != nil {
 		return err
 	}
