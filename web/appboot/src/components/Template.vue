@@ -1,11 +1,13 @@
 <template>
   <div>
     <div id="template">
-      <div class="title">Template</div>
+      <a-tooltip placement="top">
+        <template #title>
+          <span>git commit: {{ gitHash }}</span>
+        </template>
+        <div class="title">Template</div>
+      </a-tooltip>
       <a-button class="action-button" icon="reload" type="link" @click="onUpdate" :loading="loading"></a-button>
-    </div>
-    <div v-if="gitHash.length > 0">
-      <div class="gitHash">git hash: {{ gitHash }}</div>
     </div>
     <div v-if="templates.length > 0">
       <a-radio-group class="radio" buttonStyle="solid" @change="onChange">
