@@ -7,7 +7,6 @@ import (
 	"os"
 	"path"
 	"strings"
-	"time"
 
 	"github.com/appboot/appboot/configs"
 	"github.com/appboot/appboot/internal/app/appboot"
@@ -93,7 +92,7 @@ func createApp(c *gin.Context) {
 		return
 	}
 
-	saveName := fmt.Sprintf("%s%d.zip", app.Name, time.Now().Unix())
+	saveName := fmt.Sprintf("%s.zip", app.Name)
 	savePath := path.Join(getStaticPath(), saveName)
 	err = zip.Zip(app.Path, savePath)
 	if err != nil {

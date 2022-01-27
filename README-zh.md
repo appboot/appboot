@@ -27,10 +27,10 @@ Appboot 基于[模板](https://github.com/appboot/templates)创建应用。你�
 
 ```sh
 # Go 1.16+
-go install github.com/appboot/appboot@v0.5.0
+go install github.com/appboot/appboot@v0.6.0
 
 # Go version < 1.16
-go get -u github.com/appboot/appboot@v0.5.0
+go get -u github.com/appboot/appboot@v0.6.0
 ```
 
 ## 快速开始
