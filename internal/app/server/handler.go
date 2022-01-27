@@ -59,6 +59,9 @@ func createApp(c *gin.Context) {
 		return
 	}
 
+	skipBeforeScripts := c.PostForm("skipBeforeScripts") == "true"
+	skipAfterScripts := c.PostForm("skipAfterScripts") == "true"
+
 	app := appboot.Application{
 		Name:       name,
 		Template:   template,
@@ -79,8 +82,8 @@ func createApp(c *gin.Context) {
 		true,
 		config.Scripts.Before,
 		config.Scripts.After,
-		false,
-		false); err != nil {
+		skipBeforeScripts,
+		skipAfterScripts); err != nil {
 		log.Printf("Failed to create application: %v", err)
 		response.Err(c, common.CreateAppError())
 		return

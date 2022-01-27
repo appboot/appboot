@@ -90,6 +90,7 @@ export default {
 }
 
 .param-key {
-  width: 100px;
+  width: fit-content;
+  min-width: 110px;
 }
 </style>

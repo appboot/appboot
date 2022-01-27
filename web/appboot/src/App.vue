@@ -5,6 +5,7 @@
       <Template @change="onTemplateChange" @onConfigChange="onConfigChange" />
       <TemplateDesc v-if="desc" :desc="desc" />
       <Params v-if="selectedTemplate" @change="onNameChange" :params="params" :paramsLength="paramsLength" />
+      <Scripts id="scripts" v-if="showScripts" :beforeScripts="beforeScripts" :afterScripts="afterScripts" @onBeforeChange="onBeforeChange" @onAfterChange="onAfterChange" />
       <a-button v-if="selectedTemplate" class="create-button" type="primary" icon="plus" :loading="creating" @click="onCreate">Create</a-button>
     </div>
     <Success v-if="finish" :name="name" />
@@ -16,6 +17,7 @@ import Logo from "./components/Logo.vue";
 import Template from "./components/Template.vue";
 import TemplateDesc from "./components/TemplateDesc.vue";
 import Params from "./components/Params.vue";
+import Scripts from "./components/Scripts.vue";
 import Success from "./components/Success.vue";
 import { decodeParams, encodeParams } from "./params";
 import { createApp } from "./api";
@@ -29,9 +31,18 @@ export default {
       selectedTemplate: "",
       paramsLength: 0,
       params: [],
+      beforeScripts: [],
+      afterScripts: [],
+      enableBefore: true,
+      enableAfter: true,
       creating: false,
       finish: false
     };
+  },
+  computed: {
+    showScripts: function() {
+      return this.beforeScripts.length > 0 || this.afterScripts.length > 0;
+    }
   },
   methods: {
     onTemplateChange(template) {
@@ -40,6 +51,8 @@ export default {
     onConfigChange(configs) {
       const params = configs.parameters;
       this.desc = configs.desc;
+      this.beforeScripts = configs.scripts.before ?? [];
+      this.afterScripts = configs.scripts.after ?? [];
       if (params) {
         this.params = decodeParams(params);
         this.paramsLength = this.params.length;
@@ -50,6 +63,12 @@ export default {
     },
     onNameChange(value) {
       this.name = value;
+    },
+    onBeforeChange(value) {
+      this.enableBefore = value;
+    },
+    onAfterChange(value) {
+      this.enableAfter = value;
     },
     onCreate() {
       if (this.name.length < 1) {
@@ -67,7 +86,9 @@ export default {
 
       var that = this;
       this.creating = true;
-      createApp(this.name, this.selectedTemplate, encodeParams(this.params))
+      var skipBeforeScripts = this.enableBefore ? "false" : "true";
+      var skipAfterScripts = this.enableAfter ? "false" : "true";
+      createApp(this.name, this.selectedTemplate, encodeParams(this.params), skipBeforeScripts, skipAfterScripts)
         .then(function() {
           that.creating = false;
           that.finish = true;
@@ -93,6 +114,7 @@ export default {
     Logo,
     Template,
     Params,
+    Scripts,
     Success,
     TemplateDesc
   }
@@ -117,12 +139,20 @@ export default {
   font-size: larger;
   font-weight: bold;
 }
+.sub-title {
+  margin-bottom: 10px;
+  margin-top: 10px;
+  margin-right: 10px;
+  font-size: me;
+  font-weight: bold;
+}
 .create-button {
   width: 50%;
   height: 40px;
   align-self: center;
   font-size: medium;
   margin-top: 30px;
+  margin-bottom: 40px;
 }
 .action-button {
   margin-left: 10px;

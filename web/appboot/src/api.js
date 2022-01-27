@@ -55,12 +55,14 @@ export function getTemplatesGitHash() {
   });
 }
 
-export function createApp(name, template, params) {
+export function createApp(name, template, params, skipBeforeScripts, skipAfterScripts) {
   return new Promise((resolve, reject) => {
     const form = new FormData();
     form.append("name", name);
     form.append("template", template);
     form.append("params", params);
+    form.append("skipBeforeScripts", skipBeforeScripts);
+    form.append("skipAfterScripts", skipAfterScripts);
 
     axios
       .post("/app", form)
