@@ -141,8 +141,9 @@ func UpdateAllTemplatesWithDownloader(downloader Downloader) error {
 	}
 
 	// update templates
-	cp := "cp -rf " + tempDir + "/" + " " + root
-	if err := gos.RunBashCommand(cp); err != nil {
+	cp := "cp -rf " + tempDir + "/*" + " " + root
+	command := "shopt -s dotglob && " + cp
+	if err := gos.RunBashCommand(command); err != nil {
 		return err
 	}
 
