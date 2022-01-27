@@ -1,14 +1,18 @@
 package server
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"path"
 	"strings"
+	"time"
 
 	"github.com/appboot/appboot/configs"
 	"github.com/appboot/appboot/internal/app/appboot"
 	"github.com/appboot/appboot/internal/pkg/common"
+	"github.com/appboot/appboot/internal/pkg/zip"
 	"github.com/gin-gonic/gin"
 	"github.com/go-ecosystem/utils/response"
 )
@@ -89,5 +93,14 @@ func createApp(c *gin.Context) {
 		return
 	}
 
-	response.OK(c, "create application success", app)
+	saveName := fmt.Sprintf("%s%d.zip", app.Name, time.Now().Unix())
+	savePath := path.Join(getStaticPath(), saveName)
+	err = zip.Zip(app.Path, savePath)
+	if err != nil {
+		response.Err(c, common.ZipAppError())
+		return
+	}
+
+	downloadPath := "/static/" + saveName
+	response.OK(c, "create application success", downloadPath)
 }

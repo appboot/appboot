@@ -67,7 +67,11 @@ export function createApp(name, template, params, skipBeforeScripts, skipAfterSc
     axios
       .post("/app", form)
       .then(function(response) {
-        resolve(response.data.message);
+        if (response.data.data && response.data.data.length > 0) {
+          const path = axios.defaults.baseURL + response.data.data;
+          response.data.path = path;
+        }
+        resolve(response.data);
       })
       .catch(function(error) {
         reject(error.toString());

@@ -32,7 +32,7 @@ func GetTemplateRoot() (string, error) {
 	root := path.Join(home, TemplatesSubPath)
 	if !file.Exists(root) {
 		if err := os.MkdirAll(root, 0755); err != nil {
-			return root, nil
+			return root, err
 		}
 		return root, nil
 	}

@@ -21,6 +21,7 @@ import Scripts from "./components/Scripts.vue";
 import Success from "./components/Success.vue";
 import { decodeParams, encodeParams } from "./params";
 import { createApp } from "./api";
+import download from "./download";
 
 export default {
   name: "App",
@@ -89,9 +90,16 @@ export default {
       var skipBeforeScripts = this.enableBefore ? "false" : "true";
       var skipAfterScripts = this.enableAfter ? "false" : "true";
       createApp(this.name, this.selectedTemplate, encodeParams(this.params), skipBeforeScripts, skipAfterScripts)
-        .then(function() {
+        .then(function(data) {
           that.creating = false;
-          that.finish = true;
+          if (data.code == 0) {
+            that.finish = true;
+            if (data.path) {
+              download(data.path, that.name + ".zip");
+            }
+          } else {
+            that.$message.error(data.message);
+          }
         })
         .catch(function(error) {
           that.creating = false;

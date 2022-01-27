@@ -67,7 +67,7 @@ Visit <http://localhost:3000/> to **update templates** and **create projects**.
 > ```sh
 > ❯ tree -a -L 2 $HOME/appboot
 > /Users/catchzeng/appboot
-> ├── .workspace
+> ├── workspace
 > │ └── test
 > └── templates
 > ├── GO-CMD

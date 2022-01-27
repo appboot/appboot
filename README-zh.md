@@ -67,7 +67,7 @@ appboot/appboot
 >   ```sh
 >   ❯ tree -a -L 2 $HOME/appboot
 >   /Users/catchzeng/appboot
->   ├── .workspace
+>   ├── workspace
 >   │   └── test
 >   └── templates
 >       ├── GO-CMD
