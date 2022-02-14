@@ -1,20 +1,19 @@
+<script setup>
+import { CheckCircleTwoTone } from "@ant-design/icons-vue";
+
+defineProps({
+  name: String,
+});
+</script>
+
 <template>
   <div id="finish">
     <div class="finish-text">
-      <a-icon class="icons-list" type="check-circle" theme="twoTone" twoToneColor="#52c41a" />
-      Congratulations, the application {{ name }} was created successfully!
+      <check-circle-two-tone two-tone-color="#52c41a" style="font-size: large; margin-right: 8px" />
+      Congratulations, {{ name }} was created successfully!
     </div>
   </div>
 </template>
-
-<script>
-export default {
-  name: "Success",
-  props: {
-    name: String,
-  },
-};
-</script>
 
 <style>
 #finish {

@@ -1,22 +1,32 @@
-import Vue from "vue";
+import { createApp } from "vue";
 import App from "./App.vue";
+import {
+  Button,
+  Input,
+  Form,
+  Radio,
+  InputNumber,
+  message,
+  Select,
+  Tooltip,
+  Switch,
+  List,
+} from "ant-design-vue";
 
-import { Button, Input, Form, Radio, InputNumber, message, Select, Icon, Tooltip, Switch, List } from "ant-design-vue";
+import "ant-design-vue/es/message/style/css"; //vite只能用 ant-design-vue/es 而非 ant-design-vue/lib
 
-Vue.use(Button);
-Vue.use(Input);
-Vue.use(Form);
-Vue.use(Radio);
-Vue.use(InputNumber);
-Vue.use(Icon);
-Vue.use(Select);
-Vue.use(Tooltip);
-Vue.use(Switch);
-Vue.use(List);
-Vue.prototype.$message = message;
+const app = createApp(App);
 
-Vue.config.productionTip = false;
+app.use(Button);
+app.use(Input);
+app.use(Form);
+app.use(Radio);
+app.use(InputNumber);
+app.use(Select);
+app.use(Tooltip);
+app.use(Switch);
+app.use(List);
 
-new Vue({
-  render: h => h(App)
-}).$mount("#app");
+app.mount("#app");
+
+app.config.globalProperties.$message = message;

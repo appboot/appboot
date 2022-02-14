@@ -1,3 +1,72 @@
+<script setup>
+import { ReloadOutlined } from "@ant-design/icons-vue";
+import { message } from "ant-design-vue";
+import { ref } from "vue";
+import { getTemplates, getConfigs, updateTemplates, getTemplatesGitHash } from "../api";
+
+// emit
+const emit = defineEmits(["change", "onConfigChange", "update"]);
+
+// variable
+const loading = ref(false);
+const templates = ref([]);
+const gitHash = ref("ssss");
+const selectedTemplate = ref("");
+
+getTemplates()
+  .then(function (ts) {
+    templates.value = ts;
+  })
+  .catch(function (error) {
+    message.error(error);
+  });
+
+getTemplatesGitHash()
+  .then(function (hash) {
+    gitHash.value = hash;
+  })
+  .catch(function (error) {
+    message.error(error);
+  });
+
+function onChange(e) {
+  let value = e.target.value;
+  emit("change", value);
+
+  getConfigs(value)
+    .then(function (configs) {
+      emit("onConfigChange", configs);
+    })
+    .catch(function (error) {
+      message.error(error);
+      emit("onConfigChange", []);
+    });
+}
+
+function onUpdate() {
+  loading.value = true;
+  emit("update");
+
+  updateTemplates()
+    .then(function (ts) {
+      loading.value = false;
+      templates.value = ts;
+
+      getTemplatesGitHash()
+        .then(function (hash) {
+          gitHash.value = hash;
+        })
+        .catch(function (error) {
+          message.error(error);
+        });
+    })
+    .catch(function (error) {
+      loading.value = false;
+      message.error(error);
+    });
+}
+</script>
+
 <template>
   <div>
     <div id="template">
@@ -7,88 +76,17 @@
         </template>
         <div class="title">Template</div>
       </a-tooltip>
-      <a-button class="action-button" icon="reload" type="link" @click="onUpdate" :loading="loading"></a-button>
+      <a-button class="action-button" type="link" @click="onUpdate" :loading="loading">
+        <template #icon><ReloadOutlined /></template>
+      </a-button>
     </div>
     <div v-if="templates.length > 0">
-      <a-radio-group class="radio" buttonStyle="solid" @change="onChange">
+      <a-radio-group v-model:value="selectedTemplate" button-style="solid" @change="onChange">
         <a-radio-button v-for="(t, index) in templates" :key="index" :value="t">{{ t }}</a-radio-button>
       </a-radio-group>
     </div>
   </div>
 </template>
-
-<script>
-import { getTemplates, getConfigs, updateTemplates, getTemplatesGitHash } from "../api";
-
-export default {
-  name: "Template",
-  data() {
-    return {
-      loading: false,
-      templates: [],
-      gitHash: ""
-    };
-  },
-  props: {},
-  mounted() {
-    var that = this;
-    getTemplates()
-      .then(function(templates) {
-        that.templates = templates;
-      })
-      .catch(function(error) {
-        that.$message.error(error);
-      });
-
-    getTemplatesGitHash()
-      .then(function(hash) {
-        that.gitHash = hash;
-      })
-      .catch(function(error) {
-        that.$message.error(error);
-      });
-  },
-  methods: {
-    onChange(e) {
-      let value = e.target.value;
-      this.$emit("change", value);
-
-      var that = this;
-      getConfigs(value)
-        .then(function(configs) {
-          that.$emit("onConfigChange", configs);
-        })
-        .catch(function(error) {
-          that.$message.error(error);
-          that.$emit("onConfigChange", []);
-        });
-    },
-    onUpdate() {
-      this.loading = true;
-      this.$emit("update");
-
-      var that = this;
-      updateTemplates()
-        .then(function(templates) {
-          that.loading = false;
-          that.templates = templates;
-
-          getTemplatesGitHash()
-            .then(function(hash) {
-              that.gitHash = hash;
-            })
-            .catch(function(error) {
-              that.$message.error(error);
-            });
-        })
-        .catch(function(error) {
-          that.loading = false;
-          that.$message.error(error);
-        });
-    }
-  }
-};
-</script>
 
 <style>
 #template {

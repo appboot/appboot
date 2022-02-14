@@ -7,7 +7,7 @@ WORKDIR /build
 RUN go mod tidy && go build -o server cmd/server/main.go
 
 # web
-FROM node:8.12-alpine as web-builder
+FROM node:16.14-alpine as web-builder
 ADD ./web/appboot /app
 WORKDIR /app
 RUN npm install && npm run build

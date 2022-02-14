@@ -1,6 +1,6 @@
 export function decodeParams(params) {
   var result = [];
-  params.forEach(param => {
+  params.forEach((param) => {
     param.value = param.default;
     result.push(param);
   });
