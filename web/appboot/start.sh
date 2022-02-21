@@ -1,5 +1,5 @@
-cd /app/js
-JSPATH=`find . -name 'app.*.js'`
+cd /app/assets
+JSPATH=`find . -name 'index.*.js'`
 JSNAME=`echo ${JSPATH#*/}`
 DEFAULT_API_URL="http://127.0.0.1:8000"
 
