@@ -4,6 +4,7 @@ parameters:
     type: string
     default: s1
     tip: s1 tip
+    placeholder: placeholder
   - key: s2
     type: string
     default: s2

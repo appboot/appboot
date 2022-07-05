@@ -37,7 +37,7 @@ function onNameChange(e) {
             <span>{{ param.tip }}</span>
           </template>
           <a-form-item :label="param.key" :colon="false" style="margin-bottom: 8px">
-            <a-input class="input-string" v-model:value="param.value" v-if="param.type == 'string'"></a-input>
+            <a-input class="input-string" v-model:value="param.value" v-model:placeholder="param.placeholder" v-if="param.type == 'string'"></a-input>
             <a-input-number :min="param.min" :max="param.max" v-model:value="param.value" v-if="param.type == 'int'" />
             <a-input-number :min="param.min" :max="param.max" v-model:value="param.value" v-if="param.type == 'float'" />
             <a-select v-model:value="param.value" style="width: 240px" v-if="param.type == 'select'">

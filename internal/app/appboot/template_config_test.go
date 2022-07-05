@@ -29,7 +29,8 @@ func TestGetTemplateConfigFromYaml(t *testing.T) {
 							Type: "string",
 							Tip:  "s1 tip",
 						},
-						Default: "s1",
+						Placeholder: "placeholder",
+						Default:     "s1",
 					},
 					StringParameter{
 						Parameter: Parameter{

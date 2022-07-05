@@ -97,8 +97,9 @@ func newParameter(m map[interface{}]interface{}) Parameter {
 
 func newStringParameter(m map[interface{}]interface{}) StringParameter {
 	return StringParameter{
-		Parameter: newParameter(m),
-		Default:   getString(m, "default"),
+		Parameter:   newParameter(m),
+		Default:     getString(m, "default"),
+		Placeholder: getString(m, "placeholder"),
 	}
 }
 
@@ -153,7 +154,8 @@ type Parameter struct {
 
 type StringParameter struct {
 	Parameter
-	Default string `yaml:"default" json:"default"`
+	Default     string `yaml:"default" json:"default"`
+	Placeholder string `yaml:"placeholder" json:"placeholder"`
 }
 
 // IntParameter int parameter
