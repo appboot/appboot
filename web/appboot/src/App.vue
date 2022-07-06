@@ -132,12 +132,10 @@ function stepTwoStatus() {
   if (current.value < 1) {
     return "wait";
   } else if (current.value === 1) {
-    if (creating.value) {
-      return "process";
-    } else if (createErr.value) {
+    if (createErr.value) {
       return "error";
     }
-    return "wait";
+    return "process";
   } else if (current.value > 1) {
     return "finish";
   }
