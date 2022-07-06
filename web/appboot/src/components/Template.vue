@@ -10,7 +10,7 @@ const emit = defineEmits(["change", "onConfigChange", "update"]);
 // variable
 const loading = ref(false);
 const templates = ref([]);
-const gitHash = ref("ssss");
+const gitHash = ref("");
 const selectedTemplate = ref("");
 
 getTemplates()
