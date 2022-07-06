@@ -24,7 +24,6 @@ const enableBefore = ref(true);
 const enableAfter = ref(true);
 const creating = ref(false);
 const createErr = ref(false);
-const finish = ref(false);
 
 const showScripts = computed(() => {
   return beforeScripts.value.length > 0 || afterScripts.value.length > 0;
@@ -37,7 +36,6 @@ function onTemplateChange(template) {
 
 watch(current, () => {
   if (current.value === 0) {
-    finish.value = false;
     creating.value = false;
     createErr.value = false;
   }
@@ -91,7 +89,6 @@ function onCreate() {
     .then(function (data) {
       creating.value = false;
       if (data.code == 0) {
-        finish.value = true;
         current.value = 2;
         if (data.path) {
           download(data.path, name.value + ".zip");
@@ -155,19 +152,22 @@ function stepTwoStatus() {
       </a-steps>
     </div>
 
-    <div id="creator" v-if="!finish">
+    <div id="creator" v-if="current < 2">
       <Template @change="onTemplateChange" @onConfigChange="onConfigChange" v-if="current === 0" />
-      <TemplateDesc v-if="desc !== '' && current === 1" :desc="desc" />
-      <Params v-if="selectedTemplate !== '' && current === 1" @change="onNameChange" :params="params" :paramsLength="paramsLength" />
-      <Scripts id="scripts" v-if="showScripts && current === 1" :beforeScripts="beforeScripts" :afterScripts="afterScripts" @onBeforeChange="onBeforeChange" @onAfterChange="onAfterChange" />
 
-      <a-button v-if="selectedTemplate" class="create-button" type="primary" :loading="creating" @click="onCreate">
-        <template #icon><PlusOutlined /></template>
-        Create
-      </a-button>
+      <div style="display: flex; flex-direction: column" v-if="current === 1">
+        <TemplateDesc v-if="desc" :desc="desc" />
+        <Params v-if="selectedTemplate" @change="onNameChange" :params="params" :paramsLength="paramsLength" />
+        <Scripts id="scripts" v-if="showScripts" :beforeScripts="beforeScripts" :afterScripts="afterScripts" @onBeforeChange="onBeforeChange" @onAfterChange="onAfterChange" />
+
+        <a-button v-if="selectedTemplate" class="create-button" type="primary" :loading="creating" @click="onCreate">
+          <template #icon><PlusOutlined /></template>
+          Create
+        </a-button>
+      </div>
     </div>
 
-    <Success v-if="finish" :name="name" />
+    <Success v-if="current === 2" :name="name" />
   </div>
 </template>
 
