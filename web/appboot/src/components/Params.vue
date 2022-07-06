@@ -59,7 +59,8 @@ function onNameChange(e) {
 }
 
 .input-string {
-  width: 400px;
+  min-width: 250px;
+  width: 60%;
 }
 
 .param-key {

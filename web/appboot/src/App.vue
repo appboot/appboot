@@ -190,7 +190,7 @@ function stepTwoStatus() {
 }
 
 .steps {
-  width: 80%;
+  width: 70%;
 }
 
 #creator {
@@ -198,7 +198,7 @@ function stepTwoStatus() {
   flex-direction: column;
   justify-content: left;
   padding: 10px;
-  width: 80%;
+  width: 70%;
 }
 
 .title {
