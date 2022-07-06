@@ -12,6 +12,8 @@
   margin-bottom: 2%;
 }
 #image {
-  width: 8%;
+  width: 7%;
+  max-width: 100px;
+  min-width: 80px;
 }
 </style>

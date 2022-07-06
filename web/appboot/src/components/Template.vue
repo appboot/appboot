@@ -74,7 +74,7 @@ function onUpdate() {
         <template #title>
           <span>git commit: {{ gitHash }}</span>
         </template>
-        <div class="title">Template</div>
+        <div class="title">Template Commit: {{ gitHash }}</div>
       </a-tooltip>
       <a-button class="action-button" type="link" @click="onUpdate" :loading="loading">
         <template #icon><ReloadOutlined /></template>
@@ -82,7 +82,7 @@ function onUpdate() {
     </div>
     <div v-if="templates.length > 0">
       <a-radio-group v-model:value="selectedTemplate" button-style="solid" @change="onChange">
-        <a-radio-button v-for="(t, index) in templates" :key="index" :value="t">{{ t }}</a-radio-button>
+        <a-radio-button style="margin: 3px" v-for="(t, index) in templates" :key="index" :value="t">{{ t }}</a-radio-button>
       </a-radio-group>
     </div>
   </div>

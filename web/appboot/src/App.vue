@@ -1,30 +1,30 @@
 <script setup>
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-import { ref, computed } from "vue";
+import { PlusOutlined } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
+import { computed, ref, watch } from "vue";
+import { createApp } from "./api";
 import Logo from "./components/Logo.vue";
-import Template from "./components/Template.vue";
-import TemplateDesc from "./components/TemplateDesc.vue";
 import Params from "./components/Params.vue";
 import Scripts from "./components/Scripts.vue";
 import Success from "./components/Success.vue";
-import { decodeParams, encodeParams } from "./params";
-import { PlusOutlined } from "@ant-design/icons-vue";
+import Template from "./components/Template.vue";
+import TemplateDesc from "./components/TemplateDesc.vue";
 import download from "./download";
-import { createApp } from "./api";
+import { decodeParams, encodeParams } from "./params";
 
-var desc = ref("");
-var name = ref("");
-var selectedTemplate = ref("");
-var paramsLength = ref(0);
-var params = ref([]);
-var beforeScripts = ref([]);
-var afterScripts = ref([]);
-var enableBefore = ref(true);
-var enableAfter = ref(true);
-var creating = ref(false);
-var finish = ref(false);
+const current = ref(0);
+const desc = ref("");
+const name = ref("");
+const selectedTemplate = ref("");
+const paramsLength = ref(0);
+const params = ref([]);
+const beforeScripts = ref([]);
+const afterScripts = ref([]);
+const enableBefore = ref(true);
+const enableAfter = ref(true);
+const creating = ref(false);
+const createErr = ref(false);
+const finish = ref(false);
 
 const showScripts = computed(() => {
   return beforeScripts.value.length > 0 || afterScripts.value.length > 0;
@@ -32,7 +32,16 @@ const showScripts = computed(() => {
 
 function onTemplateChange(template) {
   selectedTemplate.value = template;
+  current.value = 1;
 }
+
+watch(current, () => {
+  if (current.value === 0) {
+    finish.value = false;
+    creating.value = false;
+    createErr.value = false;
+  }
+});
 
 function onConfigChange(configs) {
   const ps = configs.parameters;
@@ -75,6 +84,7 @@ function onCreate() {
   }
 
   creating.value = true;
+  createErr.value = false;
   var skipBeforeScripts = enableBefore.value ? "false" : "true";
   var skipAfterScripts = enableAfter.value ? "false" : "true";
   createApp(name.value, selectedTemplate.value, encodeParams(params.value), skipBeforeScripts, skipAfterScripts)
@@ -82,15 +92,18 @@ function onCreate() {
       creating.value = false;
       if (data.code == 0) {
         finish.value = true;
+        current.value = 2;
         if (data.path) {
           download(data.path, name.value + ".zip");
         }
       } else {
+        createErr.value = true;
         message.error(data.message);
       }
     })
     .catch(function (error) {
       creating.value = false;
+      createErr.value = true;
       message.error(error);
     });
 }
@@ -106,36 +119,90 @@ function checkParams() {
   }
   return result;
 }
+
+function stepOneDesc() {
+  var defaultValue = "Select a template";
+  if (current.value === 0) {
+    return defaultValue;
+  }
+  return selectedTemplate.value ? "Selected: " + selectedTemplate.value : defaultValue;
+}
+
+function stepTwoStatus() {
+  if (current.value < 1) {
+    return "wait";
+  } else if (current.value === 1) {
+    if (creating.value) {
+      return "process";
+    } else if (createErr.value) {
+      return "error";
+    }
+    return "wait";
+  } else if (current.value > 1) {
+    return "finish";
+  }
+  return "wait";
+}
 </script>
 
 <template>
-  <Logo />
-  <div id="creator" v-if="!finish">
-    <Template @change="onTemplateChange" @onConfigChange="onConfigChange" />
-    <TemplateDesc v-if="desc" :desc="desc" />
-    <Params v-if="selectedTemplate" @change="onNameChange" :params="params" :paramsLength="paramsLength" />
-    <Scripts id="scripts" v-if="showScripts" :beforeScripts="beforeScripts" :afterScripts="afterScripts" @onBeforeChange="onBeforeChange" @onAfterChange="onAfterChange" />
+  <div class="container">
+    <Logo class="logo" />
 
-    <a-button v-if="selectedTemplate" class="create-button" type="primary" :loading="creating" @click="onCreate">
-      <template #icon><PlusOutlined /></template>
-      Create
-    </a-button>
+    <div class="steps">
+      <a-steps v-model:current="current">
+        <a-step title="Step 1" :description="stepOneDesc()" />
+        <a-step title="Step 2" description="Create an application" :status="stepTwoStatus()" disabled />
+        <a-step title="Step 3" description="See the result" disabled />
+      </a-steps>
+    </div>
+
+    <div id="creator" v-if="!finish">
+      <Template @change="onTemplateChange" @onConfigChange="onConfigChange" v-if="current === 0" />
+      <TemplateDesc v-if="desc !== '' && current === 1" :desc="desc" />
+      <Params v-if="selectedTemplate !== '' && current === 1" @change="onNameChange" :params="params" :paramsLength="paramsLength" />
+      <Scripts id="scripts" v-if="showScripts && current === 1" :beforeScripts="beforeScripts" :afterScripts="afterScripts" @onBeforeChange="onBeforeChange" @onAfterChange="onAfterChange" />
+
+      <a-button v-if="selectedTemplate" class="create-button" type="primary" :loading="creating" @click="onCreate">
+        <template #icon><PlusOutlined /></template>
+        Create
+      </a-button>
+    </div>
+
+    <Success v-if="finish" :name="name" />
   </div>
-  <Success v-if="finish" :name="name" />
 </template>
 
 <style>
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
 #app {
   display: flex;
   flex-direction: column;
 }
+
+.logo {
+  width: 100%;
+}
+
+.steps {
+  width: 80%;
+}
+
 #creator {
   display: flex;
   flex-direction: column;
   justify-content: left;
-  margin-left: 20%;
-  margin-right: 20%;
+  padding: 10px;
+  width: 80%;
 }
+
 .title {
   margin-bottom: 10px;
   margin-top: 10px;
