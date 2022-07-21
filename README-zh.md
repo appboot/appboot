@@ -17,7 +17,7 @@ Appboot 取 application BootLoader 之意, 是一个通用的应用创建平台�
 
 Appboot 基于[模板](https://github.com/appboot/templates)创建应用。你可以自定义模板来满足个性化的需求。
 
-模板里包含**代码、配置(模板描述、参数列表、自定义脚本)**等。
+模板里包含**代码**、**配置**(模板描述、参数列表、自定义脚本)等。
 
 在自定义的脚本里，你可以做**提交代码、配置 CI&CD、DevOps** 等任何事情。
 
