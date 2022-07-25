@@ -5,8 +5,6 @@ import (
 	"path"
 
 	"github.com/go-ecosystem/utils/file"
-
-	"github.com/mitchellh/go-homedir"
 )
 
 const (
@@ -24,7 +22,7 @@ func GetTemplateRoot() (string, error) {
 		}
 	}
 
-	home, err := homedir.Dir()
+	home, err := os.UserHomeDir()
 	if err != nil {
 		return "", err
 	}

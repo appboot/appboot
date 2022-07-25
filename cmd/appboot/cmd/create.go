@@ -55,7 +55,7 @@ var create = &cobra.Command{
 			log.E(err.Error())
 			return
 		}
-		app.Path = path.HandleHomedir(savePath)
+		app.Path = path.HandleDir(savePath)
 
 		if file.Exists(app.Path) {
 			result, err := promptSelect(fmt.Sprintf("%s already exists, whether to overwrite?", app.Path))

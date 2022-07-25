@@ -6,14 +6,13 @@ import (
 
 	"github.com/go-ecosystem/utils/log"
 
-	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
 )
 
 // InitConfig reads in config file and ENV variables if set.
 func InitConfig() {
 	// Find home directory.
-	home, err := homedir.Dir()
+	home, err := os.UserHomeDir()
 	if err != nil {
 		log.E(err.Error())
 		os.Exit(1)
