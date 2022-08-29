@@ -6,7 +6,6 @@ import (
 	"path"
 
 	"github.com/go-ecosystem/utils/file"
-	"github.com/mitchellh/go-homedir"
 )
 
 func getSavePath(appName string) string {
@@ -16,7 +15,7 @@ func getSavePath(appName string) string {
 }
 
 func getStaticPath() string {
-	home, err := homedir.Dir()
+	home, err := os.UserHomeDir()
 	if err != nil {
 		log.Println(err.Error())
 		os.Exit(1)
@@ -28,7 +27,7 @@ func getStaticPath() string {
 }
 
 func getWorkspacePath() string {
-	home, err := homedir.Dir()
+	home, err := os.UserHomeDir()
 	if err != nil {
 		log.Println(err.Error())
 		os.Exit(1)
