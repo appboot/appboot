@@ -36,6 +36,13 @@ func CreateWithCallback(app Application,
 	skipBeforeScripts bool,
 	skipAfterScripts bool,
 	callback *CreateCallback) error {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return err
+	}
+	// Avoid `shell-init: error retrieving current directory: getcwd` error when the generated code is deleted due to calling os.Chdir when executing afterScripts
+	defer os.Chdir(home)
+
 	if !force && file.Exists(app.Path) {
 		return errors.New("the application already exists, you can force it to be created with the -f flag")
 	}

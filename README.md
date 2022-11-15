@@ -27,10 +27,10 @@ In custom scripts, you can **do anything** like **commit code, configure CI&CD, 
 
 ```sh
 # Go 1.16+
-go install github.com/appboot/appboot@v0.9.0
+go install github.com/appboot/appboot@v0.9.1
 
 # Go version < 1.16
-go get -u github.com/appboot/appboot@v0.9.0
+go get -u github.com/appboot/appboot@v0.9.1
 ```
 
 ## Quick Start
