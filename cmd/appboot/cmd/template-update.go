@@ -14,7 +14,7 @@ var updateTemplateCmd = &cobra.Command{
 }
 
 func runUpdateTemplate(_ *cobra.Command, _ []string) {
-	templates := appboot.GetTemplates()
+	templates := appboot.GetTemplateNames()
 	if len(templates) < 1 {
 		log.I("Updating templates...")
 		if err := appboot.UpdateAllTemplates(); err != nil {

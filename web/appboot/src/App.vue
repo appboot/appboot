@@ -32,20 +32,11 @@ const showScripts = computed(() => {
 function onTemplateChange(template) {
   selectedTemplate.value = template;
   current.value = 1;
-}
 
-watch(current, () => {
-  if (current.value === 0) {
-    creating.value = false;
-    createErr.value = false;
-  }
-});
-
-function onConfigChange(configs) {
-  const ps = configs.parameters;
-  desc.value = configs.desc;
-  beforeScripts.value = configs.scripts.before ?? [];
-  afterScripts.value = configs.scripts.after ?? [];
+  const ps = template.parameters;
+  desc.value = template.desc;
+  beforeScripts.value = template.scripts.before ?? [];
+  afterScripts.value = template.scripts.after ?? [];
   if (ps) {
     params.value = decodeParams(ps);
     paramsLength.value = params.length;
@@ -54,6 +45,13 @@ function onConfigChange(configs) {
     paramsLength.value = 0;
   }
 }
+
+watch(current, () => {
+  if (current.value === 0) {
+    creating.value = false;
+    createErr.value = false;
+  }
+});
 
 function onNameChange(value) {
   name.value = value;
@@ -152,10 +150,10 @@ function stepTwoStatus() {
       </a-steps>
     </div>
 
-    <div id="creator" v-if="current < 2">
-      <Template @change="onTemplateChange" @onConfigChange="onConfigChange" v-if="current === 0" />
+    <div id="creator" v-show="current < 2">
+      <Template @change="onTemplateChange" v-show="current === 0" />
 
-      <div style="display: flex; flex-direction: column" v-if="current === 1">
+      <div style="display: flex; flex-direction: column" v-show="current === 1">
         <TemplateDesc v-if="desc" :desc="desc" />
         <Params v-if="selectedTemplate" @change="onNameChange" :params="params" :paramsLength="paramsLength" />
         <Scripts id="scripts" v-if="showScripts" :beforeScripts="beforeScripts" :afterScripts="afterScripts" @onBeforeChange="onBeforeChange" @onAfterChange="onAfterChange" />
@@ -167,7 +165,7 @@ function stepTwoStatus() {
       </div>
     </div>
 
-    <Success v-if="current === 2" :name="name" />
+    <Success v-show="current === 2" :name="name" />
   </div>
 </template>
 

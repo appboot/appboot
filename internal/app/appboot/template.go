@@ -16,8 +16,32 @@ import (
 	gos "github.com/go-ecosystem/utils/os"
 )
 
+// Template template
+type Template struct {
+	TemplateConfig
+	Name string `json:"name"`
+}
+
 // GetTemplates get templates
-func GetTemplates() []string {
+func GetTemplates() []*Template {
+	templates := []*Template{}
+	names := GetTemplateNames()
+	for _, name := range names {
+		config, err := GetTemplateConfig(name)
+		if err != nil {
+			config = &TemplateConfig{}
+		}
+		t := &Template{
+			Name:           name,
+			TemplateConfig: *config,
+		}
+		templates = append(templates, t)
+	}
+	return templates
+}
+
+// GetTemplateNames get the names of all templates
+func GetTemplateNames() []string {
 	var templates []string
 
 	root, err := configs.GetTemplateRoot()
@@ -31,6 +55,7 @@ func GetTemplates() []string {
 	return templates
 }
 
+// GetTemplatesGitHash get templates git hash value
 func GetTemplatesGitHash() string {
 	root, err := configs.GetTemplateRoot()
 	if err != nil {
@@ -129,7 +154,7 @@ func UpdateAllTemplatesWithDownloader(downloader Downloader) error {
 	}
 
 	// remove existed templates
-	templates := GetTemplates()
+	templates := GetTemplateNames()
 	for _, name := range templates {
 		list, _ := file.GetDirListWithFilter(tempDir, func(info os.FileInfo) bool {
 			return !strings.HasPrefix(info.Name(), ".")

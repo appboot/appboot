@@ -21,8 +21,8 @@ func healthz(c *gin.Context) {
 }
 
 func getTemplates(c *gin.Context) {
-	templates := appboot.GetTemplates()
-	response.OK(c, "get templates success", templates)
+	data := getTemplatesResponseData()
+	response.OK(c, "get templates success", data)
 }
 
 func updateTemplates(c *gin.Context) {
@@ -32,8 +32,8 @@ func updateTemplates(c *gin.Context) {
 		return
 	}
 
-	templates := appboot.GetTemplates()
-	response.OK(c, "update templates success", templates)
+	data := getTemplatesResponseData()
+	response.OK(c, "update templates success", data)
 }
 
 func getTemplatesGitHash(c *gin.Context) {
@@ -102,4 +102,14 @@ func createApp(c *gin.Context) {
 
 	downloadPath := "/static/" + saveName
 	response.OK(c, "create application success", downloadPath)
+}
+
+func getTemplatesResponseData() map[string]interface{} {
+	templates := appboot.GetTemplates()
+	hash := appboot.GetTemplatesGitHash()
+
+	data := response.EmptyMapData()
+	data["templates"] = templates
+	data["hash"] = hash
+	return data
 }

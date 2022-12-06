@@ -20,14 +20,14 @@ var create = &cobra.Command{
 		app := appboot.Application{}
 
 		// Template
-		templates := appboot.GetTemplates()
+		templates := appboot.GetTemplateNames()
 		if len(templates) < 1 {
 			log.I("Updating templates...")
 			if err := appboot.UpdateAllTemplates(); err != nil {
 				log.E("Update templates error: %v", err)
 				return
 			}
-			templates = appboot.GetTemplates()
+			templates = appboot.GetTemplateNames()
 			if len(templates) < 1 { // check again
 				log.E("Without any template, the application cannot be created. Please check the configuration item of templatesSource")
 				return

@@ -24,6 +24,6 @@ func (g *gitDownloader) Run(source string, destination string) error {
 	if len(source) < 1 {
 		return errors.New("source is empty")
 	}
-	cmd := "git clone " + source + " " + destination
+	cmd := "git clone --depth=1 " + source + " " + destination
 	return os.RunBashCommand(cmd)
 }

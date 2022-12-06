@@ -2,10 +2,10 @@
 import { ReloadOutlined } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
 import { ref } from "vue";
-import { getTemplates, getConfigs, updateTemplates, getTemplatesGitHash } from "../api";
+import { getTemplates, updateTemplates } from "../api";
 
 // emit
-const emit = defineEmits(["change", "onConfigChange", "update"]);
+const emit = defineEmits(["change", "update"]);
 
 // variable
 const loading = ref(false);
@@ -15,15 +15,8 @@ const selectedTemplate = ref("");
 
 getTemplates()
   .then(function (ts) {
-    templates.value = ts;
-  })
-  .catch(function (error) {
-    message.error(error);
-  });
-
-getTemplatesGitHash()
-  .then(function (hash) {
-    gitHash.value = hash;
+    templates.value = ts.templates;
+    gitHash.value = ts.hash;
   })
   .catch(function (error) {
     message.error(error);
@@ -32,15 +25,6 @@ getTemplatesGitHash()
 function onChange(e) {
   let value = e.target.value;
   emit("change", value);
-
-  getConfigs(value)
-    .then(function (configs) {
-      emit("onConfigChange", configs);
-    })
-    .catch(function (error) {
-      message.error(error);
-      emit("onConfigChange", []);
-    });
 }
 
 function onUpdate() {
@@ -50,15 +34,9 @@ function onUpdate() {
   updateTemplates()
     .then(function (ts) {
       loading.value = false;
-      templates.value = ts;
 
-      getTemplatesGitHash()
-        .then(function (hash) {
-          gitHash.value = hash;
-        })
-        .catch(function (error) {
-          message.error(error);
-        });
+      templates.value = ts.templates;
+      gitHash.value = ts.hash;
     })
     .catch(function (error) {
       loading.value = false;
@@ -87,7 +65,10 @@ function onUpdate() {
     </div>
     <div v-if="templates.length > 0">
       <a-radio-group v-model:value="selectedTemplate" button-style="solid" @change="onChange">
-        <a-radio-button style="margin: 3px" v-for="(t, index) in templates" :key="index" :value="t">{{ t }}</a-radio-button>
+        <a-tooltip v-for="(t, index) in templates">
+          <template #title>{{t.desc}}</template>
+            <a-radio-button style="margin: 3px" :key="index" :value="t">{{ t.name }}</a-radio-button>
+          </a-tooltip>
       </a-radio-group>
     </div>
   </div>

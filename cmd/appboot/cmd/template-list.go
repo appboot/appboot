@@ -14,7 +14,7 @@ var listTemplateCmd = &cobra.Command{
 }
 
 func runListTemplate(_ *cobra.Command, _ []string) {
-	templates := appboot.GetTemplates()
+	templates := appboot.GetTemplateNames()
 	for i, t := range templates {
 		log.I("%d. %v", i+1, t)
 	}
