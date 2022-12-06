@@ -16,7 +16,7 @@ export function getTemplates() {
   });
 }
 
-export function getConfigs(template) {
+export function getConfigs(template: string) {
   return new Promise((resolve, reject) => {
     axios
       .get("/configs/" + template)
@@ -55,7 +55,7 @@ export function getTemplatesGitHash() {
   });
 }
 
-export function createApp(name, template, params, skipBeforeScripts, skipAfterScripts) {
+export function createApp(name: string, template: string, params: any, skipBeforeScripts: any, skipAfterScripts: any) {
   return new Promise((resolve, reject) => {
     const form = new FormData();
     form.append("name", name);

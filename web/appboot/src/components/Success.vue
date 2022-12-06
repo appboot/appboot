@@ -7,7 +7,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { CheckCircleTwoTone } from "@ant-design/icons-vue";
 
 defineProps({

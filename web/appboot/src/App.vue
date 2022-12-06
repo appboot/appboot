@@ -11,11 +11,11 @@
     </div>
 
     <div id="creator" v-show="current < 2">
-      <Template @change="onTemplateChange" v-show="current === 0" />
+      <Templates @change="onTemplateChange" v-show="current === 0" />
 
-      <div style="display: flex; flex-direction: column" v-show="(current === 1 && selectedTemplate)">
-        <TemplateDesc :desc="selectedTemplate.desc" />
-        <Params  @change="onNameChange" :params="params" :paramsLength="paramsLength" />
+      <div style="display: flex; flex-direction: column" v-show="current === 1 && selectedTemplate">
+        <TemplateDesc :desc="selectedTemplate ? selectedTemplate.desc : ''" />
+        <Params @change="onNameChange" :params="params" :paramsLength="paramsLength" />
         <Scripts id="scripts" v-if="showScripts" :beforeScripts="beforeScripts" :afterScripts="afterScripts" @onBeforeChange="onBeforeChange" @onAfterChange="onAfterChange" />
 
         <a-button class="create-button" type="primary" :loading="creating" @click="onCreate">
@@ -29,37 +29,38 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { PlusOutlined } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
 import { computed, ref, watch } from "vue";
-import { createApp } from "./api";
+import { createApp } from "./app/api";
 import Logo from "./components/Logo.vue";
 import Params from "./components/Params.vue";
 import Scripts from "./components/Scripts.vue";
 import Success from "./components/Success.vue";
-import Template from "./components/Template.vue";
+import Templates from "./components/Templates.vue";
 import TemplateDesc from "./components/TemplateDesc.vue";
-import download from "./download";
-import { decodeParams, encodeParams } from "./params";
+import download from "./app/download";
+import { decodeParams, encodeParams } from "./app/params";
+import type { Parameter, Template } from "./app/appboot";
 
 const current = ref(0);
 const name = ref("");
-const selectedTemplate = ref('');
+const selectedTemplate = ref<Template>();
 const paramsLength = ref(0);
-const params = ref([]);
-const beforeScripts = ref([]);
-const afterScripts = ref([]);
+const params = ref<Parameter[]>([]);
+const beforeScripts = ref<string[]>([]);
+const afterScripts = ref<string[]>([]);
 const enableBefore = ref(true);
 const enableAfter = ref(true);
 const creating = ref(false);
 const createErr = ref(false);
 
 const showScripts = computed(() => {
-  return beforeScripts.value.length > 0 || afterScripts.value.length > 0;
+  return (beforeScripts.value && beforeScripts.value.length > 0) || (afterScripts.value && afterScripts.value.length > 0);
 });
 
-function onTemplateChange(template) {
+function onTemplateChange(template: Template) {
   selectedTemplate.value = template;
   current.value = 1;
 
@@ -68,7 +69,7 @@ function onTemplateChange(template) {
   afterScripts.value = template.scripts.after ?? [];
   if (ps) {
     params.value = decodeParams(ps);
-    paramsLength.value = params.length;
+    paramsLength.value = params.value.length;
   } else {
     params.value = [];
     paramsLength.value = 0;
@@ -82,20 +83,20 @@ watch(current, () => {
   }
 });
 
-function onNameChange(value) {
+function onNameChange(value: string) {
   name.value = value;
 }
 
-function onBeforeChange(value) {
+function onBeforeChange(value: boolean) {
   enableBefore.value = value;
 }
 
-function onAfterChange(value) {
+function onAfterChange(value: boolean) {
   enableAfter.value = value;
 }
 
 function onCreate() {
-  if (!selectedTemplate || selectedTemplate.value.name.length < 1) {
+  if (!selectedTemplate.value || selectedTemplate.value.name.length < 1) {
     message.error("template cannot be empty.");
     return;
   }
@@ -113,7 +114,7 @@ function onCreate() {
   var skipBeforeScripts = enableBefore.value ? "false" : "true";
   var skipAfterScripts = enableAfter.value ? "false" : "true";
   createApp(name.value, selectedTemplate.value.name, encodeParams(params.value), skipBeforeScripts, skipAfterScripts)
-    .then(function (data) {
+    .then(function (data: any) {
       creating.value = false;
       if (data.code == 0) {
         current.value = 2;
@@ -135,13 +136,17 @@ function onCreate() {
 function checkParams() {
   var result = true;
   for (var j = 0, len = params.value.length; j < len; j++) {
-    const param = params.value[j];
-    if (param.key.length < 1 || param.value.length < 1) {
+    const p = params.value[j];
+    if (!isValidParameter(p)) {
       result = false;
       break;
     }
   }
   return result;
+}
+
+function isValidParameter(p: Parameter) {
+  return p.key.length > 0 && p.value && p.value.toString().length > 0;
 }
 
 function stepOneDesc() {

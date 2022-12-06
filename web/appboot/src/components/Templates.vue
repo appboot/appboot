@@ -16,42 +16,43 @@
         </a-button>
       </a-tooltip>
     </div>
-    <div v-if="templates.length > 0">
+    <div v-if="templates && templates.length > 0">
       <a-radio-group v-model:value="selectedTemplate" button-style="solid" @change="onChange">
         <a-tooltip v-for="(t, index) in templates">
-          <template #title>{{t.desc}}</template>
-            <a-radio-button style="margin: 3px" :key="index" :value="t">{{ t.name }}</a-radio-button>
-          </a-tooltip>
+          <template #title>{{ t.desc }}</template>
+          <a-radio-button style="margin: 3px" :key="index" :value="t">{{ t.name }}</a-radio-button>
+        </a-tooltip>
       </a-radio-group>
     </div>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ReloadOutlined } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
 import { ref } from "vue";
-import { getTemplates, updateTemplates } from "../api";
+import { getTemplates, updateTemplates } from "../app/api";
+import type { Template } from "../app/appboot";
 
 // emit
 const emit = defineEmits(["change", "update"]);
 
 // variable
 const loading = ref(false);
-const templates = ref([]);
+const templates = ref<Template[]>();
 const gitHash = ref("");
-const selectedTemplate = ref("");
+const selectedTemplate = ref<Template>();
 
 getTemplates()
-  .then(function (ts) {
-    templates.value = ts.templates;
-    gitHash.value = ts.hash;
+  .then(function (data: any) {
+    templates.value = data.templates;
+    gitHash.value = data.hash;
   })
   .catch(function (error) {
     message.error(error);
   });
 
-function onChange(e) {
+function onChange(e: any) {
   let value = e.target.value;
   emit("change", value);
 }
@@ -61,11 +62,11 @@ function onUpdate() {
   emit("update");
 
   updateTemplates()
-    .then(function (ts) {
+    .then(function (data: any) {
       loading.value = false;
 
-      templates.value = ts.templates;
-      gitHash.value = ts.hash;
+      templates.value = data.templates;
+      gitHash.value = data.hash;
     })
     .catch(function (error) {
       loading.value = false;

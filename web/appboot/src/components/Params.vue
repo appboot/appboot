@@ -36,9 +36,11 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { Parameter } from "../app/appboot";
+
 defineProps({
-  params: Array,
+  params: Array<Parameter>,
   paramsLength: Number,
 });
 
@@ -46,7 +48,7 @@ const emit = defineEmits(["change"]);
 const labelCol = { span: 4 };
 const wrapperCol = { span: 14 };
 
-function onNameChange(e) {
+function onNameChange(e: any) {
   let value = e.target.value;
   emit("change", value);
 }

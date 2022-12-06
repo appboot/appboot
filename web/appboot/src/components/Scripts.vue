@@ -4,7 +4,7 @@
       <div class="title">Scripts</div>
     </div>
 
-    <div v-if="beforeScripts.length > 0">
+    <div v-if="beforeScripts && beforeScripts.length > 0">
       <div class="script">
         <div class="sub-title">Before</div>
         <a-switch v-model:checked="beforeChecked" @change="onBeforeChange" />
@@ -17,7 +17,7 @@
       </a-list>
     </div>
 
-    <div v-if="afterScripts.length > 0">
+    <div v-if="afterScripts && afterScripts.length > 0">
       <div class="script">
         <div class="sub-title">After</div>
         <a-switch v-model:checked="afterChecked" @change="onAfterChange" />
@@ -32,12 +32,12 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
 
 defineProps({
-  beforeScripts: Array,
-  afterScripts: Array,
+  beforeScripts: Array<string>,
+  afterScripts: Array<string>,
 });
 
 const beforeChecked = ref(true);
@@ -45,11 +45,11 @@ const afterChecked = ref(true);
 
 const emit = defineEmits(["onBeforeChange", "onAfterChange"]);
 
-function onBeforeChange(checked) {
+function onBeforeChange(checked: boolean) {
   emit("onBeforeChange", checked);
 }
 
-function onAfterChange(checked) {
+function onAfterChange(checked: boolean) {
   emit("onAfterChange", checked);
 }
 </script>

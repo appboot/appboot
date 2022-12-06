@@ -1,6 +1,6 @@
-export default function download(href, filename) {
+export default function download(href: string, filename: string) {
   // Create a new link
-  const anchor = document.createElement("a");
+  const anchor = document.createElement('a');
   anchor.href = href;
   anchor.download = filename;
 
