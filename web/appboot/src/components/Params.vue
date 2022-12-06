@@ -1,19 +1,3 @@
-<script setup>
-defineProps({
-  params: Array,
-  paramsLength: Number,
-});
-
-const emit = defineEmits(["change"]);
-const labelCol = { span: 4 };
-const wrapperCol = { span: 14 };
-
-function onNameChange(e) {
-  let value = e.target.value;
-  emit("change", value);
-}
-</script>
-
 <template>
   <div>
     <div id="params">
@@ -51,6 +35,22 @@ function onNameChange(e) {
     </a-form>
   </div>
 </template>
+
+<script setup>
+defineProps({
+  params: Array,
+  paramsLength: Number,
+});
+
+const emit = defineEmits(["change"]);
+const labelCol = { span: 4 };
+const wrapperCol = { span: 14 };
+
+function onNameChange(e) {
+  let value = e.target.value;
+  emit("change", value);
+}
+</script>
 
 <style>
 #params {

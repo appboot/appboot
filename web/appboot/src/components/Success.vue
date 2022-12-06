@@ -1,11 +1,3 @@
-<script setup>
-import { CheckCircleTwoTone } from "@ant-design/icons-vue";
-
-defineProps({
-  name: String,
-});
-</script>
-
 <template>
   <div id="finish">
     <div class="finish-text">
@@ -14,6 +6,14 @@ defineProps({
     </div>
   </div>
 </template>
+
+<script setup>
+import { CheckCircleTwoTone } from "@ant-design/icons-vue";
+
+defineProps({
+  name: String,
+});
+</script>
 
 <style>
 #finish {

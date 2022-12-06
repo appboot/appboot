@@ -1,25 +1,3 @@
-<script setup>
-import { ref } from "vue";
-
-defineProps({
-  beforeScripts: Array,
-  afterScripts: Array,
-});
-
-const beforeChecked = ref(true);
-const afterChecked = ref(true);
-
-const emit = defineEmits(["onBeforeChange", "onAfterChange"]);
-
-function onBeforeChange(checked) {
-  emit("onBeforeChange", checked);
-}
-
-function onAfterChange(checked) {
-  emit("onAfterChange", checked);
-}
-</script>
-
 <template>
   <div>
     <div id="scripts">
@@ -53,6 +31,28 @@ function onAfterChange(checked) {
     </div>
   </div>
 </template>
+
+<script setup>
+import { ref } from "vue";
+
+defineProps({
+  beforeScripts: Array,
+  afterScripts: Array,
+});
+
+const beforeChecked = ref(true);
+const afterChecked = ref(true);
+
+const emit = defineEmits(["onBeforeChange", "onAfterChange"]);
+
+function onBeforeChange(checked) {
+  emit("onBeforeChange", checked);
+}
+
+function onAfterChange(checked) {
+  emit("onAfterChange", checked);
+}
+</script>
 
 <style>
 .script {

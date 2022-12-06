@@ -1,3 +1,34 @@
+<template>
+  <div class="container">
+    <Logo class="logo" />
+
+    <div class="steps">
+      <a-steps v-model:current="current">
+        <a-step title="Step 1" :description="stepOneDesc()" />
+        <a-step title="Step 2" description="Create an application" :status="stepTwoStatus()" disabled />
+        <a-step title="Step 3" description="See the result" disabled />
+      </a-steps>
+    </div>
+
+    <div id="creator" v-show="current < 2">
+      <Template @change="onTemplateChange" v-show="current === 0" />
+
+      <div style="display: flex; flex-direction: column" v-show="(current === 1 && selectedTemplate)">
+        <TemplateDesc :desc="selectedTemplate.desc" />
+        <Params  @change="onNameChange" :params="params" :paramsLength="paramsLength" />
+        <Scripts id="scripts" v-if="showScripts" :beforeScripts="beforeScripts" :afterScripts="afterScripts" @onBeforeChange="onBeforeChange" @onAfterChange="onAfterChange" />
+
+        <a-button class="create-button" type="primary" :loading="creating" @click="onCreate">
+          <template #icon><PlusOutlined /></template>
+          Create
+        </a-button>
+      </div>
+    </div>
+
+    <Success v-show="current === 2" :name="name" />
+  </div>
+</template>
+
 <script setup>
 import { PlusOutlined } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
@@ -13,9 +44,8 @@ import download from "./download";
 import { decodeParams, encodeParams } from "./params";
 
 const current = ref(0);
-const desc = ref("");
 const name = ref("");
-const selectedTemplate = ref("");
+const selectedTemplate = ref('');
 const paramsLength = ref(0);
 const params = ref([]);
 const beforeScripts = ref([]);
@@ -34,7 +64,6 @@ function onTemplateChange(template) {
   current.value = 1;
 
   const ps = template.parameters;
-  desc.value = template.desc;
   beforeScripts.value = template.scripts.before ?? [];
   afterScripts.value = template.scripts.after ?? [];
   if (ps) {
@@ -66,7 +95,7 @@ function onAfterChange(value) {
 }
 
 function onCreate() {
-  if (selectedTemplate.value.length < 1) {
+  if (!selectedTemplate || selectedTemplate.value.name.length < 1) {
     message.error("template cannot be empty.");
     return;
   }
@@ -83,7 +112,7 @@ function onCreate() {
   createErr.value = false;
   var skipBeforeScripts = enableBefore.value ? "false" : "true";
   var skipAfterScripts = enableAfter.value ? "false" : "true";
-  createApp(name.value, selectedTemplate.value, encodeParams(params.value), skipBeforeScripts, skipAfterScripts)
+  createApp(name.value, selectedTemplate.value.name, encodeParams(params.value), skipBeforeScripts, skipAfterScripts)
     .then(function (data) {
       creating.value = false;
       if (data.code == 0) {
@@ -120,7 +149,7 @@ function stepOneDesc() {
   if (current.value === 0) {
     return defaultValue;
   }
-  return selectedTemplate.value ? "Selected: " + selectedTemplate.value : defaultValue;
+  return selectedTemplate.value ? "Selected: " + selectedTemplate.value.name : defaultValue;
 }
 
 function stepTwoStatus() {
@@ -137,37 +166,6 @@ function stepTwoStatus() {
   return "wait";
 }
 </script>
-
-<template>
-  <div class="container">
-    <Logo class="logo" />
-
-    <div class="steps">
-      <a-steps v-model:current="current">
-        <a-step title="Step 1" :description="stepOneDesc()" />
-        <a-step title="Step 2" description="Create an application" :status="stepTwoStatus()" disabled />
-        <a-step title="Step 3" description="See the result" disabled />
-      </a-steps>
-    </div>
-
-    <div id="creator" v-show="current < 2">
-      <Template @change="onTemplateChange" v-show="current === 0" />
-
-      <div style="display: flex; flex-direction: column" v-show="current === 1">
-        <TemplateDesc v-if="desc" :desc="desc" />
-        <Params v-if="selectedTemplate" @change="onNameChange" :params="params" :paramsLength="paramsLength" />
-        <Scripts id="scripts" v-if="showScripts" :beforeScripts="beforeScripts" :afterScripts="afterScripts" @onBeforeChange="onBeforeChange" @onAfterChange="onAfterChange" />
-
-        <a-button v-if="selectedTemplate" class="create-button" type="primary" :loading="creating" @click="onCreate">
-          <template #icon><PlusOutlined /></template>
-          Create
-        </a-button>
-      </div>
-    </div>
-
-    <Success v-show="current === 2" :name="name" />
-  </div>
-</template>
 
 <style>
 .container {

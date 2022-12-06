@@ -1,3 +1,32 @@
+<template>
+  <div>
+    <div id="template">
+      <a-tooltip placement="top">
+        <template #title>
+          <span>git commit: {{ gitHash }}</span>
+        </template>
+        <div class="title">Templates</div>
+      </a-tooltip>
+      <a-tooltip placement="right">
+        <template #title>
+          <span>update templates</span>
+        </template>
+        <a-button class="action-button" type="link" @click="onUpdate" :loading="loading">
+          <template #icon><ReloadOutlined /></template>
+        </a-button>
+      </a-tooltip>
+    </div>
+    <div v-if="templates.length > 0">
+      <a-radio-group v-model:value="selectedTemplate" button-style="solid" @change="onChange">
+        <a-tooltip v-for="(t, index) in templates">
+          <template #title>{{t.desc}}</template>
+            <a-radio-button style="margin: 3px" :key="index" :value="t">{{ t.name }}</a-radio-button>
+          </a-tooltip>
+      </a-radio-group>
+    </div>
+  </div>
+</template>
+
 <script setup>
 import { ReloadOutlined } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
@@ -44,35 +73,6 @@ function onUpdate() {
     });
 }
 </script>
-
-<template>
-  <div>
-    <div id="template">
-      <a-tooltip placement="top">
-        <template #title>
-          <span>git commit: {{ gitHash }}</span>
-        </template>
-        <div class="title">Templates</div>
-      </a-tooltip>
-      <a-tooltip placement="right">
-        <template #title>
-          <span>update templates</span>
-        </template>
-        <a-button class="action-button" type="link" @click="onUpdate" :loading="loading">
-          <template #icon><ReloadOutlined /></template>
-        </a-button>
-      </a-tooltip>
-    </div>
-    <div v-if="templates.length > 0">
-      <a-radio-group v-model:value="selectedTemplate" button-style="solid" @change="onChange">
-        <a-tooltip v-for="(t, index) in templates">
-          <template #title>{{t.desc}}</template>
-            <a-radio-button style="margin: 3px" :key="index" :value="t">{{ t.name }}</a-radio-button>
-          </a-tooltip>
-      </a-radio-group>
-    </div>
-  </div>
-</template>
 
 <style>
 #template {
