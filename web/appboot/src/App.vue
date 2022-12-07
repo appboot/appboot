@@ -33,7 +33,7 @@
 import { PlusOutlined } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
 import { computed, ref, watch } from "vue";
-import { createApp } from "./app/api";
+import { createApp, getConfigs } from "./app/api";
 import Logo from "./components/Logo.vue";
 import Params from "./components/Params.vue";
 import Scripts from "./components/Scripts.vue";
@@ -60,19 +60,24 @@ const showScripts = computed(() => {
   return (beforeScripts.value && beforeScripts.value.length > 0) || (afterScripts.value && afterScripts.value.length > 0);
 });
 
-function onTemplateChange(template: Template) {
+async function onTemplateChange(template: Template) {
   selectedTemplate.value = template;
   current.value = 1;
 
-  const ps = template.parameters;
-  beforeScripts.value = template.scripts.before ?? [];
-  afterScripts.value = template.scripts.after ?? [];
-  if (ps) {
-    params.value = decodeParams(ps);
-    paramsLength.value = params.value.length;
-  } else {
-    params.value = [];
-    paramsLength.value = 0;
+  try {
+    const configs = await getConfigs(template.id);
+    const ps = configs.parameters;
+    beforeScripts.value = configs.scripts.before ?? [];
+    afterScripts.value = configs.scripts.after ?? [];
+    if (ps) {
+      params.value = decodeParams(ps);
+      paramsLength.value = params.value.length;
+    } else {
+      params.value = [];
+      paramsLength.value = 0;
+    }
+  } catch (error) {
+    message.error("get template config failed." + error);
   }
 }
 
@@ -96,7 +101,7 @@ function onAfterChange(value: boolean) {
 }
 
 function onCreate() {
-  if (!selectedTemplate.value || selectedTemplate.value.name.length < 1) {
+  if (!selectedTemplate.value || selectedTemplate.value.id.length < 1) {
     message.error("template cannot be empty.");
     return;
   }
@@ -113,7 +118,7 @@ function onCreate() {
   createErr.value = false;
   var skipBeforeScripts = enableBefore.value ? "false" : "true";
   var skipAfterScripts = enableAfter.value ? "false" : "true";
-  createApp(name.value, selectedTemplate.value.name, encodeParams(params.value), skipBeforeScripts, skipAfterScripts)
+  createApp(name.value, selectedTemplate.value.id, encodeParams(params.value), skipBeforeScripts, skipAfterScripts)
     .then(function (data: any) {
       creating.value = false;
       if (data.code == 0) {
@@ -154,7 +159,7 @@ function stepOneDesc() {
   if (current.value === 0) {
     return defaultValue;
   }
-  return selectedTemplate.value ? "Selected: " + selectedTemplate.value.name : defaultValue;
+  return selectedTemplate.value ? "Selected: " + selectedTemplate.value.id : defaultValue;
 }
 
 function stepTwoStatus() {

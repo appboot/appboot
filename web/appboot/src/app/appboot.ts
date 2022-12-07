@@ -1,4 +1,4 @@
-export interface Template {
+export interface TemplateConfig {
   name: string;
   desc: string;
   parameters: Parameter[];
@@ -6,6 +6,17 @@ export interface Template {
     before?: string[];
     after?:  string[];
   };
+}
+
+export interface TemplateGroup {
+  id: string;
+  desc: string;
+  templates: Template[]
+}
+
+export interface Template {
+  id: string;
+  desc: string;
 }
 
 export interface Parameter {

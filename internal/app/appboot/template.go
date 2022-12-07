@@ -10,34 +10,83 @@ import (
 
 	"github.com/go-ecosystem/utils/array"
 	"github.com/go-ecosystem/utils/log"
+	"gopkg.in/yaml.v2"
 
 	"github.com/appboot/appboot/configs"
 	"github.com/go-ecosystem/utils/file"
 	gos "github.com/go-ecosystem/utils/os"
 )
 
-// Template template
-type Template struct {
-	TemplateConfig
-	Name string `json:"name"`
+// TemplatesConfig templates config
+type TemplatesConfig struct {
+	Groups []*TemplateGroup `yaml:"groups" json:"groups"`
 }
 
-// GetTemplates get templates
-func GetTemplates() []*Template {
-	templates := []*Template{}
+// TemplateGroup template group
+type TemplateGroup struct {
+	ID        string      `yaml:"id" json:"id"`
+	Desc      string      `yaml:"desc" json:"desc"`
+	Templates []*Template `yaml:"templates" json:"templates"`
+}
+
+// Template template
+type Template struct {
+	ID   string `yaml:"id" json:"id"`
+	Desc string `yaml:"desc" json:"desc"`
+}
+
+// GetTemplateGroups get templates
+func GetTemplateGroups() []*TemplateGroup {
+	tc, err := GetTemplatesConfig()
+	if err == nil {
+		return tc.Groups
+	}
+
 	names := GetTemplateNames()
+	templates := []*Template{}
 	for _, name := range names {
 		config, err := GetTemplateConfig(name)
 		if err != nil {
 			config = &TemplateConfig{}
 		}
 		t := &Template{
-			Name:           name,
-			TemplateConfig: *config,
+			ID:   name,
+			Desc: config.Desc,
 		}
 		templates = append(templates, t)
 	}
-	return templates
+	groups := []*TemplateGroup{{
+		ID:        defaultValue,
+		Desc:      defaultValue,
+		Templates: templates,
+	}}
+	return groups
+}
+
+// GetTemplatesConfig get templates config
+func GetTemplatesConfig() (*TemplatesConfig, error) {
+	var result = &TemplatesConfig{}
+
+	root, err := configs.GetTemplateRoot()
+	if err != nil {
+		return result, err
+	}
+
+	yamlPath := path.Join(root, configYaml)
+	return GetTemplatesConfigFromYaml(yamlPath)
+}
+
+// GetTemplatesConfigFromYaml get config from yaml path
+func GetTemplatesConfigFromYaml(yamlPath string) (config *TemplatesConfig, err error) {
+	config = new(TemplatesConfig)
+	var yamlFile []byte
+	if yamlFile, err = ioutil.ReadFile(yamlPath); err != nil {
+		return
+	}
+	if err = yaml.Unmarshal(yamlFile, config); err != nil {
+		return
+	}
+	return
 }
 
 // GetTemplateNames get the names of all templates

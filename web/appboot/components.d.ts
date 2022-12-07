@@ -21,6 +21,8 @@ declare module '@vue/runtime-core' {
     AStep: typeof import('ant-design-vue/es')['Step']
     ASteps: typeof import('ant-design-vue/es')['Steps']
     ASwitch: typeof import('ant-design-vue/es')['Switch']
+    ATabPane: typeof import('ant-design-vue/es')['TabPane']
+    ATabs: typeof import('ant-design-vue/es')['Tabs']
     ATooltip: typeof import('ant-design-vue/es')['Tooltip']
     Logo: typeof import('./src/components/Logo.vue')['default']
     Params: typeof import('./src/components/Params.vue')['default']

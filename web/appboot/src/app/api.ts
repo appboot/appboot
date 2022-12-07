@@ -1,5 +1,6 @@
 import { API_URL } from "./config";
 import axios from "axios";
+import { TemplateConfig } from "./appboot";
 
 axios.defaults.baseURL = API_URL;
 
@@ -17,7 +18,7 @@ export function getTemplates() {
 }
 
 export function getConfigs(template: string) {
-  return new Promise((resolve, reject) => {
+  return new Promise<TemplateConfig>((resolve, reject) => {
     axios
       .get("/configs/" + template)
       .then(function (response) {

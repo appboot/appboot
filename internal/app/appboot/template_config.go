@@ -9,8 +9,9 @@ import (
 )
 
 const (
-	appboot    = "appboot"
-	configYaml = "appboot.yaml"
+	defaultValue = "default"
+	appboot      = "appboot"
+	configYaml   = "appboot.yaml"
 )
 
 // GetTemplateConfig get template config

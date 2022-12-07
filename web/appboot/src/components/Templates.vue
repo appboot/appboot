@@ -16,13 +16,17 @@
         </a-button>
       </a-tooltip>
     </div>
-    <div v-if="templates && templates.length > 0">
-      <a-radio-group v-model:value="selectedTemplate" button-style="solid" @change="onChange">
-        <a-tooltip v-for="(t, index) in templates">
-          <template #title>{{ t.desc }}</template>
-          <a-radio-button style="margin: 3px" :key="index" :value="t">{{ t.name }}</a-radio-button>
-        </a-tooltip>
-      </a-radio-group>
+    <div v-if="groups.length > 0">
+      <a-tabs>
+        <a-tab-pane v-for="g in groups" :key="g.id" :tab="g.desc">
+          <a-radio-group v-model:value="selectedTemplate" button-style="solid" @change="onChange">
+            <a-tooltip v-for="(t, index) in g.templates">
+              <template #title>{{ t.desc }}</template>
+              <a-radio-button style="margin: 3px" :key="index" :value="t">{{ t.id }}</a-radio-button>
+            </a-tooltip>
+          </a-radio-group>
+        </a-tab-pane>
+      </a-tabs>
     </div>
   </div>
 </template>
@@ -30,27 +34,33 @@
 <script setup lang="ts">
 import { ReloadOutlined } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { getTemplates, updateTemplates } from "../app/api";
-import type { Template } from "../app/appboot";
+import type { Template, TemplateGroup } from "../app/appboot";
 
 // emit
 const emit = defineEmits(["change", "update"]);
 
 // variable
 const loading = ref(false);
-const templates = ref<Template[]>();
+const groups = ref<TemplateGroup[]>([]);
 const gitHash = ref("");
 const selectedTemplate = ref<Template>();
 
-getTemplates()
-  .then(function (data: any) {
-    templates.value = data.templates;
-    gitHash.value = data.hash;
-  })
-  .catch(function (error) {
-    message.error(error);
-  });
+onMounted(() => {
+  loading.value = true;
+  getTemplates()
+    .then(function (data: any) {
+      groups.value = data.groups;
+      gitHash.value = data.hash;
+    })
+    .catch(function (error) {
+      message.error(error);
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+});
 
 function onChange(e: any) {
   let value = e.target.value;
@@ -58,19 +68,19 @@ function onChange(e: any) {
 }
 
 function onUpdate() {
-  loading.value = true;
   emit("update");
 
+  loading.value = true;
   updateTemplates()
     .then(function (data: any) {
-      loading.value = false;
-
-      templates.value = data.templates;
+      groups.value = data.groups;
       gitHash.value = data.hash;
     })
     .catch(function (error) {
-      loading.value = false;
       message.error(error);
+    })
+    .finally(() => {
+      loading.value = false;
     });
 }
 </script>

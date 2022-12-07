@@ -105,11 +105,11 @@ func createApp(c *gin.Context) {
 }
 
 func getTemplatesResponseData() map[string]interface{} {
-	templates := appboot.GetTemplates()
+	groups := appboot.GetTemplateGroups()
 	hash := appboot.GetTemplatesGitHash()
 
 	data := response.EmptyMapData()
-	data["templates"] = templates
+	data["groups"] = groups
 	data["hash"] = hash
 	return data
 }
