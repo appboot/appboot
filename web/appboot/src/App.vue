@@ -43,6 +43,7 @@ import TemplateDesc from "./components/TemplateDesc.vue";
 import download from "./app/download";
 import { decodeParams, encodeParams } from "./app/params";
 import type { Parameter, Template } from "./app/appboot";
+import { API_URL } from "./app/config";
 
 const current = ref(0);
 const name = ref("");
@@ -124,7 +125,7 @@ function onCreate() {
       if (data.code == 0) {
         current.value = 2;
         if (data.path) {
-          download(data.path, name.value + ".zip");
+          download(API_URL + data.path, name.value + ".zip");
         }
       } else {
         createErr.value = true;
