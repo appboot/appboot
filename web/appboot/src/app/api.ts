@@ -3,6 +3,7 @@ import axios from "axios";
 import { TemplateConfig } from "./appboot";
 
 axios.defaults.baseURL = API_URL;
+axios.defaults.timeout = 60*60*1000;
 
 export function getTemplates() {
   return new Promise((resolve, reject) => {
