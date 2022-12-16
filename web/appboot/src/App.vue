@@ -125,7 +125,7 @@ function onCreate() {
       if (data.code == 0) {
         current.value = 2;
         if (data.path) {
-          download(API_URL + data.path, name.value + ".zip");
+          download(data.path, name.value + ".zip");
         }
       } else {
         createErr.value = true;
