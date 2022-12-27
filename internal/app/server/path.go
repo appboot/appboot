@@ -5,7 +5,8 @@ import (
 	"os"
 	"path"
 
-	"github.com/go-ecosystem/utils/file"
+	"github.com/appboot/appboot/internal/pkg/common"
+	"github.com/go-ecosystem/utils/v2/file"
 )
 
 func getSavePath(appName string) string {
@@ -40,6 +41,6 @@ func getWorkspacePath() string {
 
 func createIfNoExist(path string) {
 	if !file.Exists(path) {
-		os.MkdirAll(path, 0755)
+		_ = os.MkdirAll(path, common.DefaultFileMode)
 	}
 }

@@ -11,6 +11,6 @@ for d in $(go list ./... | grep -v vendor); do
     go test -gcflags=-l -race -coverprofile=profile.out -covermode=atomic $d
     if [ -f profile.out ]; then
         cat profile.out >> coverage.txt
-        rm profile.out
+        rm -f profile.out
     fi
 done

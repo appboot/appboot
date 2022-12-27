@@ -3,7 +3,7 @@ package appboot
 import (
 	"errors"
 
-	"github.com/go-ecosystem/utils/os"
+	"github.com/go-ecosystem/utils/v2/os"
 )
 
 // Downloader downloader interface

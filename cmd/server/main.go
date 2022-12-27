@@ -5,10 +5,11 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"syscall"
 
 	"github.com/appboot/appboot/configs"
 	"github.com/appboot/appboot/internal/app/server"
-	"github.com/go-ecosystem/utils/net"
+	"github.com/go-ecosystem/utils/v2/net"
 )
 
 func main() {
@@ -22,7 +23,8 @@ func main() {
 	server.Run(port)
 
 	quit := make(chan os.Signal, 1)
-	signal.Notify(quit, os.Interrupt)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
+	server.ShutdownServer()
 	log.Println("Shutdown Server ...")
 }

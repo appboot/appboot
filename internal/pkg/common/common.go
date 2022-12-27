@@ -1,6 +1,6 @@
 package common
 
-import "github.com/go-ecosystem/utils/response"
+import "github.com/go-ecosystem/utils/v2/response"
 
 // response.Code
 const (

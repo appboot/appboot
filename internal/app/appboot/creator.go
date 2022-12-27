@@ -4,9 +4,10 @@ import (
 	"errors"
 	"os"
 
-	"github.com/go-ecosystem/utils/file"
-	"github.com/go-ecosystem/utils/log"
-	gos "github.com/go-ecosystem/utils/os"
+	"github.com/appboot/appboot/internal/pkg/common"
+	"github.com/go-ecosystem/utils/v2/file"
+	"github.com/go-ecosystem/utils/v2/log"
+	gos "github.com/go-ecosystem/utils/v2/os"
 )
 
 // Callback app callback
@@ -41,7 +42,11 @@ func CreateWithCallback(app Application,
 		return err
 	}
 	// Avoid `shell-init: error retrieving current directory: getcwd` error when the generated code is deleted due to calling os.Chdir when executing afterScripts
-	defer os.Chdir(home)
+	defer func() {
+		if err := os.Chdir(home); err != nil {
+			log.E("os.Chdir to home %v", err)
+		}
+	}()
 
 	if !force && file.Exists(app.Path) {
 		return errors.New("the application already exists, you can force it to be created with the -f flag")
@@ -68,7 +73,7 @@ func CreateWithCallback(app Application,
 	}
 
 	log.H("Creating folders")
-	if err := os.MkdirAll(app.Path, 0755); err != nil {
+	if err := os.MkdirAll(app.Path, common.DefaultFileMode); err != nil {
 		return err
 	}
 
@@ -88,7 +93,10 @@ func CreateWithCallback(app Application,
 
 		// changes the current working directory to the app's directory
 		if file.Exists(app.Path) {
-			os.Chdir(app.Path)
+			if err := os.Chdir(app.Path); err != nil {
+				log.E("os.Chdir to %v %v", app.Path, err)
+				return err
+			}
 		}
 
 		for _, script := range afterScripts {

@@ -9,7 +9,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/go-ecosystem/utils/file"
+	"github.com/go-ecosystem/utils/v2/file"
 
 	"bou.ke/monkey"
 	"github.com/appboot/appboot/configs"

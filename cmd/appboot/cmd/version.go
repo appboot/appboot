@@ -1,9 +1,9 @@
 package cmd
 
 import (
-	"github.com/go-ecosystem/utils/log"
+	"github.com/go-ecosystem/utils/v2/log"
 
-	v "github.com/go-ecosystem/utils/version"
+	v "github.com/go-ecosystem/utils/v2/version"
 	"github.com/spf13/cobra"
 )
 

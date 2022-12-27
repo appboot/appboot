@@ -23,7 +23,7 @@ export interface Parameter {
   key: string
   type: 'string'|'int'|'float'|'select'
   tip?: string
-  options? : string[] 
+  options? : string[]
   default?: string | number
   placeholder?: string
   min?: number

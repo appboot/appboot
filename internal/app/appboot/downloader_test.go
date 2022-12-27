@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"bou.ke/monkey"
-	"github.com/go-ecosystem/utils/os"
+	"github.com/go-ecosystem/utils/v2/os"
 )
 
 func TestGitDownloader_Run(t *testing.T) {

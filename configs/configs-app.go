@@ -4,7 +4,8 @@ import (
 	"os"
 	"path"
 
-	"github.com/go-ecosystem/utils/file"
+	"github.com/appboot/appboot/internal/pkg/common"
+	"github.com/go-ecosystem/utils/v2/file"
 )
 
 const (
@@ -29,7 +30,7 @@ func GetTemplateRoot() (string, error) {
 
 	root := path.Join(home, TemplatesSubPath)
 	if !file.Exists(root) {
-		if err := os.MkdirAll(root, 0755); err != nil {
+		if err := os.MkdirAll(root, common.DefaultFileMode); err != nil {
 			return root, err
 		}
 		return root, nil

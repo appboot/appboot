@@ -4,7 +4,7 @@ import (
 	"os"
 	"path"
 
-	"github.com/go-ecosystem/utils/log"
+	"github.com/go-ecosystem/utils/v2/log"
 
 	"github.com/spf13/viper"
 )

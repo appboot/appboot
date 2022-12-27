@@ -13,7 +13,7 @@ import (
 	"github.com/appboot/appboot/internal/pkg/common"
 	"github.com/appboot/appboot/internal/pkg/zip"
 	"github.com/gin-gonic/gin"
-	"github.com/go-ecosystem/utils/response"
+	"github.com/go-ecosystem/utils/v2/response"
 )
 
 func healthz(c *gin.Context) {
@@ -62,8 +62,9 @@ func createApp(c *gin.Context) {
 		return
 	}
 
-	skipBeforeScripts := c.PostForm("skipBeforeScripts") == "true"
-	skipAfterScripts := c.PostForm("skipAfterScripts") == "true"
+	const t = "true"
+	skipBeforeScripts := c.PostForm("skipBeforeScripts") == t
+	skipAfterScripts := c.PostForm("skipAfterScripts") == t
 
 	app := appboot.Application{
 		Name:       name,
@@ -81,7 +82,7 @@ func createApp(c *gin.Context) {
 		return
 	}
 
-	if err := appboot.Create(app,
+	if err = appboot.Create(app,
 		true,
 		config.Scripts.Before,
 		config.Scripts.After,
@@ -104,7 +105,7 @@ func createApp(c *gin.Context) {
 	response.OK(c, "create application success", downloadPath)
 }
 
-func getTemplatesResponseData() map[string]interface{} {
+func getTemplatesResponseData() map[string]any {
 	groups := appboot.GetTemplateGroups()
 	hash := appboot.GetTemplatesGitHash()
 

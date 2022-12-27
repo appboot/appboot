@@ -5,9 +5,9 @@ import (
 
 	"github.com/appboot/appboot/internal/app/appboot"
 	"github.com/appboot/appboot/internal/pkg/path"
-	"github.com/go-ecosystem/utils/convert"
-	"github.com/go-ecosystem/utils/file"
-	"github.com/go-ecosystem/utils/log"
+	"github.com/go-ecosystem/utils/v2/convert"
+	"github.com/go-ecosystem/utils/v2/file"
+	"github.com/go-ecosystem/utils/v2/log"
 	"github.com/spf13/cobra"
 )
 

@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"github.com/appboot/appboot/internal/app/appboot"
-	"github.com/go-ecosystem/utils/log"
+	"github.com/go-ecosystem/utils/v2/log"
 	"github.com/spf13/cobra"
 )
 

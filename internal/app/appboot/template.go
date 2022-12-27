@@ -3,18 +3,17 @@ package appboot
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path"
 	"strings"
 
-	"github.com/go-ecosystem/utils/array"
-	"github.com/go-ecosystem/utils/log"
+	"github.com/go-ecosystem/utils/v2/array"
+	"github.com/go-ecosystem/utils/v2/log"
 	"gopkg.in/yaml.v2"
 
 	"github.com/appboot/appboot/configs"
-	"github.com/go-ecosystem/utils/file"
-	gos "github.com/go-ecosystem/utils/os"
+	"github.com/go-ecosystem/utils/v2/file"
+	gos "github.com/go-ecosystem/utils/v2/os"
 )
 
 // TemplatesConfig templates config
@@ -80,7 +79,7 @@ func GetTemplatesConfig() (*TemplatesConfig, error) {
 func GetTemplatesConfigFromYaml(yamlPath string) (config *TemplatesConfig, err error) {
 	config = new(TemplatesConfig)
 	var yamlFile []byte
-	if yamlFile, err = ioutil.ReadFile(yamlPath); err != nil {
+	if yamlFile, err = os.ReadFile(yamlPath); err != nil {
 		return
 	}
 	if err = yaml.Unmarshal(yamlFile, config); err != nil {
@@ -208,7 +207,7 @@ func UpdateAllTemplatesWithDownloader(downloader Downloader) error {
 		list, _ := file.GetDirListWithFilter(tempDir, func(info os.FileInfo) bool {
 			return !strings.HasPrefix(info.Name(), ".")
 		})
-		if array.ContainString(list, name) {
+		if array.Contains(list, name) {
 			existed := path.Join(root, name)
 			os.RemoveAll(existed)
 		}
@@ -228,7 +227,7 @@ func UpdateAllTemplatesWithDownloader(downloader Downloader) error {
 // defer os.RemoveAll(tempDir)
 func downloadTemplates(downloader Downloader) (string, error) {
 	source := configs.GetTemplateSource()
-	tempDir, err := ioutil.TempDir(os.TempDir(), "template")
+	tempDir, err := os.MkdirTemp(os.TempDir(), "template")
 	if err != nil {
 		return tempDir, err
 	}

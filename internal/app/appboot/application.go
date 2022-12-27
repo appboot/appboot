@@ -7,8 +7,9 @@ import (
 	"strings"
 
 	"github.com/appboot/appboot/configs"
-	"github.com/go-ecosystem/utils/convert"
-	"github.com/go-ecosystem/utils/file"
+	"github.com/appboot/appboot/internal/pkg/common"
+	"github.com/go-ecosystem/utils/v2/convert"
+	"github.com/go-ecosystem/utils/v2/file"
 )
 
 const (
@@ -98,7 +99,7 @@ func (app Application) CreateFiles() error {
 		index := strings.LastIndex(savePath, "/")
 		if index > 0 {
 			dir := savePath[:index]
-			if err := os.MkdirAll(dir, 0755); err != nil {
+			if err := os.MkdirAll(dir, common.DefaultFileMode); err != nil {
 				return err
 			}
 		}

@@ -1,34 +1,38 @@
 package server
 
 import (
-	"log"
+	"context"
 	"net/http"
 	"time"
 
 	"github.com/appboot/appboot/configs"
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/go-ecosystem/log"
+	"github.com/go-ecosystem/utils/v2/middleware"
 )
 
 const (
-	maxAgeInMinutes  = 10
-	timeoutInSeconds = 30
+	maxWaitTimeBeforeShutdown = 10
 )
 
-//Run run server with port
+var srv *http.Server
+
+// Run run server with port
 func Run(port string) {
 	setGinMode()
-	router := gin.Default()
-	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"*"},
-		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTION"},
-		AllowHeaders:     []string{"utoken,x-auth-token,x-request-id,Content-Type,Accept,Origin,Access-Control-Allow-Origin", "Cache-Control"},
-		ExposeHeaders:    []string{"Content-Length"},
-		AllowCredentials: true,
-		MaxAge:           maxAgeInMinutes * time.Minute,
-	}))
+	router := gin.New()
+	router.Use(middleware.Cors())
 	registerRouter(router)
-	startHTTPServer(router, port)
+	startServer(router, port)
+}
+
+// ShutdownServer ShutdownServer
+func ShutdownServer() {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*maxWaitTimeBeforeShutdown)
+	defer cancel()
+	if err := srv.Shutdown(ctx); err != nil {
+		log.Print("shutdown server: ", err)
+	}
 }
 
 func setGinMode() {
@@ -42,18 +46,19 @@ func setGinMode() {
 	}
 }
 
-func startHTTPServer(router *gin.Engine, port string) {
-	srv := &http.Server{
-		Addr:         port,
-		Handler:      router,
-		ReadTimeout:  timeoutInSeconds * time.Second,
-		WriteTimeout: timeoutInSeconds * time.Second,
+func startServer(router *gin.Engine, port string) {
+	srv = &http.Server{
+		Addr:              port,
+		Handler:           router,
+		ReadTimeout:       time.Duration(configs.EnvConfig.ReadTimeout) * time.Second,
+		ReadHeaderTimeout: time.Duration(configs.EnvConfig.ReadHeaderTimeout) * time.Second,
+		WriteTimeout:      time.Duration(configs.EnvConfig.WriteTimeout) * time.Second,
 	}
 
 	go func() {
 		log.Println("Start Http Server ", srv.Addr)
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Fatal("Failed to serve: ", err)
+			log.FatalE("Failed to serve: ", err)
 		}
 	}()
 }

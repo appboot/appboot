@@ -42,9 +42,9 @@ func GetTemplateConfigFromYaml(yamlPath string) (config *TemplateConfig, err err
 
 // TemplateConfig appboot config from appboot.yaml
 type TemplateConfig struct {
-	Parameters []interface{} `yaml:"parameters" json:"parameters"`
-	Desc       string        `yaml:"desc" json:"desc"`
-	Scripts    Scripts       `yaml:"scripts" json:"scripts"`
+	Parameters []any   `yaml:"parameters" json:"parameters"`
+	Desc       string  `yaml:"desc" json:"desc"`
+	Scripts    Scripts `yaml:"scripts" json:"scripts"`
 }
 
 // Scripts scripts
@@ -54,7 +54,7 @@ type Scripts struct {
 }
 
 // UnmarshalYAML unmarshalYAML
-func (p *TemplateConfig) UnmarshalYAML(unmarshal func(interface{}) error) error {
+func (p *TemplateConfig) UnmarshalYAML(unmarshal func(any) error) error {
 	type param TemplateConfig
 	raw := param{}
 	if err := unmarshal(&raw); err != nil {
@@ -62,7 +62,7 @@ func (p *TemplateConfig) UnmarshalYAML(unmarshal func(interface{}) error) error 
 	}
 
 	for i, v := range raw.Parameters {
-		m, ok := v.(map[interface{}]interface{})
+		m, ok := v.(map[any]any)
 		if !ok {
 			continue
 		}
@@ -88,7 +88,7 @@ func (p *TemplateConfig) UnmarshalYAML(unmarshal func(interface{}) error) error 
 	return nil
 }
 
-func newParameter(m map[interface{}]interface{}) Parameter {
+func newParameter(m map[any]any) Parameter {
 	return Parameter{
 		Key:  getString(m, "key"),
 		Type: getString(m, "type"),
@@ -96,7 +96,7 @@ func newParameter(m map[interface{}]interface{}) Parameter {
 	}
 }
 
-func newStringParameter(m map[interface{}]interface{}) StringParameter {
+func newStringParameter(m map[any]any) StringParameter {
 	return StringParameter{
 		Parameter:   newParameter(m),
 		Default:     getString(m, "default"),
@@ -104,7 +104,7 @@ func newStringParameter(m map[interface{}]interface{}) StringParameter {
 	}
 }
 
-func newIntParameter(m map[interface{}]interface{}) IntParameter {
+func newIntParameter(m map[any]any) IntParameter {
 	return IntParameter{
 		Parameter: newParameter(m),
 		Min:       getInt(m, "min"),
@@ -113,7 +113,7 @@ func newIntParameter(m map[interface{}]interface{}) IntParameter {
 	}
 }
 
-func newFloatParameter(m map[interface{}]interface{}) FloatParameter {
+func newFloatParameter(m map[any]any) FloatParameter {
 	return FloatParameter{
 		Parameter: newParameter(m),
 		Min:       getFloat(m, "min"),
@@ -122,8 +122,8 @@ func newFloatParameter(m map[interface{}]interface{}) FloatParameter {
 	}
 }
 
-func newSelectParameter(m map[interface{}]interface{}) SelectParameter {
-	mops, ok := m["options"].([]interface{})
+func newSelectParameter(m map[any]any) SelectParameter {
+	mops, ok := m["options"].([]any)
 	ops := []string{}
 	if !ok {
 		return SelectParameter{
@@ -182,7 +182,7 @@ type SelectParameter struct {
 	Default string   `yaml:"default" json:"default"`
 }
 
-func getString(m map[interface{}]interface{}, key string) string {
+func getString(m map[any]any, key string) string {
 	v, ok := m[key].(string)
 	if ok {
 		return v
@@ -190,7 +190,7 @@ func getString(m map[interface{}]interface{}, key string) string {
 	return ""
 }
 
-func getInt(m map[interface{}]interface{}, key string) int {
+func getInt(m map[any]any, key string) int {
 	v, ok := m[key].(int)
 	if ok {
 		return v
@@ -198,7 +198,7 @@ func getInt(m map[interface{}]interface{}, key string) int {
 	return 0
 }
 
-func getFloat(m map[interface{}]interface{}, key string) float64 {
+func getFloat(m map[any]any, key string) float64 {
 	v, ok := m[key].(float64)
 	if ok {
 		return v
