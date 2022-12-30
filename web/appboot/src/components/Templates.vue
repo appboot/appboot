@@ -35,8 +35,9 @@
 import { ReloadOutlined } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
 import { onMounted, ref } from "vue";
-import { getTemplates, updateTemplates } from "../app/api";
+import { updateTemplates } from "../app/api";
 import type { Template, TemplateGroup } from "../app/appboot";
+import socket, { SokcetCMD, SokcetEvent } from "../app/ws";
 
 // emit
 const emit = defineEmits(["change", "update"]);
@@ -49,17 +50,20 @@ const selectedTemplate = ref<Template>();
 
 onMounted(() => {
   loading.value = true;
-  getTemplates()
-    .then(function (data: any) {
-      groups.value = data.groups;
-      gitHash.value = data.hash;
-    })
-    .catch(function (error) {
-      message.error(error);
-    })
-    .finally(() => {
-      loading.value = false;
-    });
+
+  socket.on(SokcetEvent.open, () => {
+    socket.getTemplates();
+  });
+
+  socket.on(SokcetEvent.message, (data: string) => {
+    loading.value = false;
+
+    let obj = JSON.parse(data);
+    if (obj.cmd === SokcetCMD.getTemplates) {
+      groups.value = obj.groups;
+      gitHash.value = obj.hash;
+    }
+  });
 });
 
 function onChange(e: any) {

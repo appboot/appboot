@@ -15,12 +15,12 @@ import (
 func main() {
 	const port = ":8000"
 
-	url := fmt.Sprintf("http://%v%v", net.GetIP(), port)
+	url := fmt.Sprintf("ws://%v%v", net.GetIP(), port)
 	log.Printf("API_URL: %v\n", url)
 
 	configs.InitConfig()
 
-	server.Run(port)
+	server.StartServer(port)
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)

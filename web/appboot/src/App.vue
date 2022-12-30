@@ -43,7 +43,6 @@ import TemplateDesc from "./components/TemplateDesc.vue";
 import download from "./app/download";
 import { decodeParams, encodeParams } from "./app/params";
 import type { Parameter, Template } from "./app/appboot";
-import { API_URL } from "./app/config";
 
 const current = ref(0);
 const name = ref("");

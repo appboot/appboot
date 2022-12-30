@@ -11,6 +11,7 @@
   "dependencies": {
     "ant-design-vue": "^3.2.15",
     "axios": "^1.2.1",
+    "eventemitter3": "^5.0.0",
     "vue": "^3.2.41"
   },
   "devDependencies": {
