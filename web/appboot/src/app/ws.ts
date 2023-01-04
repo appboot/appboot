@@ -8,7 +8,10 @@ export enum SokcetEvent {
 }
 
 export enum SokcetCMD {
-    getTemplates = "getTemplates"
+    getTemplates = "getTemplates",
+    getTemplateConfig = "getTemplateConfig",
+    updateTemplates = "updateTemplates",
+    createApp = "createApp"
 }
 
 class Sokcet extends EventEmitter{
@@ -29,13 +32,46 @@ class Sokcet extends EventEmitter{
         }
 
         this.sock.onmessage = function(e) {
-            console.log("message received: " + e.data);
             that.emit(SokcetEvent.message, e.data)
         }
     }
 
     getTemplates() {
-        const message = `{"cmd": "${SokcetCMD.getTemplates}"}`
+        this.send({
+            cmd: SokcetCMD.getTemplates
+        })
+    }
+
+    getConfigs(template: string) {
+        this.send({
+            cmd: SokcetCMD.getTemplateConfig,
+            data: {
+                template,
+            }
+        })
+    }
+
+    updateTemplates() {
+        this.send({
+            cmd: SokcetCMD.updateTemplates
+        })
+    }
+
+    createApp(name: string, template: string, params: string, skipBeforeScripts: string, skipAfterScripts:string) {
+        this.send({
+            cmd: SokcetCMD.createApp,
+            data: {
+                name,
+                template,
+                params,
+                skipBeforeScripts,
+                skipAfterScripts
+            }
+        })
+    }
+
+    send(obj: object) {
+        const message = JSON.stringify(obj)
         this.sock.send(message)
     }
 }

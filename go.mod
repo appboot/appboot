@@ -5,7 +5,7 @@ go 1.19
 require (
 	bou.ke/monkey v1.0.2
 	github.com/gin-gonic/gin v1.7.2
-	github.com/go-ecosystem/utils/v2 v2.1.1
+	github.com/go-ecosystem/utils/v2 v2.1.2
 	github.com/manifoldco/promptui v0.8.0
 	github.com/spf13/cobra v1.2.1
 	github.com/spf13/viper v1.9.0

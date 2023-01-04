@@ -59,9 +59,14 @@ onMounted(() => {
     loading.value = false;
 
     let obj = JSON.parse(data);
-    if (obj.cmd === SokcetCMD.getTemplates) {
-      groups.value = obj.groups;
-      gitHash.value = obj.hash;
+    if (obj.error.code !== 0) {
+      message.error(obj.error.msg);
+      return;
+    }
+
+    if (obj.cmd === SokcetCMD.getTemplates || obj.cmd === SokcetCMD.updateTemplates) {
+      groups.value = obj.data.groups;
+      gitHash.value = obj.data.hash;
     }
   });
 });
@@ -75,17 +80,7 @@ function onUpdate() {
   emit("update");
 
   loading.value = true;
-  updateTemplates()
-    .then(function (data: any) {
-      groups.value = data.groups;
-      gitHash.value = data.hash;
-    })
-    .catch(function (error) {
-      message.error(error);
-    })
-    .finally(() => {
-      loading.value = false;
-    });
+  socket.updateTemplates();
 }
 </script>
 

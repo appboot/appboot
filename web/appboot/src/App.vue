@@ -32,17 +32,17 @@
 <script setup lang="ts">
 import { PlusOutlined } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
-import { computed, ref, watch } from "vue";
-import { createApp, getConfigs } from "./app/api";
+import { computed, onMounted, ref, watch } from "vue";
+import type { Parameter, Template } from "./app/appboot";
+import download from "./app/download";
+import { decodeParams, encodeParams } from "./app/params";
+import socket, { SokcetCMD, SokcetEvent } from "./app/ws";
 import Logo from "./components/Logo.vue";
 import Params from "./components/Params.vue";
 import Scripts from "./components/Scripts.vue";
 import Success from "./components/Success.vue";
-import Templates from "./components/Templates.vue";
 import TemplateDesc from "./components/TemplateDesc.vue";
-import download from "./app/download";
-import { decodeParams, encodeParams } from "./app/params";
-import type { Parameter, Template } from "./app/appboot";
+import Templates from "./components/Templates.vue";
 
 const current = ref(0);
 const name = ref("");
@@ -56,6 +56,42 @@ const enableAfter = ref(true);
 const creating = ref(false);
 const createErr = ref(false);
 
+onMounted(() => {
+  socket.on(SokcetEvent.message, (data: string) => {
+    let obj = JSON.parse(data);
+    if (obj.cmd === SokcetCMD.getTemplateConfig) {
+      if (obj.error.code !== 0) {
+        message.error(obj.error.msg);
+        return;
+      }
+
+      const configs = obj.data.config;
+      const ps = configs.parameters;
+      beforeScripts.value = configs.scripts.before ?? [];
+      afterScripts.value = configs.scripts.after ?? [];
+      if (ps) {
+        params.value = decodeParams(ps);
+        paramsLength.value = params.value.length;
+      } else {
+        params.value = [];
+        paramsLength.value = 0;
+      }
+    } else if (obj.cmd == SokcetCMD.createApp) {
+      creating.value = false;
+      if (obj.error.code !== 0) {
+        createErr.value = true;
+        message.error(obj.error.msg);
+        return;
+      }
+
+      current.value = 2;
+      if (obj.data.path) {
+        download(obj.data.path, name.value + ".zip");
+      }
+    }
+  });
+});
+
 const showScripts = computed(() => {
   return (beforeScripts.value && beforeScripts.value.length > 0) || (afterScripts.value && afterScripts.value.length > 0);
 });
@@ -64,21 +100,7 @@ async function onTemplateChange(template: Template) {
   selectedTemplate.value = template;
   current.value = 1;
 
-  try {
-    const configs = await getConfigs(template.id);
-    const ps = configs.parameters;
-    beforeScripts.value = configs.scripts.before ?? [];
-    afterScripts.value = configs.scripts.after ?? [];
-    if (ps) {
-      params.value = decodeParams(ps);
-      paramsLength.value = params.value.length;
-    } else {
-      params.value = [];
-      paramsLength.value = 0;
-    }
-  } catch (error) {
-    message.error("get template config failed." + error);
-  }
+  socket.getConfigs(template.id);
 }
 
 watch(current, () => {
@@ -118,24 +140,7 @@ function onCreate() {
   createErr.value = false;
   var skipBeforeScripts = enableBefore.value ? "false" : "true";
   var skipAfterScripts = enableAfter.value ? "false" : "true";
-  createApp(name.value, selectedTemplate.value.id, encodeParams(params.value), skipBeforeScripts, skipAfterScripts)
-    .then(function (data: any) {
-      creating.value = false;
-      if (data.code == 0) {
-        current.value = 2;
-        if (data.path) {
-          download(data.path, name.value + ".zip");
-        }
-      } else {
-        createErr.value = true;
-        message.error(data.message);
-      }
-    })
-    .catch(function (error) {
-      creating.value = false;
-      createErr.value = true;
-      message.error(error);
-    });
+  socket.createApp(name.value, selectedTemplate.value.id, encodeParams(params.value), skipBeforeScripts, skipAfterScripts);
 }
 
 function checkParams() {
