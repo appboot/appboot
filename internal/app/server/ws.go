@@ -18,7 +18,11 @@ import (
 var conn *websocket.Conn
 
 func StartServer(addr string) {
-	http.Handle("/", websocket.Handler(wsHandler))
+	staticPath := getStaticPath()
+	fs := http.FileServer(http.Dir(staticPath))
+	http.Handle("/static/", http.StripPrefix("/static/", fs))
+
+	http.Handle("/ws", websocket.Handler(wsHandler))
 
 	if err := http.ListenAndServe(addr, nil); err != nil {
 		log.Fatal("ListenAndServe:", err)

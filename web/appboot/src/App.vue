@@ -34,6 +34,7 @@ import { PlusOutlined } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
 import { computed, onMounted, ref, watch } from "vue";
 import type { Parameter, Template } from "./app/appboot";
+import { STATIC_URL } from "./app/config";
 import download from "./app/download";
 import { decodeParams, encodeParams } from "./app/params";
 import socket, { SokcetCMD, SokcetEvent } from "./app/ws";
@@ -86,7 +87,8 @@ onMounted(() => {
 
       current.value = 2;
       if (obj.data.path) {
-        download(obj.data.path, name.value + ".zip");
+        const path = STATIC_URL + obj.data.path;
+        download(path, name.value + ".zip");
       }
     }
   });

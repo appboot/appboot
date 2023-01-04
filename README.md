@@ -47,7 +47,8 @@ appboot create
 
 ```sh
 $ docker run -it \
--e API_URL=http://127.0.0.1:8000 \
+-e API_URL=ws://127.0.0.1:8000/ws \
+-e STATIC_URL=http://127.0.0.1:8000 \
 -v $HOME/appboot:/root/.appboot \
 -p 8000:8000 \
 -p 3000:80 \
@@ -60,7 +61,7 @@ Visit <http://localhost:3000/> to **update templates** and **create projects**.
 
 > Note:
 >
-> - `-e API_URL`: API URL. appboot docker includes frontend and backend, so `API_URL` is the address where appboot docker is deployed, where the API backend service port is `8000`, and the frontend port is `80`.
+> - `-e API_URL`: Server Address. appboot docker includes frontend and backend, so `API_URL` is the address where appboot docker is deployed, where the API backend service port is `8000`, and the frontend port is `80`.
 > - `-v $HOME/appboot:/root/.appboot`: Map the appboot's **working directory** to `$HOME/appboot`, so that [configuration](#Configuration) and **Data** can be persisted locally.
 >   Once the `test` project is created, it can be found in the working directory
 >

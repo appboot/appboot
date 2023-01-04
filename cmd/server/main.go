@@ -15,8 +15,9 @@ import (
 func main() {
 	const port = ":8000"
 
-	url := fmt.Sprintf("ws://%v%v", net.GetIP(), port)
-	log.Printf("API_URL: %v\n", url)
+	url := fmt.Sprintf("://%v%v", net.GetIP(), port)
+	log.Printf("API_URL: %v%v%v\n", "ws", url, "/ws/")
+	log.Printf("STATIC_URL: %v%v%v\n", "http", url, "/static/")
 
 	configs.InitConfig()
 

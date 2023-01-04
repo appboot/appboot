@@ -47,7 +47,8 @@ appboot create
 
 ```sh
 $ docker run -it \
--e API_URL=http://127.0.0.1:8000 \
+-e API_URL=ws://127.0.0.1:8000/ws \
+-e STATIC_URL=http://127.0.0.1:8000 \
 -v $HOME/appboot:/root/.appboot \
 -p 8000:8000 \
 -p 3000:80 \
@@ -60,7 +61,7 @@ appboot/appboot
 
 > 注：
 >
-> - `-e API_URL`：API 的地址。appboot docker 包含了前后端，所以 `API_URL` 就是部署 appboot docker 的地址，其中 API 后端服务端口为 `8000`，前端端口为 `80`。
+> - `-e API_URL`：后端服务地址。appboot docker 包含了前后端，所以 `API_URL` 就是部署 appboot docker 的地址，其中 API 后端服务端口为 `8000`，前端端口为 `80`。
 > - `-v $HOME/appboot:/root/.appboot`：将 appboot 的**工作目录**映射到本机的 `$HOME/appboot`，这样就可以将[配置](#配置)和**数据**持久化到本地。
 >   当创建完 `test` 项目后，即可在工作目录中找到
 >
